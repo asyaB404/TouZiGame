@@ -492,7 +492,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -515,8 +515,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: -1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -551,27 +551,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 866927989521922223, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 866927989521922223, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 866927989521922223, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5333333
       objectReference: {fileID: 0}
     - target: {fileID: 1494633835117233674, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1494633835117233674, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1494633835117233674, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 4953626781694488890, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_Pivot.x
@@ -656,6 +656,10 @@ PrefabInstance:
     - target: {fileID: 5161435991544639982, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: m_Name
       value: Chat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5161435991544639982, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5762671317970466648, guid: c632dc00a19bf9642b97d563d9c226e0, type: 3}
       propertyPath: chatInput
