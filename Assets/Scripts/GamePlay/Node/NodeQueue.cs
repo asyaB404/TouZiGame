@@ -16,24 +16,21 @@ namespace GamePlay.Node
     public class NodeQueue : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
         IPointerExitHandler
     {
-        private const float HoverScaleFactor = 1.2f;
+        private const float HoverScaleFactor = 1.1f;
         private const float MaxClickDuration = 0.5f;
-        [SerializeField] private SpriteRenderer sr;
-        [SerializeField] private float initialScale;
+        [SerializeField] private Vector3 initialScale;
         private float _mouseDownTime;
 
         public void OnPointerEnter(PointerEventData data)
         {
-            if (sr == null) return;
-            sr.transform.DOKill();
-            sr.transform.DOScale(initialScale * HoverScaleFactor, 0.3f);
+            transform.DOKill();
+            transform.DOScale(initialScale * HoverScaleFactor, 0.3f);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            if (sr == null) return;
-            sr.transform.DOKill();
-            sr.transform.DOScale(initialScale, 0.3f);
+            transform.DOKill();
+            transform.DOScale(initialScale, 0.3f);
         }
 
         public void OnPointerDown(PointerEventData data)
