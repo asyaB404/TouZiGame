@@ -23,8 +23,8 @@ namespace UI.Panel
         public override void Init()
         {
             base.Init();
-            GetControl<Button>("btn1").onClick.AddListener(CreateRoomBtn);
-            GetControl<Button>("btn2").onClick.AddListener(JoinRoomBtn);
+            GetControl<Button>("btn1").onClick.AddListener(JoinRoomBtn);
+            GetControl<Button>("btn2").onClick.AddListener(CreateRoomBtn);
         }
 
         public void CreateRoomBtn()
