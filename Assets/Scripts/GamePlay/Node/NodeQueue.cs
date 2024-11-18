@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,10 +17,14 @@ namespace GamePlay.Node
     public class NodeQueue : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
         IPointerExitHandler
     {
+        public int id = -1;
         private const float HoverScaleFactor = 1.1f;
-        private const float MaxClickDuration = 0.5f;
+        private const int MaxNode = 3;
+        public int SumScore { get; private set; }
         [SerializeField] private Vector3 initialScale;
-        private float _mouseDownTime;
+        [SerializeField] private Transform[] nodePos;
+        [SerializeField] private int[] scores;
+        private int _lastIndex = 0;
 
         public void OnPointerEnter(PointerEventData data)
         {
@@ -35,15 +40,26 @@ namespace GamePlay.Node
 
         public void OnPointerDown(PointerEventData data)
         {
-            _mouseDownTime = Time.time;
         }
 
         public void OnPointerUp(PointerEventData data)
         {
-            if (Time.time - _mouseDownTime < MaxClickDuration)
-            {
-                
-            }
+            if (data.pointerCurrentRaycast.gameObject != gameObject)
+                return;
+            Debug.Log("Pointer clicked and released on the same component.");
+        }
+
+        public bool AddNode(int score)
+        {
+            if (_lastIndex == MaxNode) return false;
+            scores[_lastIndex] = score;
+            _lastIndex++;
+            return true;
+        }
+
+        private void UpdateSumScore()
+        {
+            
         }
     }
 }
