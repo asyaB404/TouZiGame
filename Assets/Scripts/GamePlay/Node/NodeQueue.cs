@@ -23,8 +23,8 @@ namespace GamePlay.Node
         public int SumScore { get; private set; }
         [SerializeField] private Vector3 initialScale;
         [SerializeField] private Transform[] nodePos;
-        [SerializeField] private int[] scores;
-        private int _lastIndex = 0;
+        [SerializeField] private List<int> scores;
+        private readonly Dictionary<int, int> _scoreCounts = new();
 
         public void OnPointerEnter(PointerEventData data)
         {
@@ -51,15 +51,48 @@ namespace GamePlay.Node
 
         public bool AddNode(int score)
         {
-            if (_lastIndex == MaxNode) return false;
-            scores[_lastIndex] = score;
-            _lastIndex++;
+            if (scores.Count == MaxNode) return false;
+            scores.Add(score);
+            if (!_scoreCounts.TryAdd(score, 1))
+            {
+                _scoreCounts[score]++;
+            }
+
+            return true;
+        }
+
+        public bool RemoveNode(int index)
+        {
+            if (scores.Count == 0|| index < 0 || index >= MaxNode) return false;
+            int score = scores[index];
+            if (_scoreCounts.TryGetValue(score, out int count))
+            {
+                if (count == 1) _scoreCounts.Remove(score);
+            }
+            else
+            {
+                _scoreCounts[score]--;
+            }
+            scores.RemoveAt(index);
             return true;
         }
 
         private void UpdateSumScore()
         {
-            
+            SumScore = 0;
+            foreach (var kv in _scoreCounts)
+            {
+                int score = kv.Key;
+                int count = kv.Value;
+                if (count >= 2)
+                {
+                    SumScore += score * count * count;
+                }
+                else
+                {
+                    SumScore += score;
+                }
+            }
         }
     }
 }
