@@ -18,7 +18,7 @@ namespace GamePlay.Node
         IPointerExitHandler
     {
         public int id = -1;
-        private const float HoverScaleFactor = 1.1f;
+        private const float HOVER_SCALE_FACTOR = 1.1f;
         private static int MaxNode => NodeQueueManager.MaxNode;
         public int SumScore { get; private set; }
         [SerializeField] private Vector3 initialScale;
@@ -30,7 +30,7 @@ namespace GamePlay.Node
         public void OnPointerEnter(PointerEventData data)
         {
             transform.DOKill();
-            transform.DOScale(initialScale * HoverScaleFactor, 0.3f);
+            transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f);
         }
 
         public void OnPointerExit(PointerEventData data)

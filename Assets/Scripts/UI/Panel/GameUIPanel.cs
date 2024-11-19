@@ -18,30 +18,55 @@ namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
     {
-        private const int spinCount = 15;
-        private const float animationDuration = 2f;
-        private IReadOnlyList<Sprite> touzi => GameManager.Instance.Touzi;
+        private const int SPIN_COUNT = 15;
+        private const float ANIMATION_DURATION = 2f;
+        private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
         [SerializeField] private Image touziImage;
 
         public void UpdateTouZi()
         {
         }
 
-        [ContextMenu("test")]
         public void RollDiceAnimation(int finalIndex)
         {
             Sequence diceSequence = DOTween.Sequence();
-            for (int i = 0; i < spinCount; i++)
+            // 添加持续摇晃效果
+            Tween shakeTween = touziImage.transform.DOShakeRotation(
+                duration: ANIMATION_DURATION, // 摇晃的总持续时间
+                strength: new Vector3(0, 0, 30), // 主要在 Z 轴方向旋转
+                vibrato: 20, // 震动频率
+                randomness: 90, // 随机性
+                fadeOut: true // 衰减
+            );       
+
+            // 添加骰子面滚动动画
+            for (int i = 0; i < SPIN_COUNT; i++)
             {
-                int randomIndex = Random.Range(0, touzi.Count); 
-                diceSequence.AppendCallback(() =>
-                {
-                    touziImage.sprite = touzi[randomIndex]; 
-                });
-                diceSequence.AppendInterval(animationDuration / spinCount); 
+                int randomIndex = Random.Range(0, Touzi.Count);
+                diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[randomIndex]; });
+                diceSequence.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
             }
-            diceSequence.AppendCallback(() => { touziImage.sprite = touzi[finalIndex]; });
-            diceSequence.Play(); 
+
+            diceSequence.AppendCallback(() =>
+            {
+                shakeTween.Kill();                
+                touziImage.sprite = Touzi[finalIndex]; 
+            });
+            diceSequence.Play();
         }
+
+
+
+        #region debug
+
+        [SerializeField] [Range(0, 5)] private int testIndex;
+
+        [ContextMenu("test")]
+        public void Test()
+        {
+            RollDiceAnimation(testIndex);
+        }
+
+        #endregion
     }
 }

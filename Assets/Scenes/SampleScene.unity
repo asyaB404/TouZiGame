@@ -5090,7 +5090,6 @@ MonoBehaviour:
   - {fileID: 2120985667, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: 291251235, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: 388916297, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
-  randomList: 000000000100000002000000030000000400000005000000
   curScore: -1
 --- !u!1 &1610893767
 GameObject:
@@ -7130,6 +7129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2108712729}
   - component: {fileID: 2108712731}
+  - component: {fileID: 2108712732}
   m_Layer: 5
   m_Name: GamePanel
   m_TagString: Untagged
@@ -7169,6 +7169,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108712728}
   m_CullTransparentMesh: 1
+--- !u!114 &2108712732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108712728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 008ff053102a424f9cef4e9cf0b95abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touziImage: {fileID: 836442703}
 --- !u!1 &2115031866
 GameObject:
   m_ObjectHideFlags: 0
