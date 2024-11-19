@@ -7,6 +7,8 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System;
+using System.Collections.Generic;
 using GameKit.Dependencies.Utilities;
 using UnityEngine;
 
@@ -26,14 +28,18 @@ namespace GamePlay.Core
 
     public class GameManager : MonoBehaviour
     {
+        public static GameManager Instance { get; private set; }
         [SerializeField] private Sprite[] touzi;
-        [SerializeField] private int[] randomList = { 0, 1, 2, 3, 4, 5 };
+        public IReadOnlyList<Sprite> Touzi => touzi;
         public int curScore = -1;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         public void NextTurn()
         {
-            randomList.ShuffleArray();
-            curScore = randomList[^1];
         }
     }
 }
