@@ -7,12 +7,33 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using GameKit.Dependencies.Utilities;
 using UnityEngine;
 
 namespace GamePlay.Core
 {
-    public class GameManager:MonoBehaviour
+    public enum GameState
     {
-        
+        Idle,
+        Gaming
+    }
+
+    public enum Turn
+    {
+        P1,
+        P2
+    }
+
+    public class GameManager : MonoBehaviour
+    {
+        [SerializeField] private Sprite[] touzi;
+        [SerializeField] private int[] randomList = { 0, 1, 2, 3, 4, 5 };
+        public int curScore = -1;
+
+        public void NextTurn()
+        {
+            randomList.ShuffleArray();
+            curScore = randomList[^1];
+        }
     }
 }

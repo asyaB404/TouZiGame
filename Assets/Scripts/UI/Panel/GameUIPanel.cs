@@ -13,6 +13,9 @@ namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
     {
-        
+        public void UpdateTouZi()
+        {
+            
+        }
     }
 }

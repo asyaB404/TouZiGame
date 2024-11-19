@@ -19,7 +19,7 @@ namespace GamePlay.Node
     {
         public int id = -1;
         private const float HoverScaleFactor = 1.1f;
-        private const int MaxNode = 3;
+        private static int MaxNode => NodeQueueManager.MaxNode;
         public int SumScore { get; private set; }
         [SerializeField] private Vector3 initialScale;
         [SerializeField] private Transform[] nodePos;
