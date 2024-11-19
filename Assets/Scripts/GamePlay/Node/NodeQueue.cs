@@ -24,6 +24,7 @@ namespace GamePlay.Node
         [SerializeField] private Vector3 initialScale;
         [SerializeField] private Transform[] nodePos;
         [SerializeField] private List<int> scores;
+        public IReadOnlyList<int> Scores => scores;
         private readonly Dictionary<int, int> _scoreCounts = new();
 
         public void OnPointerEnter(PointerEventData data)
@@ -63,7 +64,7 @@ namespace GamePlay.Node
 
         public bool RemoveNode(int index)
         {
-            if (scores.Count == 0|| index < 0 || index >= MaxNode) return false;
+            if (scores.Count == 0 || index < 0 || index >= MaxNode) return false;
             int score = scores[index];
             if (_scoreCounts.TryGetValue(score, out int count))
             {
@@ -73,6 +74,7 @@ namespace GamePlay.Node
             {
                 _scoreCounts[score]--;
             }
+
             scores.RemoveAt(index);
             return true;
         }

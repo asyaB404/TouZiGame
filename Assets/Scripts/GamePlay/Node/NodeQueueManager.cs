@@ -13,6 +13,17 @@ namespace GamePlay.Node
 {
     public class NodeQueueManager : MonoBehaviour
     {
-        
+        [SerializeField] private NodeQueue[] nodeQueues;
+        public const int maxNode = 3;
+        public int MaxNode => maxNode;
+
+        private bool CheckIsGameOver()
+        {
+            foreach (var nodeQueue in nodeQueues)
+            {
+                if (nodeQueue.Scores.Count < maxNode) return false;
+            }
+            return true;
+        }
     }
 }

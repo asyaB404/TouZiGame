@@ -36,6 +36,11 @@ MonoBehaviour:
     - FishNet.Demos
     - FishNet.Runtime
     - GameKit.Dependencies
+    - UniTask
+    - UniTask.Addressables
+    - UniTask.DOTween
+    - UniTask.Linq
+    - UniTask.TextMeshPro
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
