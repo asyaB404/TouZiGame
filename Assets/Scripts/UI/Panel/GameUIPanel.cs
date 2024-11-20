@@ -31,10 +31,17 @@ namespace UI.Panel
         {
             Sequence diceSequence = DOTween.Sequence();
             // 添加持续摇晃效果
+            Tweener doShakePosition = touziImage.transform.DOShakePosition(
+                duration: ANIMATION_DURATION ,
+                strength: new Vector3(10, 10, 0), // 水平和垂直方向抖动
+                vibrato: 20,
+                randomness: 90,
+                fadeOut: true
+            );
             Tween shakeTween = touziImage.transform.DOShakeRotation(
                 duration: ANIMATION_DURATION, // 摇晃的总持续时间
-                strength: new Vector3(0, 0, 30), // 主要在 Z 轴方向旋转
-                vibrato: 20, // 震动频率
+                strength: new Vector3(0, 0, 180), // 主要在 Z 轴方向旋转
+                vibrato: 30, // 震动频率
                 randomness: 90, // 随机性
                 fadeOut: true // 衰减
             );       
@@ -49,7 +56,6 @@ namespace UI.Panel
 
             diceSequence.AppendCallback(() =>
             {
-                shakeTween.Kill();                
                 touziImage.sprite = Touzi[finalIndex]; 
             });
             diceSequence.Play();

@@ -7,9 +7,9 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
-using System;
+
 using System.Collections.Generic;
-using GameKit.Dependencies.Utilities;
+using GamePlay.Node;
 using UnityEngine;
 
 namespace GamePlay.Core
@@ -20,7 +20,7 @@ namespace GamePlay.Core
         Gaming
     }
 
-    public enum Turn
+    public enum Player
     {
         P1,
         P2
@@ -30,6 +30,8 @@ namespace GamePlay.Core
     {
         public static GameManager Instance { get; private set; }
         [SerializeField] private Sprite[] touzi;
+        [SerializeField] private NodeQueueManager[] nodeQueueManagers;
+        public static Player CurTurn;
         public IReadOnlyList<Sprite> Touzi => touzi;
         public int curScore = -1;
 
@@ -40,6 +42,12 @@ namespace GamePlay.Core
 
         public void NextTurn()
         {
+        }
+
+        public bool AddTouzi(int playerId, int id, int score)
+        {
+            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
+            return playerNodeQueueManager.AddTouzi(id, score);
         }
     }
 }
