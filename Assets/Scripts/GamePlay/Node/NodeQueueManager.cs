@@ -30,6 +30,11 @@ namespace GamePlay.Node
             return nodeQueues[id].AddNode(score);
         }
 
+        public bool RemoveTouzi(int id, int score)
+        {
+            return nodeQueues[id].RemoveNode(score);
+        }
+
         private bool CheckIsGameOver()
         {
             foreach (var nodeQueue in nodeQueues)

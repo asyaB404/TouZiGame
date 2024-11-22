@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using GamePlay.Node;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GamePlay.Core
 {
@@ -29,11 +30,18 @@ namespace GamePlay.Core
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
+        public const int MAX_PLAYER_COUNT = 2;
+        [SerializeField] private int nextPlayerId = 1;
         [SerializeField] private Sprite[] touzi;
-        [SerializeField] public static Sprite[] touzi1;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
-        public static Player CurTurn;
         public IReadOnlyList<Sprite> Touzi => touzi;
+
+        public int CurPlayerId
+        {
+            get => nextPlayerId;
+            private set => nextPlayerId = value;
+        }
+
         public int curScore = -1;
 
         private void Awake()
@@ -43,6 +51,8 @@ namespace GamePlay.Core
 
         public void NextTurn()
         {
+            nextPlayerId++;
+            nextPlayerId %= MAX_PLAYER_COUNT;
         }
 
         public bool AddTouzi(int playerId, int id, int score)
@@ -51,18 +61,23 @@ namespace GamePlay.Core
             return playerNodeQueueManager.AddTouzi(id, score);
         }
 
+        public bool RemoveTouzi(int playerId, int id, int score)
+        {
+            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
+            return playerNodeQueueManager.RemoveTouzi(id, score);
+        }
+
         #region Debug
 
-        [Space(10)]
-        [SerializeField]private int t1 = 0;
-        [SerializeField]private int t2 = 0;
-        [SerializeField]private int t3 = 0;
+        [Space(10)] [SerializeField] private int t1 = 0;
+        [SerializeField] private int t2 = 0;
+        [SerializeField] private int t3 = 0;
+
         [ContextMenu("add")]
         private void Test()
         {
             AddTouzi(t1, t2, t3);
         }
-
 
         #endregion
     }

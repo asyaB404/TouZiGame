@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using DG.Tweening;
+using GamePlay.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,12 +22,21 @@ namespace GamePlay.Node
         public int id = -1;
         private const float HOVER_SCALE_FACTOR = 1.1f;
         private static int MaxNode => NodeQueueManager.MaxNode;
-        public int SumScore { get; private set; }
+        [SerializeField] private int sumScore;
+
+        public int SumScore
+        {
+            get => sumScore;
+            private set => sumScore = value;
+        }
+
         [SerializeField] private Vector3 initialScale;
         [SerializeField] private Transform[] nodePos;
         [SerializeField] private List<int> scores;
         [SerializeField] private List<GameObject> nodeObjs;
         public IReadOnlyList<int> Scores => scores;
+
+
         private readonly Dictionary<int, int> _scoreCounts = new();
 
         public void OnPointerEnter(PointerEventData data)
@@ -64,6 +74,7 @@ namespace GamePlay.Node
                 _scoreCounts[score]++;
             }
 
+            GameManager.Instance.RemoveTouzi(,id,score);
             UpdateSumScore();
             return true;
         }
@@ -79,28 +90,27 @@ namespace GamePlay.Node
 
                 if (curScore == removedScore)
                 {
-                    // 删除当前节点对象
                     Destroy(nodeObjs[i]);
                     nodeObjs.RemoveAt(i);
-                    scores.RemoveAt(i);  // 删除元素
-                    found = true;  
+                    scores.RemoveAt(i);
+                    found = true;
                 }
                 else
                 {
-                    // 处理 _scoreCounts 更新
                     if (_scoreCounts.TryGetValue(curScore, out int count))
                     {
                         if (count == 1)
                         {
-                            _scoreCounts.Remove(curScore); // 计数为1时移除该分数
+                            _scoreCounts.Remove(curScore);
                         }
                         else
                         {
-                            _scoreCounts[curScore]--; // 计数减一
+                            _scoreCounts[curScore]--;
                         }
                     }
                 }
             }
+
             if (found)
             {
                 UpdateSumScore();
