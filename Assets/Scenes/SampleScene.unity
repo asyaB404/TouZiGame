@@ -364,6 +364,7 @@ MonoBehaviour:
   - {fileID: 1411161905}
   - {fileID: 539182512}
   scores: 
+  nodeObjs: []
 --- !u!1001 &197103422
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1033,6 +1034,7 @@ MonoBehaviour:
   - {fileID: 1369884582}
   - {fileID: 1687793258}
   scores: 
+  nodeObjs: []
 --- !u!1 &392272762
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,6 +1224,7 @@ MonoBehaviour:
   - {fileID: 1975081714}
   - {fileID: 551622115}
   scores: 
+  nodeObjs: []
 --- !u!61 &450804167
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1559,6 +1562,7 @@ MonoBehaviour:
   - {fileID: 596650318}
   - {fileID: 857471833}
   scores: 
+  nodeObjs: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2122,6 +2126,7 @@ MonoBehaviour:
   - {fileID: 1877177631}
   - {fileID: 208737629}
   scores: 
+  nodeObjs: []
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,6 +2412,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 740797944}
+  - component: {fileID: 740797945}
   m_Layer: 0
   m_Name: P2
   m_TagString: Untagged
@@ -2432,6 +2438,22 @@ Transform:
   - {fileID: 382777007}
   m_Father: {fileID: 1455416934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &740797945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740797943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e56ff68d8edf4c54803e9e5793ff849c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeQueues:
+  - {fileID: 512509084}
+  - {fileID: 1850839161}
+  - {fileID: 382777009}
 --- !u!1 &780374860
 GameObject:
   m_ObjectHideFlags: 0
@@ -4284,6 +4306,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1388458614}
+  - component: {fileID: 1388458615}
   m_Layer: 0
   m_Name: P1
   m_TagString: Untagged
@@ -4309,6 +4332,22 @@ Transform:
   - {fileID: 612134794}
   m_Father: {fileID: 1455416934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1388458615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388458613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e56ff68d8edf4c54803e9e5793ff849c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeQueues:
+  - {fileID: 450804166}
+  - {fileID: 111593711}
+  - {fileID: 612134796}
 --- !u!1 &1411161904
 GameObject:
   m_ObjectHideFlags: 0
@@ -5090,7 +5129,13 @@ MonoBehaviour:
   - {fileID: 2120985667, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: 291251235, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: 388916297, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
+  nodeQueueManagers:
+  - {fileID: 1388458615}
+  - {fileID: 740797945}
   curScore: -1
+  t1: 0
+  t2: 0
+  t3: 0
 --- !u!1 &1610893767
 GameObject:
   m_ObjectHideFlags: 0
@@ -6323,6 +6368,7 @@ MonoBehaviour:
   - {fileID: 1483725636}
   - {fileID: 1066645756}
   scores: 
+  nodeObjs: []
 --- !u!1001 &1853763039
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7182,6 +7228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   touziImage: {fileID: 836442703}
+  testIndex: 0
 --- !u!1 &2115031866
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+
 namespace GamePlay.Node
 {
     public class NodeQueue : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
@@ -24,7 +25,7 @@ namespace GamePlay.Node
         [SerializeField] private Vector3 initialScale;
         [SerializeField] private Transform[] nodePos;
         [SerializeField] private List<int> scores;
-        [SerializeField] private List<GameObject> nodeObj;
+        [SerializeField] private List<GameObject> nodeObjs;
         public IReadOnlyList<int> Scores => scores;
         private readonly Dictionary<int, int> _scoreCounts = new();
 
@@ -54,31 +55,60 @@ namespace GamePlay.Node
         public bool AddNode(int score)
         {
             if (scores.Count == MaxNode) return false;
+            GameObject node = NodeFactory.CreateNode(score, nodePos[scores.Count]);
+            nodeObjs.Add(node);
+            score++;
             scores.Add(score);
             if (!_scoreCounts.TryAdd(score, 1))
             {
                 _scoreCounts[score]++;
             }
 
+            UpdateSumScore();
             return true;
         }
 
-        public bool RemoveNode(int score)
+        public bool RemoveNode(int removedScore)
         {
             if (scores.Count == 0) return false;
-            // int score = scores[index];
-            if (_scoreCounts.TryGetValue(score, out int count))
+
+            bool found = false;
+            for (int i = scores.Count - 1; i >= 0; i--)
             {
-                if (count == 1) _scoreCounts.Remove(score);
+                var curScore = scores[i];
+
+                if (curScore == removedScore)
+                {
+                    // 删除当前节点对象
+                    Destroy(nodeObjs[i]);
+                    nodeObjs.RemoveAt(i);
+                    scores.RemoveAt(i);  // 删除元素
+                    found = true;  
+                }
+                else
+                {
+                    // 处理 _scoreCounts 更新
+                    if (_scoreCounts.TryGetValue(curScore, out int count))
+                    {
+                        if (count == 1)
+                        {
+                            _scoreCounts.Remove(curScore); // 计数为1时移除该分数
+                        }
+                        else
+                        {
+                            _scoreCounts[curScore]--; // 计数减一
+                        }
+                    }
+                }
             }
-            else
+            if (found)
             {
-                _scoreCounts[score]--;
+                UpdateSumScore();
             }
 
-            scores.Remove(score);
-            return true;
+            return found;
         }
+
 
         private void UpdateSumScore()
         {
