@@ -30,6 +30,7 @@ namespace GamePlay.Core
     {
         public static GameManager Instance { get; private set; }
         [SerializeField] private Sprite[] touzi;
+        [SerializeField] public static Sprite[] touzi1;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public static Player CurTurn;
         public IReadOnlyList<Sprite> Touzi => touzi;
@@ -49,5 +50,20 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             return playerNodeQueueManager.AddTouzi(id, score);
         }
+
+        #region Debug
+
+        [Space(10)]
+        [SerializeField]private int t1 = 0;
+        [SerializeField]private int t2 = 0;
+        [SerializeField]private int t3 = 0;
+        [ContextMenu("add")]
+        private void Test()
+        {
+            AddTouzi(t1, t2, t3);
+        }
+
+
+        #endregion
     }
 }
