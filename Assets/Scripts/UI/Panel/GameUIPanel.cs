@@ -23,7 +23,7 @@ namespace UI.Panel
         private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
         [SerializeField] private Image touziImage;
 
-        public void UpdateTouZi()
+        public void UpdateScoreUI()
         {
         }
 

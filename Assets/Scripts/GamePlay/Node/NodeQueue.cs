@@ -121,6 +121,17 @@ namespace GamePlay.Node
             return found;
         }
 
+        public void Clear()
+        {
+            scores.Clear();
+            for (int i = nodeObjs.Count - 1; i >= 0; i--)
+            {
+                Destroy(nodeObjs[i]);
+            }
+            _scoreCounts.Clear();
+            nodeObjs.Clear();
+        }
+
         private void UpdateSumScore()
         {
             SumScore = 0;

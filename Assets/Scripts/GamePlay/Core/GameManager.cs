@@ -39,8 +39,7 @@ namespace GamePlay.Core
         [SerializeField] private Sprite[] touzi;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<Sprite> Touzi => touzi;
-
-        public int NextPlayerId => nextPlayerId;
+        public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
         public int CurPlayerId => curPlayerId;
 
         public int curScore = -1;
@@ -51,6 +50,7 @@ namespace GamePlay.Core
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {
                 nodeQueueManagers[i].playerId = i;
+                nodeQueueManagers[i].Init();
             }
         }
 
@@ -75,21 +75,41 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             RemoveTouzi(nextPlayerId, id, score);
+            if (playerNodeQueueManager.CheckIsGameOver())
+            {
+                GameOver();
+                return;
+            }
+
             NextTurn();
         }
 
         public void AddTouzi(int id)
         {
-            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[curPlayerId];
-            if (!playerNodeQueueManager.AddTouzi(id, curScore)) return;
-            RemoveTouzi(nextPlayerId, id, curScore);
-            NextTurn();
+            AddTouzi(curPlayerId, id, curScore);
         }
 
         public bool RemoveTouzi(int playerId, int id, int score)
         {
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             return playerNodeQueueManager.RemoveTouzi(id, score);
+        }
+
+        private void GameOver()
+        {
+            Reset();
+        }
+
+        private void Reset()
+        {
+            curScore = Random.Range(0, 6);
+            GameUIPanel.Instance.RollDiceAnimation(curScore);
+            curPlayerId = 0;
+            nextPlayerId = 1;
+            foreach (var nodeQueueManager in nodeQueueManagers)
+            {
+                nodeQueueManager.Clear();
+            }
         }
 
         #region Debug
@@ -104,10 +124,16 @@ namespace GamePlay.Core
             AddTouzi(t1, t2, t3);
         }
 
-        [ContextMenu("add")]
+        [ContextMenu("add1")]
         private void Test1()
         {
-            AddTouzi(nextPlayerId, t2, t3);
+            AddTouzi(curPlayerId, t2, t3);
+        }
+
+        [ContextMenu("clear")]
+        private void Test2()
+        {
+            Reset();
         }
 
         #endregion

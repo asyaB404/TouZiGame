@@ -8,17 +8,19 @@
 // // ********************************************************************************************
 
 
+using System.Linq;
 using UnityEngine;
 
 namespace GamePlay.Node
 {
     public class NodeQueueManager : MonoBehaviour
     {
-        public int playerId;
+        public int playerId = -1;
         [SerializeField] private NodeQueue[] nodeQueues;
         public const int MAX_QUEUE_NODE = 3;
+        public int SumScore => nodeQueues.Sum(nodeQueue => nodeQueue.SumScore);
 
-        private void Awake()
+        public void Init()
         {
             for (int i = 0; i < nodeQueues.Length; i++)
             {
@@ -37,13 +39,20 @@ namespace GamePlay.Node
             return nodeQueues[id].RemoveNode(score);
         }
 
-        private bool CheckIsGameOver()
+        public void Clear()
+        {
+            foreach (var nodeQueue in nodeQueues)
+            {
+                nodeQueue.Clear();
+            }
+        }
+
+        public bool CheckIsGameOver()
         {
             foreach (var nodeQueue in nodeQueues)
             {
                 if (nodeQueue.Scores.Count < MAX_QUEUE_NODE) return false;
             }
-
             return true;
         }
     }
