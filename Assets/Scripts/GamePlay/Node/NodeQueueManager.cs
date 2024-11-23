@@ -7,21 +7,23 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
-using System;
+
 using UnityEngine;
 
 namespace GamePlay.Node
 {
     public class NodeQueueManager : MonoBehaviour
     {
+        public int playerId;
         [SerializeField] private NodeQueue[] nodeQueues;
-        public const int MaxNode = 3;
+        public const int MAX_QUEUE_NODE = 3;
 
         private void Awake()
         {
             for (int i = 0; i < nodeQueues.Length; i++)
             {
                 nodeQueues[i].id = i;
+                nodeQueues[i].playerId = playerId;
             }
         }
 
@@ -39,7 +41,7 @@ namespace GamePlay.Node
         {
             foreach (var nodeQueue in nodeQueues)
             {
-                if (nodeQueue.Scores.Count < MaxNode) return false;
+                if (nodeQueue.Scores.Count < MAX_QUEUE_NODE) return false;
             }
 
             return true;

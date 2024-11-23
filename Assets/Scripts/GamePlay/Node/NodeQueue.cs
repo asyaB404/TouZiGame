@@ -19,9 +19,10 @@ namespace GamePlay.Node
     public class NodeQueue : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
         IPointerExitHandler
     {
+        public int playerId = -1;
         public int id = -1;
         private const float HOVER_SCALE_FACTOR = 1.1f;
-        private static int MaxNode => NodeQueueManager.MaxNode;
+        private static int MaxQueueNode => NodeQueueManager.MAX_QUEUE_NODE;
         [SerializeField] private int sumScore;
 
         public int SumScore
@@ -41,6 +42,7 @@ namespace GamePlay.Node
 
         public void OnPointerEnter(PointerEventData data)
         {
+            if (playerId != GameManager.Instance.CurPlayerId) return;
             transform.DOKill();
             transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f);
         }
@@ -57,14 +59,14 @@ namespace GamePlay.Node
 
         public void OnPointerUp(PointerEventData data)
         {
-            if (data.pointerCurrentRaycast.gameObject != gameObject)
+            if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.Instance.CurPlayerId)
                 return;
-            Debug.Log("Pointer clicked and released on the same component.");
+            GameManager.Instance.AddTouzi(id);
         }
 
         public bool AddNode(int score)
         {
-            if (scores.Count == MaxNode) return false;
+            if (scores.Count == MaxQueueNode) return false;
             GameObject node = NodeFactory.CreateNode(score, nodePos[scores.Count]);
             nodeObjs.Add(node);
             score++;
@@ -74,13 +76,13 @@ namespace GamePlay.Node
                 _scoreCounts[score]++;
             }
 
-            GameManager.Instance.RemoveTouzi(,id,score);
             UpdateSumScore();
             return true;
         }
 
         public bool RemoveNode(int removedScore)
         {
+            removedScore++;
             if (scores.Count == 0) return false;
 
             bool found = false;
@@ -118,7 +120,6 @@ namespace GamePlay.Node
 
             return found;
         }
-
 
         private void UpdateSumScore()
         {
