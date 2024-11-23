@@ -74,7 +74,9 @@ namespace GamePlay.Core
         {
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
-            RemoveTouzi(nextPlayerId, id, score);
+            GameUIPanel.Instance.UpdateScoreUI(curPlayerId, playerNodeQueueManager);
+            if (RemoveTouzi(nextPlayerId, id, score))
+                GameUIPanel.Instance.UpdateScoreUI(nextPlayerId, nodeQueueManagers[nextPlayerId]);
             if (playerNodeQueueManager.CheckIsGameOver())
             {
                 GameOver();
@@ -103,13 +105,16 @@ namespace GamePlay.Core
         private void Reset()
         {
             curScore = Random.Range(0, 6);
-            GameUIPanel.Instance.RollDiceAnimation(curScore);
             curPlayerId = 0;
             nextPlayerId = 1;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
                 nodeQueueManager.Clear();
             }
+
+            GameUIPanel.Instance.RollDiceAnimation(curScore);
+            GameUIPanel.Instance.UpdateScoreUI(0, nodeQueueManagers[0]);
+            GameUIPanel.Instance.UpdateScoreUI(1, nodeQueueManagers[1]);
         }
 
         #region Debug

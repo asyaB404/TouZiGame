@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using DG.Tweening;
 using FishNet;
 using GamePlay.Core;
+using GamePlay.Node;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,9 +24,27 @@ namespace UI.Panel
         private const float ANIMATION_DURATION = 2f;
         private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
         [SerializeField] private Image touziImage;
-
-        public void UpdateScoreUI()
+        [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
+        [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
+        
+        public void UpdateScoreUI(int playerId, NodeQueueManager nodeQueueManager)
         {
+            TextMeshProUGUI[] texts;
+            if (playerId == 0)
+            {
+                texts = p1ScoreTexts;
+            }
+            else
+            {
+                texts = p2ScoreTexts;
+            }
+
+            texts[^1].text = nodeQueueManager.SumScore.ToString();
+            int i = 0;
+            foreach (var nodeQueue in nodeQueueManager.NodeQueues)
+            {
+                texts[i].text = nodeQueue.SumScore.ToString();
+            }
         }
 
         public void RollDiceAnimation(int finalIndex)
@@ -32,7 +52,7 @@ namespace UI.Panel
             Sequence diceSequence = DOTween.Sequence();
             // 添加持续摇晃效果
             Tweener doShakePosition = touziImage.transform.DOShakePosition(
-                duration: ANIMATION_DURATION ,
+                duration: ANIMATION_DURATION,
                 strength: new Vector3(10, 10, 0), // 水平和垂直方向抖动
                 vibrato: 20,
                 randomness: 90,
@@ -44,7 +64,7 @@ namespace UI.Panel
                 vibrato: 30, // 震动频率
                 randomness: 90, // 随机性
                 fadeOut: true // 衰减
-            );       
+            );
 
             // 添加骰子面滚动动画
             for (int i = 0; i < SPIN_COUNT; i++)
@@ -54,13 +74,9 @@ namespace UI.Panel
                 diceSequence.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
             }
 
-            diceSequence.AppendCallback(() =>
-            {
-                touziImage.sprite = Touzi[finalIndex]; 
-            });
+            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex]; });
             diceSequence.Play();
         }
-
 
 
         #region debug

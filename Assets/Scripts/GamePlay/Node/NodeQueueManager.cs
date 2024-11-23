@@ -8,6 +8,7 @@
 // // ********************************************************************************************
 
 
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -18,7 +19,9 @@ namespace GamePlay.Node
         public int playerId = -1;
         [SerializeField] private NodeQueue[] nodeQueues;
         public const int MAX_QUEUE_NODE = 3;
-        public int SumScore => nodeQueues.Sum(nodeQueue => nodeQueue.SumScore);
+        public int SumScore => NodeQueues.Sum(nodeQueue => nodeQueue.SumScore);
+
+        public IReadOnlyList<NodeQueue> NodeQueues => nodeQueues;
 
         public void Init()
         {
@@ -31,17 +34,17 @@ namespace GamePlay.Node
 
         public bool AddTouzi(int id, int score)
         {
-            return nodeQueues[id].AddNode(score);
+            return NodeQueues[id].AddNode(score);
         }
 
         public bool RemoveTouzi(int id, int score)
         {
-            return nodeQueues[id].RemoveNode(score);
+            return NodeQueues[id].RemoveNode(score);
         }
 
         public void Clear()
         {
-            foreach (var nodeQueue in nodeQueues)
+            foreach (var nodeQueue in NodeQueues)
             {
                 nodeQueue.Clear();
             }
@@ -49,7 +52,7 @@ namespace GamePlay.Node
 
         public bool CheckIsGameOver()
         {
-            foreach (var nodeQueue in nodeQueues)
+            foreach (var nodeQueue in NodeQueues)
             {
                 if (nodeQueue.Scores.Count < MAX_QUEUE_NODE) return false;
             }
