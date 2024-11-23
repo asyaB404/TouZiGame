@@ -26,7 +26,7 @@ namespace UI.Panel
         [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
-        
+
         public void UpdateScoreUI(int playerId, NodeQueueManager nodeQueueManager)
         {
             TextMeshProUGUI[] texts;
@@ -44,6 +44,7 @@ namespace UI.Panel
             foreach (var nodeQueue in nodeQueueManager.NodeQueues)
             {
                 texts[i].text = nodeQueue.SumScore.ToString();
+                i++;
             }
         }
 

@@ -12,6 +12,7 @@ using DG.Tweening;
 using GamePlay.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 
 namespace GamePlay.Node
@@ -32,9 +33,15 @@ namespace GamePlay.Node
         }
 
         [SerializeField] private Vector3 initialScale;
-        [SerializeField] private Transform[] nodePos;
+
+        [FormerlySerializedAs("nodePos")] [SerializeField]
+        private Transform[] touziPos;
+
         [SerializeField] private List<int> scores;
-        [SerializeField] private List<GameObject> nodeObjs;
+
+        [FormerlySerializedAs("nodeObjs")] [SerializeField]
+        private List<GameObject> touziObjs;
+
         public IReadOnlyList<int> Scores => scores;
 
 
@@ -67,8 +74,8 @@ namespace GamePlay.Node
         public bool AddNode(int score)
         {
             if (scores.Count == MaxQueueNode) return false;
-            GameObject node = NodeFactory.CreateNode(score, nodePos[scores.Count]);
-            nodeObjs.Add(node);
+            GameObject node = NodeFactory.CreateNode(score, touziPos[scores.Count]);
+            touziObjs.Add(node);
             score++;
             scores.Add(score);
             if (!_scoreCounts.TryAdd(score, 1))
@@ -85,51 +92,42 @@ namespace GamePlay.Node
             removedScore++;
             if (scores.Count == 0) return false;
 
-            bool found = false;
+            bool isRemoved = false;
             for (int i = scores.Count - 1; i >= 0; i--)
             {
                 var curScore = scores[i];
+                if (curScore != removedScore) continue;
+                Destroy(touziObjs[i]);
+                touziObjs.RemoveAt(i);
+                scores.RemoveAt(i);
+                if (_scoreCounts.TryGetValue(curScore, out int count))
+                {
+                    if (count == 1)
+                        _scoreCounts.Remove(curScore);
+                    else
+                        _scoreCounts[curScore]--;
+                }
 
-                if (curScore == removedScore)
-                {
-                    Destroy(nodeObjs[i]);
-                    nodeObjs.RemoveAt(i);
-                    scores.RemoveAt(i);
-                    found = true;
-                }
-                else
-                {
-                    if (_scoreCounts.TryGetValue(curScore, out int count))
-                    {
-                        if (count == 1)
-                        {
-                            _scoreCounts.Remove(curScore);
-                        }
-                        else
-                        {
-                            _scoreCounts[curScore]--;
-                        }
-                    }
-                }
+                isRemoved = true;
             }
 
-            if (found)
-            {
-                UpdateSumScore();
-            }
+            if (!isRemoved) return false;
+            UpdateSumScore();
+            UpdateTouziPos();
 
-            return found;
+            return true;
         }
 
         public void Clear()
         {
+            sumScore = 0;
             scores.Clear();
-            for (int i = nodeObjs.Count - 1; i >= 0; i--)
+            for (int i = touziObjs.Count - 1; i >= 0; i--)
             {
-                Destroy(nodeObjs[i]);
+                Destroy(touziObjs[i]);
             }
             _scoreCounts.Clear();
-            nodeObjs.Clear();
+            touziObjs.Clear();
         }
 
         private void UpdateSumScore()
@@ -147,6 +145,14 @@ namespace GamePlay.Node
                 {
                     SumScore += score;
                 }
+            }
+        }
+
+        private void UpdateTouziPos()
+        {
+            for (int i = 0; i < touziObjs.Count; i++)
+            {
+                touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
             }
         }
     }

@@ -357,7 +357,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 1096935279}
@@ -1027,7 +1029,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 883042790}
@@ -1217,7 +1221,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 1966424998}
@@ -1555,7 +1561,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 780374861}
@@ -2119,7 +2127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 1148858968}
@@ -2450,6 +2460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56ff68d8edf4c54803e9e5793ff849c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: 0
   nodeQueues:
   - {fileID: 512509084}
   - {fileID: 1850839161}
@@ -4344,6 +4355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56ff68d8edf4c54803e9e5793ff849c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: 0
   nodeQueues:
   - {fileID: 450804166}
   - {fileID: 111593711}
@@ -5122,6 +5134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0755a2d0ddac45ecacdeb0d88c381bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curPlayerId: 0
+  nextPlayerId: 1
   touzi:
   - {fileID: 688475534, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: -290093216, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
@@ -6361,7 +6375,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2c136357f84b4e92e3969a98b05296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: -1
   id: -1
+  sumScore: 0
   initialScale: {x: 1, y: 1, z: 1}
   nodePos:
   - {fileID: 2108107947}
@@ -7228,6 +7244,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   touziImage: {fileID: 836442703}
+  p1ScoreTexts:
+  - {fileID: 492147910}
+  - {fileID: 2034730829}
+  - {fileID: 934491226}
+  - {fileID: 2131434129}
+  p2ScoreTexts:
+  - {fileID: 392272764}
+  - {fileID: 1461739434}
+  - {fileID: 1661151936}
+  - {fileID: 839523385}
   testIndex: 0
 --- !u!1 &2115031866
 GameObject:

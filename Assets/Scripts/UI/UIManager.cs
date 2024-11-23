@@ -12,7 +12,7 @@ namespace UI
 
         private void Start()
         {
-            GameStartPanel.Instance.ShowMe();
+            // GameStartPanel.Instance.ShowMe();
         }
 
         /// <summary>
