@@ -58,6 +58,7 @@ namespace GamePlay.Core
         {
             curScore = Random.Range(0, 6);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
+            Application.targetFrameRate = 9999;
         }
 
         public void NextTurn()
