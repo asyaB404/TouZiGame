@@ -68,6 +68,9 @@ namespace GamePlay.Core
             Application.targetFrameRate = 9999;
         }
 
+        /// <summary>
+        /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
+        /// </summary>
         public void NextTurn()
         {
             nextPlayerId++;
@@ -78,6 +81,12 @@ namespace GamePlay.Core
             GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
+        /// <summary>
+        /// 添加骰子
+        /// </summary>
+        /// <param name="playerId">玩家id</param>
+        /// <param name="id">第几行</param>
+        /// <param name="score">骰子点数大小</param>
         public void AddTouzi(int playerId, int id, int score)
         {
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
@@ -98,6 +107,7 @@ namespace GamePlay.Core
         {
             AddTouzi(curPlayerId, id, curScore);
         }
+        
 
         public bool RemoveTouzi(int playerId, int id, int score)
         {
