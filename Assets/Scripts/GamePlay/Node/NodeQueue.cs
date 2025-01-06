@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Core;
@@ -70,8 +71,16 @@ namespace GamePlay.Node
                 return;
             transform.DOKill();
             transform.DOScale(initialScale, 0.3f);
-            //TODO:判断是否是本地游戏之后然后向服务端发送请求
-            GameManager.Instance.AddTouzi(id);
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.AddTouzi(id);
+                    break;
+                case GameMode.Online:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public bool AddNode(int score)
@@ -129,6 +138,7 @@ namespace GamePlay.Node
             {
                 Destroy(touziObjs[i]);
             }
+
             _scoreCounts.Clear();
             touziObjs.Clear();
         }

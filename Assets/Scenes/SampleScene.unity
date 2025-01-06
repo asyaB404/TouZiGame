@@ -1552,6 +1552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323d951d57c046228b0f40b7c42a1576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openFindControl: 1
 --- !u!1 &512509081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2692,6 +2693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580db818d41542f6a9fd68cc9a9a2c2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openFindControl: 1
   ip: {fileID: 1689693790}
   port: {fileID: 260934352}
 --- !u!1 &811633155
@@ -5220,7 +5222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curPlayerId: 0
-  nextPlayerId: 1
   touzi:
   - {fileID: 688475534, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
   - {fileID: -290093216, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
@@ -7328,6 +7329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008ff053102a424f9cef4e9cf0b95abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openFindControl: 1
   touziImage: {fileID: 836442703}
   p1ScoreTexts:
   - {fileID: 492147910}
@@ -7753,6 +7755,7 @@ GameObject:
   - component: {fileID: 1755694724}
   - component: {fileID: 7443408886587729836}
   - component: {fileID: 7443408886587729837}
+  - component: {fileID: 7443408886587729838}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -7795,6 +7798,21 @@ MonoBehaviour:
   _port: 7770
   _maximumClients: 4095
   _clientAddress: localhost
+--- !u!114 &7443408886587729838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7443408886587729827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08bb003fce297d4086cf8cba5aa459a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropExcessiveReplicates: 1
+  _maximumServerReplicates: 15
+  _stateInterpolation: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

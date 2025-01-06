@@ -21,6 +21,8 @@ namespace NetWork.Client
             }
         }
 
+        #region AddTouzi
+
         public void AddTouziRequest(int playerId, int id, int score)
         {
             MyServer.Instance.HandleAddTouziRequest(playerId, id, score);
@@ -31,12 +33,12 @@ namespace NetWork.Client
         {
             if (IsServerStarted)
             {
-                
             }
             else
             {
-                
             }
         }
+
+        #endregion
     }
 }

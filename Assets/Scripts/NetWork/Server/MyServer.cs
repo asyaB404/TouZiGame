@@ -21,7 +21,11 @@ namespace NetWork.Server
         [ServerRpc]
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
         {
-            GameManager.Instance.AddTouzi(playerId, id, score);
+            if (conn == Owner)
+            {
+                GameManager.Instance.AddTouzi(playerId, id, score);
+            }
+
             MyClient.Instance.AddTouziResponse();
         }
 

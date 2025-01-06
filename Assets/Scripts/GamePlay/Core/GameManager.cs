@@ -24,6 +24,7 @@ namespace GamePlay.Core
 
     public class GameManager : MonoBehaviour
     {
+        public static GameMode GameMode { get; private set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
         public const int MAX_PLAYER_COUNT = 2; //说不定呢，以后能做个2V2
         [SerializeField] private int curPlayerId = 0;
