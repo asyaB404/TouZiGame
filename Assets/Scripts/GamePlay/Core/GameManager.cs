@@ -8,12 +8,10 @@
 // // ********************************************************************************************
 
 
-using System;
 using System.Collections.Generic;
 using GamePlay.Node;
 using UI.Panel;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace GamePlay.Core
@@ -107,7 +105,7 @@ namespace GamePlay.Core
         {
             AddTouzi(curPlayerId, id, curScore);
         }
-        
+
 
         public bool RemoveTouzi(int playerId, int id, int score)
         {
