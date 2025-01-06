@@ -42,12 +42,21 @@ namespace UI
         /// </summary>
         void ChangeMe();
 
+        void ShowAnim();
+
+        void HideAnim();
+
         /// <summary>
-        ///     true表示该面板作为新的元素入栈顶时的标记（可以写渐渐出现的逻辑），false时表示新的元素入栈后原来的栈顶（this）的标记（可以写消失的逻辑）
+        /// 当面板被推入UI栈顶部时的回调方法。
         /// </summary>
-        /// <param name="flag">true表示为栈顶，flag表示有新的元素替代了原来的栈顶</param>
-        /// <example>例如栈为[1],新push了一个2变为[1,2],此时1会执行CallBack(false),2会执行CallBack(true)</example>
-        void CallBack(bool flag);
+        /// <param name="oldPanel">之前在顶部的面板（如果存在）。</param>
+        void CallBackWhenHeadPush(IBasePanel oldPanel);
+
+        /// <summary>
+        /// 当有面板从UI栈顶部弹出时的回调方法，this是新的栈顶
+        /// </summary>
+        /// <param name="popPanel">从顶部弹出的面板。</param>
+        void CallBackWhenHeadPop(IBasePanel popPanel);
     }
 
     /// <summary>
@@ -56,7 +65,8 @@ namespace UI
     /// <typeparam name="T1">决定单例模式Instance的类型</typeparam>
     public class BasePanel<T1> : MonoBehaviour, IBasePanel where T1 : class
     {
-        private readonly Dictionary<string, List<UIBehaviour>> _controlDic = new();
+        [SerializeField] private bool openFindControl = true;
+        private Dictionary<string, List<UIBehaviour>> _controlDic;
         private CanvasGroup _canvasGroup;
         public static T1 Instance { get; private set; }
 
@@ -84,7 +94,8 @@ namespace UI
         {
             //单例模式
             Instance = this as T1;
-            //添加控件
+            if (!openFindControl) return;
+            _controlDic = new Dictionary<string, List<UIBehaviour>>();
             FindChildrenControl<Button>();
             FindChildrenControl<Image>();
             FindChildrenControl<Text>();
@@ -147,26 +158,44 @@ namespace UI
         }
 
         /// <summary>
-        ///     true表示该面板作为新的元素入栈顶时的标记（可以写渐渐出现的逻辑），false时表示新的元素入栈后原来的栈顶（this）的标记（可以写消失的逻辑）
+        /// 当面板被推入UI栈顶部时的回调方法。
         /// </summary>
-        /// <param name="flag">true表示为栈顶，flag表示有新的元素替代了原来的栈顶</param>
-        /// <example>例如栈为[1],新push了一个2变为[1,2],此时1会执行CallBack(false),2会执行CallBack(true)</example>
-        public virtual void CallBack(bool flag)
+        /// <param name="oldPanel">之前在顶部的面板（如果存在）。</param>
+        public virtual void CallBackWhenHeadPush(IBasePanel oldPanel)
         {
-            //以下是默认实现，觉得不好看的话可以自己改
-            transform.DOKill(true);
-            if (flag)
-            {
-                CanvasGroupInstance.interactable = true;
-                gameObject.SetActive(true);
-                transform.localScale = Vector3.zero;
-                transform.DOScale(1, UIConst.UIDuration);
-            }
-            else
-            {
-                CanvasGroupInstance.interactable = false;
-                transform.DOScale(0, UIConst.UIDuration).OnComplete(() => { gameObject.SetActive(false); });
-            }
+            oldPanel?.HideAnim();
+            ShowAnim();
+        }
+
+        /// <summary>
+        /// 当有面板从UI栈顶部弹出时的回调方法，this是新的栈顶
+        /// </summary>
+        /// <param name="popPanel">从顶部弹出的面板。</param>
+        public virtual void CallBackWhenHeadPop(IBasePanel popPanel)
+        {
+            popPanel?.HideAnim();
+            if (gameObject.activeSelf == false) ShowAnim();
+        }
+
+
+        /// <summary>
+        /// 播放面板显示动画。
+        /// </summary>
+        public virtual void ShowAnim()
+        {
+            CanvasGroupInstance.interactable = true;
+            gameObject.SetActive(true);
+            transform.localScale = Vector3.zero;
+            transform.DOScale(1, UIConst.UIDuration);
+        }
+
+        /// <summary>
+        /// 播放面板隐藏动画。
+        /// </summary>
+        public virtual void HideAnim()
+        {
+            CanvasGroupInstance.interactable = false;
+            transform.DOScale(0, UIConst.UIDuration).OnComplete(() => { gameObject.SetActive(false); });
         }
 
         /// <summary>
@@ -205,18 +234,23 @@ namespace UI
         private void FindChildrenControl<T>() where T : UIBehaviour
         {
             var controls = GetComponentsInChildren<T>(true);
-            for (var i = 0; i < controls.Length; ++i)
+            foreach (var t in controls)
             {
-                var objName = controls[i].gameObject.name;
+                var objName = t.gameObject.name;
                 if (_controlDic.TryGetValue(objName, out var value1))
-                    value1.Add(controls[i]);
+                    value1.Add(t);
                 else
-                    _controlDic.Add(objName, new List<UIBehaviour> { controls[i] });
+                    _controlDic.Add(objName, new List<UIBehaviour> { t });
 
-                if (controls[i] is Button)
-                    (controls[i] as Button)?.onClick.AddListener(() => { OnClick(objName); });
-                else if (controls[i] is Toggle)
-                    (controls[i] as Toggle)?.onValueChanged.AddListener(value => { OnValueChanged(objName, value); });
+                switch (t)
+                {
+                    case Button button:
+                        button?.onClick.AddListener(() => { OnClick(objName); });
+                        break;
+                    case Toggle toggle:
+                        toggle?.onValueChanged.AddListener(value => { OnValueChanged(objName, value); });
+                        break;
+                }
             }
         }
     }
