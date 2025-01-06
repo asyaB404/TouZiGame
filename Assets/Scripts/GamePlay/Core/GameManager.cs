@@ -40,8 +40,15 @@ namespace GamePlay.Core
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<Sprite> Touzi => touzi;
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
+
+        /// <summary>
+        /// 当前玩家Id
+        /// </summary>
         public int CurPlayerId => curPlayerId;
 
+        /// <summary>
+        /// 当前骰子的大小
+        /// </summary>
         public int curScore = -1;
 
         private void Awake()

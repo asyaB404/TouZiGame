@@ -68,6 +68,9 @@ namespace GamePlay.Node
         {
             if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.Instance.CurPlayerId)
                 return;
+            transform.DOKill();
+            transform.DOScale(initialScale, 0.3f);
+            //TODO:判断是否是本地游戏之后然后向服务端发送请求
             GameManager.Instance.AddTouzi(id);
         }
 
