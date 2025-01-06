@@ -17,7 +17,7 @@ namespace GamePlay.Node
         /// <summary>
         /// 创建一个NodeGameObject，并将其设置为指定父级的子对象。
         /// </summary>
-        /// <param name="index">骰子面值</param>
+        /// <param name="index">骰子图片资源索引，0其实就是第一张图片，也就是点数1</param>
         /// <param name="parent">生成对象的父级Transform。</param>
         /// <returns>创建的GameObject，若索引无效则返回 null。</returns>
         public static GameObject CreateNode(int index, Transform parent = null)

@@ -16,36 +16,30 @@ using Random = UnityEngine.Random;
 
 namespace GamePlay.Core
 {
-    public enum GameState
+    public enum GameMode
     {
-        Idle,
-        Gaming
-    }
-
-    public enum Player
-    {
-        P1,
-        P2
+        Native = 0,
+        Online = 1
     }
 
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
-        public const int MAX_PLAYER_COUNT = 2;
+        public const int MAX_PLAYER_COUNT = 2; //说不定呢，以后能做个2V2
         [SerializeField] private int curPlayerId = 0;
-        [SerializeField] private int nextPlayerId = 1;
+        [SerializeField] private int NextPlayerId => (curPlayerId + 1) % MAX_PLAYER_COUNT;
         [SerializeField] private Sprite[] touzi;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<Sprite> Touzi => touzi;
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         /// <summary>
-        /// 当前玩家Id
+        /// 当前玩家Id,    0-1
         /// </summary>
         public int CurPlayerId => curPlayerId;
 
         /// <summary>
-        /// 当前骰子的大小
+        /// 当前骰子的大小-1，  取值范围为0-5
         /// </summary>
         public int curScore = -1;
 
@@ -71,8 +65,6 @@ namespace GamePlay.Core
         /// </summary>
         public void NextTurn()
         {
-            nextPlayerId++;
-            nextPlayerId %= MAX_PLAYER_COUNT;
             curPlayerId++;
             curPlayerId %= MAX_PLAYER_COUNT;
             curScore = Random.Range(0, 6);
@@ -90,8 +82,8 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             GameUIPanel.Instance.UpdateScoreUI(curPlayerId, playerNodeQueueManager);
-            if (RemoveTouzi(nextPlayerId, id, score))
-                GameUIPanel.Instance.UpdateScoreUI(nextPlayerId, nodeQueueManagers[nextPlayerId]);
+            if (RemoveTouzi(NextPlayerId, id, score))
+                GameUIPanel.Instance.UpdateScoreUI(NextPlayerId, nodeQueueManagers[NextPlayerId]);
             if (playerNodeQueueManager.CheckIsGameOver())
             {
                 GameOver();
@@ -122,7 +114,6 @@ namespace GamePlay.Core
         {
             curScore = Random.Range(0, 6);
             curPlayerId = 0;
-            nextPlayerId = 1;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
                 nodeQueueManager.Clear();

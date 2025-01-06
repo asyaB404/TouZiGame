@@ -3,8 +3,10 @@
 //但是也只有在所有客户端中仅有一个而已
 
 
+using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
+using GamePlay.Core;
 using NetWork.Client;
 
 namespace NetWork.Server
@@ -19,6 +21,7 @@ namespace NetWork.Server
         [ServerRpc]
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
         {
+            GameManager.Instance.AddTouzi(playerId, id, score);
             MyClient.Instance.AddTouziResponse();
         }
 
@@ -26,6 +29,7 @@ namespace NetWork.Server
         {
             base.OnStartClient();
             Instance = this;
+            if (!IsServerStarted) gameObject.SetActive(false);
         }
     }
 }

@@ -29,6 +29,14 @@ namespace NetWork.Client
         [ObserversRpc]
         public void AddTouziResponse()
         {
+            if (IsServerStarted)
+            {
+                
+            }
+            else
+            {
+                
+            }
         }
     }
 }
