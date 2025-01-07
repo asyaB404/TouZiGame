@@ -1,7 +1,13 @@
-using FishNet.Connection;
+/********************************************************************
+    Author:			Basyyya
+    Date:			2025:1:7 15:28
+    Description:	客户端脚本实例
+*********************************************************************/
+
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
+using UnityEngine;
 
 namespace NetWork.Client
 {
@@ -25,6 +31,7 @@ namespace NetWork.Client
         [ObserversRpc]
         public void StartGameResponse()
         {
+            Random.InitState(MyServer.Instance.Seed.Value);
             //由于服务端那边已经在请求中处理了，所以这里不用做处理
             if (IsServerStarted) return;
             //让客户端后手

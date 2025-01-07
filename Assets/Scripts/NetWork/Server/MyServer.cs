@@ -1,7 +1,11 @@
-//说是服务端实例，但其实只是形式上像
-//由于框架的P2P方式,其实每个客户端都有一个服务端实例
-//但是也只有在所有客户端中仅有一个而已
-
+/********************************************************************
+    Author:			Basyyya
+    Date:			2025:1:7 15:28
+    Description:	服务端脚本实例
+    //说是服务端实例，但其实只是形式上像
+    //由于框架的P2P方式,其实每个客户端都有一个服务端实例
+    //但是也只有在所有客户端中仅有一个而已
+*********************************************************************/
 
 using FishNet;
 using FishNet.CodeGenerating;
@@ -10,6 +14,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GamePlay.Core;
 using NetWork.Client;
+using UnityEngine;
 
 namespace NetWork.Server
 {
@@ -24,7 +29,7 @@ namespace NetWork.Server
         [Server]
         public void StartGame()
         {
-            
+            MyClient.Instance.StartGameResponse();
         }
 
         [ServerRpc]
@@ -50,6 +55,7 @@ namespace NetWork.Server
             base.OnStartClient();
             Instance = this;
             if (!IsServerStarted) gameObject.SetActive(false);
+            //同步种子
             Seed.Value = MyGlobal.CurSeed;
         }
     }
