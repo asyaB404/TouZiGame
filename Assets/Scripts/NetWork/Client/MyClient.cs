@@ -19,6 +19,7 @@ namespace NetWork.Client
         public static MyClient CreateInstance()
         {
             GameObject obj = new GameObject("MyClient");
+            obj.AddComponent<NetworkObject>();
             return obj.AddComponent<MyClient>();
         }
 

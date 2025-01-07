@@ -29,6 +29,7 @@ namespace NetWork.Server
         public static MyServer CreateInstance()
         {
             GameObject obj = new GameObject("MyServer");
+            obj.AddComponent<NetworkObject>();
             return obj.AddComponent<MyServer>();
         }
 
