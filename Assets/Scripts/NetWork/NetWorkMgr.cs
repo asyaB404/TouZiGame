@@ -7,7 +7,9 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System;
 using FishNet;
+using Random = UnityEngine.Random;
 
 namespace NetWork
 {
@@ -21,6 +23,8 @@ namespace NetWork
 
         public static bool CreateServer(string roomName, ushort port)
         {
+            int seed = Random.Range(int.MinValue, int.MaxValue);
+            MyGlobal.CurSeed = seed;
             var flag = InstanceFinder.ServerManager.StartConnection(port);
             return flag;
         }

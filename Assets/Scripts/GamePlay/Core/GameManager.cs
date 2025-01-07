@@ -7,7 +7,6 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
-
 using System.Collections.Generic;
 using GamePlay.Node;
 using UI.Panel;
@@ -26,9 +25,8 @@ namespace GamePlay.Core
     {
         public static GameMode GameMode { get; private set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
-        public const int MAX_PLAYER_COUNT = 2; //说不定呢，以后能做个2V2
         [SerializeField] private int curPlayerId = 0;
-        [SerializeField] private int NextPlayerId => (curPlayerId + 1) % MAX_PLAYER_COUNT;
+        private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
         [SerializeField] private Sprite[] touzi;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<Sprite> Touzi => touzi;
@@ -54,8 +52,15 @@ namespace GamePlay.Core
             }
         }
 
-        private void Start()
+        public void NextToPlayerId()
         {
+            curPlayerId++;
+            curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
+        }
+
+        public void StartGame(int seed)
+        {
+            Random.InitState(seed);
             curScore = Random.Range(0, 6);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
             Application.targetFrameRate = 9999;
@@ -66,8 +71,7 @@ namespace GamePlay.Core
         /// </summary>
         public void NextTurn()
         {
-            curPlayerId++;
-            curPlayerId %= MAX_PLAYER_COUNT;
+            NextToPlayerId();
             curScore = Random.Range(0, 6);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
         }

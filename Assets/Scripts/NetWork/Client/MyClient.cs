@@ -1,5 +1,6 @@
 using FishNet.Connection;
 using FishNet.Object;
+using GamePlay.Core;
 using NetWork.Server;
 
 namespace NetWork.Client
@@ -21,6 +22,15 @@ namespace NetWork.Client
             }
         }
 
+        [ObserversRpc]
+        public void StartGameResponse()
+        {
+            //由于服务端那边已经在请求中处理了，所以这里不用做处理
+            if (IsServerStarted) return;
+            //让客户端后手
+            GameManager.Instance.NextToPlayerId();
+        }
+
         #region AddTouzi
 
         public void AddTouziRequest(int playerId, int id, int score)
@@ -29,13 +39,22 @@ namespace NetWork.Client
         }
 
         [ObserversRpc]
-        public void AddTouziResponse()
+        public void AddTouziResponse(int playerId, int id, int score)
         {
             if (IsServerStarted)
             {
+                //由于服务端那边已经在请求中处理了，所以这里不用做处理
             }
             else
             {
+                if (playerId == GameManager.Instance.CurPlayerId)
+                {
+                    GameManager.Instance.AddTouzi(playerId, id, score);
+                }
+                else
+                {
+                    GameManager.Instance.AddTouzi(MyTool.GetNextPlayerId(playerId), id, score);
+                }
             }
         }
 
