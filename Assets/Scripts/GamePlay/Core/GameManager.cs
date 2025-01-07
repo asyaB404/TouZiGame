@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using GamePlay.Node;
+using NetWork;
 using UI.Panel;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -44,6 +45,7 @@ namespace GamePlay.Core
 
         private void Awake()
         {
+            Debug.Log(NetWorkMgr.CloseServer());//test
             Instance = this;
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {

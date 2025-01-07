@@ -8,13 +8,47 @@
 // // ********************************************************************************************
 
 using System;
+using System.Linq;
 using FishNet;
+using FishNet.Connection;
+using FishNet.Transporting;
+using NetWork.Server;
 using Random = UnityEngine.Random;
 
 namespace NetWork
 {
     public static class NetWorkMgr
     {
+        static NetWorkMgr()
+        {
+            InstanceFinder.ServerManager.OnServerConnectionState += (arg) =>
+            {
+                switch (arg.ConnectionState)
+                {
+                    case LocalConnectionState.Stopped:
+                        break;
+                    case LocalConnectionState.Starting:
+                        break;
+                    case LocalConnectionState.Started:
+                        break;
+                    case LocalConnectionState.Stopping:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            };
+            InstanceFinder.SceneManager.OnClientLoadedStartScenes += (connection, isSever) =>
+            {
+                if (isSever)
+                {
+                    InstanceFinder.ServerManager.Spawn(MyServer.CreateInstance().gameObject, connection);
+                }
+                else
+                {
+                }
+            };
+        }
+
         public static bool JoinServer(string address, ushort port)
         {
             var flag = InstanceFinder.ClientManager.StartConnection(address, port);

@@ -26,6 +26,12 @@ namespace NetWork.Server
         [AllowMutableSyncType] public readonly SyncVar<int> Seed = new();
         public static MyServer Instance { get; private set; }
 
+        public static MyServer CreateInstance()
+        {
+            GameObject obj = new GameObject("MyServer");
+            return obj.AddComponent<MyServer>();
+        }
+
         [Server]
         public void StartGame()
         {

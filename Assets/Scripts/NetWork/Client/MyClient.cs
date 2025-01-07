@@ -4,6 +4,7 @@
     Description:	客户端脚本实例
 *********************************************************************/
 
+using FishNet;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
@@ -14,6 +15,12 @@ namespace NetWork.Client
     public class MyClient : NetworkBehaviour
     {
         public static MyClient Instance { get; private set; }
+
+        public static MyClient CreateInstance()
+        {
+            GameObject obj = new GameObject("MyClient");
+            return obj.AddComponent<MyClient>();
+        }
 
         public override void OnStartClient()
         {
