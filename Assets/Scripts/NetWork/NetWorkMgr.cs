@@ -38,6 +38,22 @@ namespace NetWork
                         throw new ArgumentOutOfRangeException();
                 }
             };
+            InstanceFinder.ClientManager.OnClientConnectionState += args =>
+            {
+                switch (args.ConnectionState)
+                {
+                    case LocalConnectionState.Stopped:
+                        break;
+                    case LocalConnectionState.Starting:
+                        break;
+                    case LocalConnectionState.Started:
+                        break;
+                    case LocalConnectionState.Stopping:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            };
             InstanceFinder.SceneManager.OnClientLoadedStartScenes += (connection, isSever) =>
             {
                 if (isSever)

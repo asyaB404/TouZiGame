@@ -45,12 +45,11 @@ namespace GamePlay.Core
 
         private void Awake()
         {
-            Debug.Log(NetWorkMgr.CloseServer());//test
+            Debug.Log(NetWorkMgr.CloseServer()); //test
             Instance = this;
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {
-                nodeQueueManagers[i].playerId = i;
-                nodeQueueManagers[i].Init();
+                nodeQueueManagers[i].Init(i);
             }
         }
 

@@ -16,19 +16,24 @@ namespace GamePlay.Node
 {
     public class NodeQueueManager : MonoBehaviour
     {
-        public int playerId = -1;
+        [SerializeField] private int playerId = -1;
+
         [SerializeField] private NodeQueue[] nodeQueues;
+        public int PlayerId => playerId;
+
+        //一列最多存多少个Node
         public const int MAX_QUEUE_NODE = 3;
         public int SumScore => NodeQueues.Sum(nodeQueue => nodeQueue.SumScore);
 
         public IReadOnlyList<NodeQueue> NodeQueues => nodeQueues;
 
-        public void Init()
+        public void Init(int id)
         {
+            playerId = id;
             for (int i = 0; i < nodeQueues.Length; i++)
             {
                 nodeQueues[i].id = i;
-                nodeQueues[i].playerId = playerId;
+                nodeQueues[i].playerId = id;
             }
         }
 
@@ -56,6 +61,7 @@ namespace GamePlay.Node
             {
                 if (nodeQueue.Scores.Count < MAX_QUEUE_NODE) return false;
             }
+
             return true;
         }
     }
