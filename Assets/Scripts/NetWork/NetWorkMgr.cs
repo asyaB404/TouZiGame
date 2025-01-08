@@ -23,7 +23,6 @@ namespace NetWork
     {
         static NetWorkMgr()
         {
-            Debug.Log("执行");
             InstanceFinder.ServerManager.OnServerConnectionState += (arg) =>
             {
                 switch (arg.ConnectionState)
@@ -56,15 +55,15 @@ namespace NetWork
                         throw new ArgumentOutOfRangeException();
                 }
             };
+            //其实场景加载成功会激活两次，一次由server调用，一次由client调用
             InstanceFinder.SceneManager.OnClientLoadedStartScenes += (connection, isSever) =>
             {
-                if (isSever)
+                if (!isSever) return;
+                if (connection.IsHost)
                 {
                     InstanceFinder.ServerManager.Spawn(MyServer.CreateInstance().gameObject, connection);
                 }
-                else
-                {
-                }
+                InstanceFinder.ServerManager.Spawn(MyClient.CreateInstance().gameObject, connection);
             };
         }
 

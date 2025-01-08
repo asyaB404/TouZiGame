@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using GamePlay.Node;
 using NetWork;
@@ -22,8 +23,15 @@ namespace GamePlay.Core
         Online = 1
     }
 
+    public enum GameState
+    {
+        Idle = 0,
+        Gaming = 1
+    }
+
     public class GameManager : MonoBehaviour
     {
+        public static GameState GameState { get; private set; } = GameState.Idle;
         public static GameMode GameMode { get; private set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
         [SerializeField] private int curPlayerId = 0;
@@ -45,12 +53,18 @@ namespace GamePlay.Core
 
         private void Awake()
         {
-            Debug.Log(NetWorkMgr.CloseServer()); //test
+            Application.targetFrameRate = 9999;
+            Debug.Log(NetWorkMgr.CloseServer()); //激活静态构造函数，测试用
             Instance = this;
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {
                 nodeQueueManagers[i].Init(i);
             }
+        }
+
+        private void Start()
+        {
+            StartGame(123);
         }
 
         public void NextToPlayerId()
@@ -61,10 +75,10 @@ namespace GamePlay.Core
 
         public void StartGame(int seed)
         {
+            GameState = GameState.Gaming;
             Random.InitState(seed);
             curScore = Random.Range(0, 6);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
-            Application.targetFrameRate = 9999;
         }
 
         /// <summary>

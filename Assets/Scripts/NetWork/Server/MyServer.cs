@@ -43,7 +43,7 @@ namespace NetWork.Server
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
         {
             //因为自己服务端也是客户端
-            //所以可以先处理自己这一边，这样速度较快
+            //所以可以先处理自己这一边，这样主机的响应较快
             //当然，如果想规范一点的话可以在response统一处理所有客户端
             if (conn == Owner)
             {
