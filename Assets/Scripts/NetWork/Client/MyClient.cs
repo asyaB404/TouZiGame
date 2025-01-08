@@ -62,7 +62,7 @@ namespace NetWork.Client
             }
             else
             {
-                if (playerId == GameManager.Instance.CurPlayerId)
+                if (playerId == GameManager.CurPlayerId)
                 {
                     GameManager.Instance.AddTouzi(playerId, id, score);
                 }

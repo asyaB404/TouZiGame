@@ -13,6 +13,7 @@ using GamePlay.Node;
 using NetWork;
 using UI.Panel;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace GamePlay.Core
@@ -34,22 +35,30 @@ namespace GamePlay.Core
         public static GameState GameState { get; private set; } = GameState.Idle;
         public static GameMode GameMode { get; private set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
-        [SerializeField] private int curPlayerId = 0;
-        private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
-        [SerializeField] private Sprite[] touzi;
-        [SerializeField] private NodeQueueManager[] nodeQueueManagers;
-        public IReadOnlyList<Sprite> Touzi => touzi;
-        public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         /// <summary>
         /// 当前玩家Id
         /// </summary>
-        public int CurPlayerId => curPlayerId;
-
+        public static int CurPlayerId => Instance.curPlayerId;
+        
         /// <summary>
-        /// 当前骰子的大小
+        /// 当前骰子点数大小
         /// </summary>
-        public int curScore = -1;
+        public static int CurScore => Instance.curScore;
+
+        [SerializeField] private int curPlayerId = 0;
+
+        private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
+
+        [SerializeField] private Sprite[] touzi;
+
+        [SerializeField] private NodeQueueManager[] nodeQueueManagers;
+
+        public IReadOnlyList<Sprite> Touzi => touzi;
+
+        public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
+        
+        [SerializeField] private int curScore;
 
         private void Awake()
         {
@@ -139,6 +148,7 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
+
             GameUIPanel.Instance.UpdateScoreUI(0, nodeQueueManagers[0]);
             GameUIPanel.Instance.UpdateScoreUI(1, nodeQueueManagers[1]);
         }
