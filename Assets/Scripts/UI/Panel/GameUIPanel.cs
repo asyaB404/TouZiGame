@@ -50,6 +50,7 @@ namespace UI.Panel
 
         public void RollDiceAnimation(int finalIndex)
         {
+            finalIndex -= 1;
             Sequence diceSequence = DOTween.Sequence();
             // 添加持续摇晃效果
             Tweener doShakePosition = touziImage.transform.DOShakePosition(

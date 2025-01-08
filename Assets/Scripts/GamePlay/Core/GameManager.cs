@@ -42,12 +42,12 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         /// <summary>
-        /// 当前玩家Id,    0-1
+        /// 当前玩家Id
         /// </summary>
         public int CurPlayerId => curPlayerId;
 
         /// <summary>
-        /// 当前骰子的大小-1，  取值范围为0-5
+        /// 当前骰子的大小
         /// </summary>
         public int curScore = -1;
 
@@ -77,7 +77,7 @@ namespace GamePlay.Core
         {
             GameState = GameState.Gaming;
             Random.InitState(seed);
-            curScore = Random.Range(0, 6);
+            curScore = Random.Range(1, 7);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
@@ -87,7 +87,7 @@ namespace GamePlay.Core
         public void NextTurn()
         {
             NextToPlayerId();
-            curScore = Random.Range(0, 6);
+            curScore = Random.Range(1, 7);
             GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
@@ -133,7 +133,7 @@ namespace GamePlay.Core
         private void Reset()
         {
             GameState = GameState.Idle;
-            curScore = Random.Range(0, 6);
+            curScore = Random.Range(1, 7);
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {

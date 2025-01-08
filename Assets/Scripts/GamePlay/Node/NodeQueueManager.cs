@@ -14,19 +14,31 @@ using UnityEngine;
 
 namespace GamePlay.Node
 {
+    /// <summary>
+    /// Node队列管理器
+    /// </summary>
     public class NodeQueueManager : MonoBehaviour
     {
+        /// <summary>
+        /// 属于的玩家
+        /// </summary>
         [SerializeField] private int playerId = -1;
 
         [SerializeField] private NodeQueue[] nodeQueues;
-        public int PlayerId => playerId;
 
         //一列最多存多少个Node
         public const int MAX_QUEUE_NODE = 3;
+        /// <summary>
+        /// 每次调用都将会遍历计算一次node队列的总和分数
+        /// </summary>
         public int SumScore => NodeQueues.Sum(nodeQueue => nodeQueue.SumScore);
 
         public IReadOnlyList<NodeQueue> NodeQueues => nodeQueues;
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="id"></param>
         public void Init(int id)
         {
             playerId = id;
