@@ -63,7 +63,7 @@ namespace NetWork
                 {
                     InstanceFinder.ServerManager.Spawn(MyServer.CreateInstance().gameObject, connection);
                 }
-                InstanceFinder.ServerManager.Spawn(MyClient.CreateInstance().gameObject, connection);
+                // InstanceFinder.ServerManager.Spawn(MyClient.CreateInstance().gameObject, connection);
             };
         }
 

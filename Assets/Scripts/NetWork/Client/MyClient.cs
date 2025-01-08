@@ -41,9 +41,11 @@ namespace NetWork.Client
         [ObserversRpc]
         public void StartGameResponse()
         {
-            Random.InitState(MyServer.Instance.Seed.Value);
+            if (!IsOwner) return;
             //由于服务端那边已经在请求中处理了，所以这里不用做处理
             if (IsServerStarted) return;
+            GameManager.GameMode = GameMode.Online;
+            GameManager.Instance.StartGame(MyServer.Instance.Seed.Value);
             //让客户端后手
             GameManager.Instance.NextToPlayerId();
         }
@@ -58,6 +60,7 @@ namespace NetWork.Client
         [ObserversRpc]
         public void AddTouziResponse(int playerId, int id, int score)
         {
+            if (!IsOwner) return;
             if (IsServerStarted)
             {
                 //由于服务端那边已经在请求中处理了，所以这里不用做处理

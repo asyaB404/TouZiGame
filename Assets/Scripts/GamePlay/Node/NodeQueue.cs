@@ -57,7 +57,17 @@ namespace GamePlay.Node
         public void OnPointerEnter(PointerEventData data)
         {
             if (GameManager.GameState == GameState.Idle) return;
-            if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
+                    break;
+                case GameMode.Online:
+                    // if(playerId == 1) return;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             transform.DOKill(); // 停止所有当前的动画
             transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
         }
@@ -81,10 +91,6 @@ namespace GamePlay.Node
             if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.CurPlayerId ||
                 GameManager.GameState == GameState.Idle)
                 return; // 确保点击的是当前节点且是当前玩家操作
-
-            transform.DOKill(); // 停止动画
-            transform.DOScale(initialScale, 0.3f); // 恢复缩放
-
             // 根据不同的游戏模式执行不同的逻辑
             switch (GameManager.GameMode)
             {
@@ -92,12 +98,15 @@ namespace GamePlay.Node
                     GameManager.Instance.AddTouzi(id); // 在本地模式下，向游戏中添加骰子
                     break;
                 case GameMode.Online:
+                    if(playerId == 1) return;
                     MyClient.Instance.AddTouziRequest(GameManager.CurPlayerId, id,
                         GameManager.CurScore);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
             }
+            transform.DOKill(); // 停止动画
+            transform.DOScale(initialScale, 0.3f); 
         }
 
         //添加一个节点

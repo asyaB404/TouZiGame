@@ -38,6 +38,7 @@ namespace NetWork.Server
         [Server]
         public void StartGame()
         {
+            GameManager.GameMode = GameMode.Online;
             GameManager.Instance.StartGame(Seed.Value);
             MyClient.Instance.StartGameResponse();
         }

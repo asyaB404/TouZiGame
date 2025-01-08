@@ -33,7 +33,7 @@ namespace GamePlay.Core
     public class GameManager : MonoBehaviour
     {
         public static GameState GameState { get; private set; } = GameState.Idle;
-        public static GameMode GameMode { get; private set; } = GameMode.Native;
+        public static GameMode GameMode { get; set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
 
         /// <summary>
