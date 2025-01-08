@@ -47,11 +47,11 @@ namespace GamePlay.Node
             return NodeQueues[id].RemoveNode(score);
         }
 
-        public void Clear()
+        public void Reset()
         {
             foreach (var nodeQueue in NodeQueues)
             {
-                nodeQueue.Clear();
+                nodeQueue.Reset();
             }
         }
 

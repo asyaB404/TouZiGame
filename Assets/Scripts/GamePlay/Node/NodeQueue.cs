@@ -130,15 +130,15 @@ namespace GamePlay.Node
             return true;
         }
 
-        public void Clear()
+        public void Reset()
         {
             sumScore = 0;
             scores.Clear();
             for (int i = touziObjs.Count - 1; i >= 0; i--)
             {
+                touziObjs[i].transform.DOKill();
                 Destroy(touziObjs[i]);
             }
-
             _scoreCounts.Clear();
             touziObjs.Clear();
         }

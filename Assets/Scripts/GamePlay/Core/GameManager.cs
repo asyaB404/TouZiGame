@@ -132,14 +132,13 @@ namespace GamePlay.Core
 
         private void Reset()
         {
+            GameState = GameState.Idle;
             curScore = Random.Range(0, 6);
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
-                nodeQueueManager.Clear();
+                nodeQueueManager.Reset();
             }
-
-            GameUIPanel.Instance.RollDiceAnimation(curScore);
             GameUIPanel.Instance.UpdateScoreUI(0, nodeQueueManagers[0]);
             GameUIPanel.Instance.UpdateScoreUI(1, nodeQueueManagers[1]);
         }
