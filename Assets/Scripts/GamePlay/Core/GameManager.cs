@@ -73,7 +73,7 @@ namespace GamePlay.Core
 
         private void Start()
         {
-            StartGame(123);
+            // StartGame(123);
         }
 
         public void NextToPlayerId()
@@ -158,6 +158,12 @@ namespace GamePlay.Core
         [Space(10)] [SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
+
+        [ContextMenu("startGame")]
+        private void TestStartGame()
+        {
+            StartGame(MyGlobal.CurSeed);
+        }
 
         [ContextMenu("add")]
         private void Test()

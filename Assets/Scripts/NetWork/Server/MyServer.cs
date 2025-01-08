@@ -36,6 +36,7 @@ namespace NetWork.Server
         [Server]
         public void StartGame()
         {
+            GameManager.Instance.StartGame(Seed.Value);
             MyClient.Instance.StartGameResponse();
         }
 
@@ -65,5 +66,15 @@ namespace NetWork.Server
             //同步种子
             Seed.Value = MyGlobal.CurSeed;
         }
+
+        #region Debug
+        
+        [ContextMenu(nameof(TestForStartGame))]
+        private void TestForStartGame()
+        {
+            StartGame();
+        }
+
+        #endregion
     }
 }
