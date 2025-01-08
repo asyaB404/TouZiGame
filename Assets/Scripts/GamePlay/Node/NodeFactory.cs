@@ -17,18 +17,20 @@ namespace GamePlay.Node
         /// <summary>
         /// 创建一个NodeGameObject，并将其设置为指定父级的子对象。
         /// </summary>
-        /// <param name="index">骰子图片资源索引，0其实就是第一张图片，也就是点数1</param>
+        /// <param name="score">骰子点数大小</param>
         /// <param name="parent">生成对象的父级Transform。</param>
         /// <returns>创建的GameObject，若索引无效则返回 null。</returns>
-        public static GameObject CreateNode(int index, Transform parent = null)
+        public static GameObject CreateNode(int score, Transform parent = null)
         {
+            //将分数转为下标
+            score--; 
             //验证GameManager实例和索引有效性
-            if (GameManager.Instance == null || index < 0 || index >= GameManager.Instance.Touzi.Count)
+            if (GameManager.Instance == null || score < 0 || score >= GameManager.Instance.Touzi.Count)
             {
-                Debug.LogError($"无效的索引 {index} 或 GameManager 未初始化。");
+                Debug.LogError($"无效的索引 {score} 或 GameManager 未初始化。");
                 return null;
             }
-            Sprite sprite = GameManager.Instance.Touzi[index];
+            Sprite sprite = GameManager.Instance.Touzi[score];
             GameObject nodeGameObject = new GameObject("Node");
 
             //设置父级
