@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8979329489616825525}
   - component: {fileID: 2351596134139656965}
   - component: {fileID: 4197976186772974494}
+  - component: {fileID: 5677578941233176850}
   m_Layer: 0
   m_Name: MyServer
   m_TagString: Untagged
@@ -49,6 +50,8 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 2351596134139656965}
   _networkObjectCache: {fileID: 2351596134139656965}
+  Seed:
+    _value: 0
 --- !u!114 &2351596134139656965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +69,7 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 8979329489616825525}
+  - {fileID: 4197976186772974494}
   <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
   <NestedRootNetworkBehaviours>k__BackingField: []
   SerializedTransformProperties:
@@ -107,6 +111,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402926ef33e0a894d9fec352693988ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 2351596134139656965}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2351596134139656965}
+--- !u!114 &5677578941233176850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526537015051212328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fd7f855ec523429999fc4e14a1928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _overrideType: 3
+  _updateHostVisibility: 1
+  _observerConditions: []

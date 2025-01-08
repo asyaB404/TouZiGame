@@ -7,14 +7,16 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using FishNet;
 using GamePlay.Core;
 using GamePlay.Node;
+using NetWork.Server;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI.Panel
 {
@@ -26,6 +28,11 @@ namespace UI.Panel
         [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
+
+        private void Awake()
+        {
+            GetControl<Button>("testBtn").onClick.AddListener(() => {MyServer.Instance.StartGame(); });
+        }
 
         public void UpdateScoreUI(int playerId, NodeQueueManager nodeQueueManager)
         {

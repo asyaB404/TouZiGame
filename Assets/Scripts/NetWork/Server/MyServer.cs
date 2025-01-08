@@ -23,7 +23,7 @@ namespace NetWork.Server
     /// </summary>
     public class MyServer : NetworkBehaviour
     {
-        [AllowMutableSyncType] public readonly SyncVar<int> Seed = new();
+        [AllowMutableSyncType] public SyncVar<int> Seed = new();
         public static MyServer Instance { get; private set; }
 
         public static GameObject CreateInstance()
@@ -65,13 +65,18 @@ namespace NetWork.Server
         {
             base.OnStartClient();
             Instance = this;
-            if (!IsServerStarted) gameObject.SetActive(false);
-            //同步种子
-            Seed.Value = MyGlobal.CurSeed;
+            if (IsServerStarted)
+            {
+                Seed.Value = MyGlobal.CurSeed;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         #region Debug
-        
+
         [ContextMenu(nameof(TestForStartGame))]
         private void TestForStartGame()
         {
