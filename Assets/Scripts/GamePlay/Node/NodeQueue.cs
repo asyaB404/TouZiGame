@@ -56,6 +56,7 @@ namespace GamePlay.Node
         //当鼠标进入节点时，缩放节点并播放动画
         public void OnPointerEnter(PointerEventData data)
         {
+            if (GameManager.GameState == GameState.Idle) return;
             if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
             transform.DOKill(); // 停止所有当前的动画
             transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
@@ -64,6 +65,7 @@ namespace GamePlay.Node
         //当鼠标离开节点时，恢复节点的原始大小
         public void OnPointerExit(PointerEventData data)
         {
+            if (GameManager.GameState == GameState.Idle) return;
             transform.DOKill(); // 停止当前动画
             transform.DOScale(initialScale, 0.3f); // 恢复节点的原始缩放
         }
@@ -76,7 +78,8 @@ namespace GamePlay.Node
         // 当鼠标松开时，根据游戏模式执行相应操作
         public void OnPointerUp(PointerEventData data)
         {
-            if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.CurPlayerId)
+            if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.CurPlayerId ||
+                GameManager.GameState == GameState.Idle)
                 return; // 确保点击的是当前节点且是当前玩家操作
 
             transform.DOKill(); // 停止动画

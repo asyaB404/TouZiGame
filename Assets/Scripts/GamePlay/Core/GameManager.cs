@@ -40,7 +40,7 @@ namespace GamePlay.Core
         /// 当前玩家Id
         /// </summary>
         public static int CurPlayerId => Instance.curPlayerId;
-        
+
         /// <summary>
         /// 当前骰子点数大小
         /// </summary>
@@ -57,7 +57,7 @@ namespace GamePlay.Core
         public IReadOnlyList<Sprite> Touzi => touzi;
 
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
-        
+
         [SerializeField] private int curScore;
 
         private void Awake()
@@ -108,6 +108,7 @@ namespace GamePlay.Core
         /// <param name="score">骰子点数大小</param>
         public void AddTouzi(int playerId, int id, int score)
         {
+            if (GameState == GameState.Idle) return;
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             GameUIPanel.Instance.UpdateScoreUI(curPlayerId, playerNodeQueueManager);
