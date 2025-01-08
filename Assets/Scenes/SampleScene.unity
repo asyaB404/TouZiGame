@@ -5329,7 +5329,7 @@ MonoBehaviour:
   nodeQueueManagers:
   - {fileID: 1388458615}
   - {fileID: 740797945}
-  curScore: -1
+  curScore: 0
   t1: 0
   t2: 0
   t3: 0

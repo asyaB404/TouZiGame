@@ -16,11 +16,13 @@ namespace NetWork.Client
     {
         public static MyClient Instance { get; private set; }
 
-        public static MyClient CreateInstance()
+        public static GameObject CreateInstance()
         {
-            GameObject obj = new GameObject("MyClient");
-            obj.AddComponent<NetworkObject>();
-            return obj.AddComponent<MyClient>();
+            GameObject prefabRes = Resources.Load<GameObject>(MyGlobal.CLIENT_PREFABS_PATH);
+            return Instantiate(prefabRes);
+            // GameObject obj = new GameObject("MyClient");
+            // obj.AddComponent<NetworkObject>();
+            // return obj.AddComponent<MyClient>();
         }
 
         public override void OnStartClient()

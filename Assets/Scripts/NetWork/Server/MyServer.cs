@@ -26,11 +26,13 @@ namespace NetWork.Server
         [AllowMutableSyncType] public readonly SyncVar<int> Seed = new();
         public static MyServer Instance { get; private set; }
 
-        public static MyServer CreateInstance()
+        public static GameObject CreateInstance()
         {
-            GameObject obj = new GameObject("MyServer");
-            obj.AddComponent<NetworkObject>();
-            return obj.AddComponent<MyServer>();
+            GameObject prefabRes = Resources.Load<GameObject>(MyGlobal.SERVER_PREFABS_PATH);
+            return Instantiate(prefabRes);
+            // GameObject obj = new GameObject("MyServer");
+            // obj.AddComponent<NetworkObject>();
+            // return obj.AddComponent<MyServer>();
         }
 
         [Server]
