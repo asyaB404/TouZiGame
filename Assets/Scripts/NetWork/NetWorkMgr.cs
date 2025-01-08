@@ -14,6 +14,7 @@ using FishNet.Connection;
 using FishNet.Transporting;
 using NetWork.Client;
 using NetWork.Server;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace NetWork
@@ -22,6 +23,7 @@ namespace NetWork
     {
         static NetWorkMgr()
         {
+            Debug.Log("执行");
             InstanceFinder.ServerManager.OnServerConnectionState += (arg) =>
             {
                 switch (arg.ConnectionState)
@@ -63,7 +65,6 @@ namespace NetWork
                 else
                 {
                 }
-                InstanceFinder.ServerManager.Spawn(MyClient.CreateInstance().gameObject, connection);
             };
         }
 
