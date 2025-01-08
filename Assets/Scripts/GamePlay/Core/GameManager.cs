@@ -63,7 +63,7 @@ namespace GamePlay.Core
         private void Awake()
         {
             Application.targetFrameRate = 9999;
-            Debug.Log(NetWorkMgr.CloseServer()); //激活静态构造函数，测试用
+            Debug.Log(NetWorkMgr.CloseServer()); //激活静态构造函数，测试用test
             Instance = this;
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {
