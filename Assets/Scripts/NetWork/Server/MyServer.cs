@@ -43,7 +43,7 @@ namespace NetWork.Server
             MyClient.Instance.StartGameResponse();
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
         {
             //因为自己服务端也是客户端

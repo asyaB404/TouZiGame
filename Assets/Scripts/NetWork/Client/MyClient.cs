@@ -41,7 +41,6 @@ namespace NetWork.Client
         [ObserversRpc]
         public void StartGameResponse()
         {
-            // if (!IsOwner) return;
             //由于服务端那边已经在请求中处理了，所以这里不用做处理
             if (IsServerStarted) return;
             GameManager.GameMode = GameMode.Online;
