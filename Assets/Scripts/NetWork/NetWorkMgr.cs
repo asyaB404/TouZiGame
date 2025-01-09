@@ -75,8 +75,6 @@ namespace NetWork
 
         public static bool CreateServer(string roomName, ushort port)
         {
-            int seed = Random.Range(int.MinValue, int.MaxValue);
-            MyGlobal.CurSeed = seed;
             var flag = InstanceFinder.ServerManager.StartConnection(port);
             return flag;
         }

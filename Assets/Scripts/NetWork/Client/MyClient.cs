@@ -4,7 +4,6 @@
     Description:	客户端脚本实例
 *********************************************************************/
 
-using FishNet;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
@@ -38,6 +37,23 @@ namespace NetWork.Client
             }
         }
 
+        #region GetReady
+
+        public void GetReadyRequest()
+        {
+            MyServer.Instance.HandleGetReady();
+        }
+
+        [ObserversRpc]
+        public void GetReadyResponse()
+        {
+            //TODO:准备成功的UI
+        }
+
+        #endregion
+        
+        #region GameStart
+
         [ObserversRpc]
         public void StartGameResponse()
         {
@@ -48,6 +64,8 @@ namespace NetWork.Client
             //让客户端后手
             GameManager.Instance.NextToPlayerId();
         }
+
+        #endregion
 
         #region AddTouzi
 

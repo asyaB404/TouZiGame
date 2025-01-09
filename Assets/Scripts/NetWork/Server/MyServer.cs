@@ -44,6 +44,11 @@ namespace NetWork.Server
         }
 
         [ServerRpc(RequireOwnership = false)]
+        public void HandleGetReady(NetworkConnection conn = null)
+        {
+        }
+
+        [ServerRpc(RequireOwnership = false)]
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
         {
             //因为自己服务端也是客户端
@@ -61,18 +66,28 @@ namespace NetWork.Server
             MyClient.Instance.AddTouziResponse(playerId, id, score);
         }
 
+        public void ResetState()
+        {
+            
+        }
+
         public override void OnStartClient()
         {
             base.OnStartClient();
             Instance = this;
             if (IsServerStarted)
             {
-                Seed.Value = MyGlobal.CurSeed;
+                Seed.Value = Random.Range(int.MinValue, int.MaxValue);
             }
             else
             {
                 gameObject.SetActive(false);
             }
+        }
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
         }
 
         #region Debug

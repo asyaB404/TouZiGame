@@ -163,8 +163,8 @@ namespace GamePlay.Core
         [ContextMenu("startGame")]
         private void TestStartGame()
         {
-            StartGame(MyGlobal.CurSeed);
-        }
+            StartGame(123);
+        } 
 
         [ContextMenu("add")]
         private void Test()
