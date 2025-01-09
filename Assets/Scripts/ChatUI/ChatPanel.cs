@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Extension;
 using FishNet;
 using FishNet.Broadcast;
 using FishNet.Connection;
@@ -15,18 +14,11 @@ namespace ChatUI
     {
         public string Sender;
         public string Message;
-
-        public ChatMessage(string sender, string message)
-        {
-            Sender = sender;
-            Message = message;
-        }
     }
 
-    public class ChatPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class ChatPanel : MonoBehaviour
     {
         public static ChatPanel Instance;
-        public bool IsPointInPanel { get; private set; }
         [SerializeField] private RectTransform content;
         [SerializeField] private TMP_InputField messageInput;
         [SerializeField] private ChatInput chatInput;
@@ -35,7 +27,6 @@ namespace ChatUI
         [SerializeField] private int lineHeight = 40;
         private Button[] _buttons;
         private int _totalLineCount;
-        private Tween _tween;
 
         #region Private
 
@@ -47,8 +38,8 @@ namespace ChatUI
 
         private void OnEnable()
         {
-            HideChatPanel(5f);
             _buttons[0].onClick.AddListener(SendInputField);
+            _buttons[1].onClick.AddListener(OnSwitchBtnClick);
             messageInput.onSubmit.AddListener(OnInputSubmit);
             messageInput.onValidateInput += ValidateInput;
             InstanceFinder.ClientManager.RegisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
@@ -56,11 +47,12 @@ namespace ChatUI
             // InstanceFinder.ServerManager.OnRemoteConnectionState += OnRemoteConnection;
             // InstanceFinder.ServerManager.OnAuthenticationResult += OnAuthentication;
         }
-        
+
         private void OnDisable()
         {
             Clear();
             _buttons[0].onClick.RemoveListener(SendInputField);
+            _buttons[1].onClick.RemoveListener(OnSwitchBtnClick);
             messageInput.onSubmit.RemoveListener(OnInputSubmit);
             messageInput.onValidateInput -= ValidateInput;
             InstanceFinder.ClientManager?.UnregisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
@@ -70,23 +62,19 @@ namespace ChatUI
             // InstanceFinder.ServerManager.OnAuthenticationResult -= OnAuthentication;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        private void OnSwitchBtnClick()
         {
-            IsPointInPanel = true;
-            if (chatInput.IsSelected) return;
-            if (_tween.IsActive())
-                _tween.Kill(true);
-            ShowChatPanel();
+            float x = transform.localPosition.x;
+            if (x >= 0)
+            {
+                transform.DOLocalMoveX(-((RectTransform)transform).sizeDelta.x, 0.1f);
+            }
+            else
+            {
+                transform.DOLocalMoveX(0, 0.1f);
+            }
         }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            IsPointInPanel = false;
-            if (chatInput.IsSelected) return;
-
-            HideChatPanel();
-        }
-
+        
         private char ValidateInput(string text, int charIndex, char addedChar)
         {
             // 忽略首个Enter键的输入
@@ -140,8 +128,6 @@ namespace ChatUI
         private void SpawnMsg(ChatMessage chatMessage)
         {
             if (string.IsNullOrEmpty(chatMessage.Message)) return;
-
-            ShowChatPanel(3);
             var newMessage = Instantiate(messagePrefab, content, false);
             Vector2 pos = newMessage.transform.localPosition;
             pos.y = -_totalLineCount * lineHeight;
@@ -186,28 +172,5 @@ namespace ChatUI
             content.localPosition = new Vector3(0, 0);
             _totalLineCount = 0;
         }
-
-        #region ViewDotween
-
-        public void ShowChatPanel(float duration = -1)
-        {
-            if (_tween.IsActive())
-                _tween.Kill(true);
-            if (duration <= 0)
-                canvasGroup.DOFade(1f, 0.35f);
-            else
-                canvasGroup.DOFade(1f, 0.35f).OnComplete(() => { HideChatPanel(duration); });
-        }
-
-        public void HideChatPanel(float duration = 0f)
-        {
-            if (chatInput.IsSelected || IsPointInPanel)
-                return;
-            if (_tween.IsActive())
-                _tween.Kill(true);
-            DOVirtual.DelayedCall(duration, () => { canvasGroup.DOFade(0f, 0.35f); });
-        }
-
-        #endregion
     }
 }
