@@ -121,7 +121,7 @@ namespace ChatUI
 
         private void SendInputField()
         {
-            SendChatMessage("NoName", messageInput.text);
+            SendChatMessage("NoName:", messageInput.text);
             messageInput.text = null;
         }
 

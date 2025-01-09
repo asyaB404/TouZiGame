@@ -1,3 +1,9 @@
+/********************************************************************
+    Author:			Basyyya
+    Date:			2025:1:9 18:02
+    Description:	全局字段和常量
+*********************************************************************/
+
 public static class MyGlobal
 {
     public static int CurSeed { get; set; }
