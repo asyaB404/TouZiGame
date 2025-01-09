@@ -6,7 +6,6 @@ using FishNet.Transporting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace ChatUI
@@ -21,7 +20,6 @@ namespace ChatUI
     {
         [SerializeField] private RectTransform content;
         [SerializeField] private TMP_InputField messageInput;
-        [SerializeField] private ChatInput chatInput;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private GameObject messagePrefab;
         [SerializeField] private int lineHeight = 40;
@@ -63,14 +61,15 @@ namespace ChatUI
 
         private void OnSwitchBtnClick()
         {
-            float x = transform.localPosition.x;
+            var rectTransform = (RectTransform)transform;
+            var x = rectTransform.anchoredPosition.x;
             if (x >= 0)
             {
-                transform.DOLocalMoveX(-((RectTransform)transform).sizeDelta.x, 0.1f);
+                rectTransform.DOAnchorPosX(-rectTransform.sizeDelta.x, 0.1f);
             }
             else
             {
-                transform.DOLocalMoveX(0, 0.1f);
+                rectTransform.DOAnchorPosX(0, 0.1f);
             }
         }
 
