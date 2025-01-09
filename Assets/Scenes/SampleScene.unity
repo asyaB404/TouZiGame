@@ -3659,7 +3659,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6835476992510392306}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
@@ -10367,7 +10367,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 50}
+  m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &6398566372839863162
 RectTransform:
@@ -10764,7 +10764,7 @@ MonoBehaviour:
   messageInput: {fileID: 8968083932077934407}
   canvasGroup: {fileID: 8394987396799901568}
   messagePrefab: {fileID: 932797467922521988, guid: 6c4e435b4c7336d46b983d695898f648, type: 3}
-  lineHeight: 40
+  lineHeight: 20
   buttons:
   - {fileID: 2095758483197140158}
   - {fileID: 1520099343}
@@ -10815,8 +10815,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
-  m_fontSizeBase: 26
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

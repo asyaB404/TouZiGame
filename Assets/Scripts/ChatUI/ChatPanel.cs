@@ -115,8 +115,8 @@ namespace ChatUI
             var size = content.sizeDelta;
             size.y = lineHeight * (_totalLineCount + 2);
             content.sizeDelta = size;
-            if (size.y >= 700)
-                content.localPosition = new Vector3(0, size.y - 700);
+            if (size.y >= 350)
+                content.localPosition = new Vector3(0, size.y - 350);
         }
 
         private void SendInputField()
