@@ -6,6 +6,7 @@ using FishNet.Transporting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace ChatUI
@@ -18,28 +19,26 @@ namespace ChatUI
 
     public class ChatPanel : MonoBehaviour
     {
-        public static ChatPanel Instance;
         [SerializeField] private RectTransform content;
         [SerializeField] private TMP_InputField messageInput;
         [SerializeField] private ChatInput chatInput;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private GameObject messagePrefab;
         [SerializeField] private int lineHeight = 40;
-        private Button[] _buttons;
+        [SerializeField] private Button[] buttons;
         private int _totalLineCount;
 
         #region Private
 
         private void Awake()
         {
-            Instance = this;
-            _buttons = GetComponentsInChildren<Button>(true);
+            buttons = GetComponentsInChildren<Button>(true);
         }
 
         private void OnEnable()
         {
-            _buttons[0].onClick.AddListener(SendInputField);
-            _buttons[1].onClick.AddListener(OnSwitchBtnClick);
+            buttons[0].onClick.AddListener(SendInputField);
+            buttons[1].onClick.AddListener(OnSwitchBtnClick);
             messageInput.onSubmit.AddListener(OnInputSubmit);
             messageInput.onValidateInput += ValidateInput;
             InstanceFinder.ClientManager.RegisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
@@ -51,12 +50,12 @@ namespace ChatUI
         private void OnDisable()
         {
             Clear();
-            _buttons[0].onClick.RemoveListener(SendInputField);
-            _buttons[1].onClick.RemoveListener(OnSwitchBtnClick);
+            buttons[0].onClick.RemoveListener(SendInputField);
+            buttons[1].onClick.RemoveListener(OnSwitchBtnClick);
             messageInput.onSubmit.RemoveListener(OnInputSubmit);
             messageInput.onValidateInput -= ValidateInput;
-            InstanceFinder.ClientManager?.UnregisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
-            InstanceFinder.ServerManager?.UnregisterBroadcast<ChatMessage>(OnServerChatMessageReceived);
+            InstanceFinder.ClientManager.UnregisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
+            InstanceFinder.ServerManager.UnregisterBroadcast<ChatMessage>(OnServerChatMessageReceived);
             if (InstanceFinder.ServerManager == null) return;
             // InstanceFinder.ServerManager.OnRemoteConnectionState -= OnRemoteConnection;
             // InstanceFinder.ServerManager.OnAuthenticationResult -= OnAuthentication;
@@ -74,7 +73,7 @@ namespace ChatUI
                 transform.DOLocalMoveX(0, 0.1f);
             }
         }
-        
+
         private char ValidateInput(string text, int charIndex, char addedChar)
         {
             // 忽略首个Enter键的输入
@@ -90,27 +89,6 @@ namespace ChatUI
             messageInput.OnPointerClick(new PointerEventData(EventSystem.current));
         }
 
-        // private void OnRemoteConnection(NetworkConnection connection, RemoteConnectionStateArgs obj)
-        // {
-        //     switch (obj.ConnectionState)
-        //     {
-        //         case RemoteConnectionState.Stopped:
-        //             if (connection.IsAuthenticated)
-        //             {
-        //                 InstanceFinder.ServerManager.Broadcast(new ChatMessage("   ", "玩家" + connection + "离开了游戏"));
-        //             }
-        //
-        //             break;
-        //     }
-        // }
-        //
-        // private void OnAuthentication(NetworkConnection connection, bool flag)
-        // {
-        //     if (flag)
-        //     {
-        //         InstanceFinder.ServerManager.Broadcast(new ChatMessage("   ", "玩家" + connection + "加入了游戏"));
-        //     }
-        // }
 
         private void OnClientChatMessageReceived(ChatMessage chatMessage, Channel channel)
         {
@@ -150,6 +128,7 @@ namespace ChatUI
 
         # endregion
 
+
         public void SendChatMessage(string sender, string text)
         {
             var chatMessage = new ChatMessage
@@ -172,5 +151,27 @@ namespace ChatUI
             content.localPosition = new Vector3(0, 0);
             _totalLineCount = 0;
         }
+
+        // private void OnRemoteConnection(NetworkConnection connection, RemoteConnectionStateArgs obj)
+        // {
+        //     switch (obj.ConnectionState)
+        //     {
+        //         case RemoteConnectionState.Stopped:
+        //             if (connection.IsAuthenticated)
+        //             {
+        //                 InstanceFinder.ServerManager.Broadcast(new ChatMessage("   ", "玩家" + connection + "离开了游戏"));
+        //             }
+        //
+        //             break;
+        //     }
+        // }
+        //
+        // private void OnAuthentication(NetworkConnection connection, bool flag)
+        // {
+        //     if (flag)
+        //     {
+        //         InstanceFinder.ServerManager.Broadcast(new ChatMessage("   ", "玩家" + connection + "加入了游戏"));
+        //     }
+        // }
     }
 }
