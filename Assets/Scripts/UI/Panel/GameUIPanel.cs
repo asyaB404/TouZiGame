@@ -54,7 +54,7 @@ namespace UI.Panel
                 i++;
             }
         }
-
+        //摇骰子
         public void RollDiceAnimation(int finalIndex)
         {
             finalIndex -= 1;
