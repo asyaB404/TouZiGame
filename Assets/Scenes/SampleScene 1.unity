@@ -4787,6 +4787,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028660562}
   m_CullTransparentMesh: 1
+--- !u!1 &1032235944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032235946}
+  - component: {fileID: 1032235945}
+  m_Layer: 0
+  m_Name: TouZiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1032235945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032235944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee91b17cf3afcdc4e8ff948d74ed24e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touZiDatas: []
+--- !u!4 &1032235946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032235944}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 546.25, y: 401.50003, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1054591309
 GameObject:
   m_ObjectHideFlags: 0
@@ -9483,8 +9528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c382daa2cb42d9a3078412f69f1d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chatPanel: {fileID: 0}
-  <IsSelected>k__BackingField: 0
 --- !u!222 &262727603534936666
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9703,7 +9746,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 866927988815566192}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5
+  m_Size: 0.50000006
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11000,3 +11043,4 @@ SceneRoots:
   - {fileID: 694099984}
   - {fileID: 1596878882}
   - {fileID: 540398926}
+  - {fileID: 1032235946}
