@@ -69,6 +69,7 @@ namespace GamePlay.Core
             {
                 nodeQueueManagers[i].Init(i);
             }
+            // StartGame(123);
         }
 
         private void Start()
@@ -87,7 +88,9 @@ namespace GamePlay.Core
             GameState = GameState.Gaming;
             Random.InitState(seed);
             curScore = Random.Range(1, 7);
-            GameUIPanel.Instance.RollDiceAnimation(curScore);
+            // GameUIPanel.Instance.RollDiceAnimation(curScore);
+            Debug.Log(GameUIPanel.Instance);
+            HoleCard.Instance.HoleCardsInit();
         }
 
         /// <summary>
@@ -97,11 +100,11 @@ namespace GamePlay.Core
         {
             NextToPlayerId();
             curScore = Random.Range(1, 7);
-            GameUIPanel.Instance.RollDiceAnimation(curScore);
+            // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
         /// <summary>
-        /// 添加骰子
+        /// 添加骰子,将骰子添加到场上
         /// </summary>
         /// <param name="playerId">玩家id</param>
         /// <param name="id">第几行</param>
@@ -139,7 +142,7 @@ namespace GamePlay.Core
         {
             Reset();
         }
-
+        //重置
         private void Reset()
         {
             GameState = GameState.Idle;

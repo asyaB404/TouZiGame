@@ -25,7 +25,7 @@ namespace UI.Panel
         private const int SPIN_COUNT = 15;
         private const float ANIMATION_DURATION = 2f;
         private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
-        [SerializeField] private Image touziImage;
+        // [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
 
@@ -33,7 +33,7 @@ namespace UI.Panel
         {
             GetControl<Button>("testBtn").onClick.AddListener(() => {MyServer.Instance.StartGame(); });
         }
-
+        //计算分数
         public void UpdateScoreUI(int playerId, NodeQueueManager nodeQueueManager)
         {
             TextMeshProUGUI[] texts;
@@ -54,14 +54,14 @@ namespace UI.Panel
                 i++;
             }
         }
-        //摇骰子
-        public void RollDiceAnimation(int finalIndex)
+        //摇骰子动画，finalIndex是最终结果
+        public void RollDiceAnimation(Image touziImage,int finalIndex,Vector2 point)
         {
             finalIndex -= 1;
             Sequence diceSequence = DOTween.Sequence();
             // 添加持续摇晃效果
             Tweener doShakePosition = touziImage.transform.DOShakePosition(
-                duration: ANIMATION_DURATION,
+                duration: ANIMATION_DURATION,//持续时间
                 strength: new Vector3(10, 10, 0), // 水平和垂直方向抖动
                 vibrato: 20,
                 randomness: 90,
@@ -74,7 +74,7 @@ namespace UI.Panel
                 randomness: 90, // 随机性
                 fadeOut: true // 衰减
             );
-
+            Tween MoveTween=touziImage.transform.DOMove(point, ANIMATION_DURATION);
             // 添加骰子面滚动动画
             for (int i = 0; i < SPIN_COUNT; i++)
             {
@@ -95,7 +95,7 @@ namespace UI.Panel
         [ContextMenu("test")]
         public void Test()
         {
-            RollDiceAnimation(testIndex);
+            // RollDiceAnimation(testIndex);
         }
 
         #endregion

@@ -106,6 +106,8 @@ namespace UI
             FindChildrenControl<Slider>();
             FindChildrenControl<ScrollRect>();
             FindChildrenControl<InputField>();
+            Debug.Log(this.name);
+
         }
 
 
