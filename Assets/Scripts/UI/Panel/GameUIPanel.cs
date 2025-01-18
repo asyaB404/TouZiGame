@@ -28,6 +28,7 @@ namespace UI.Panel
         // [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
+        
 
         private void Awake()
         {
@@ -55,8 +56,9 @@ namespace UI.Panel
             }
         }
         //摇骰子动画，finalIndex是最终结果
-        public void RollDiceAnimation(Image touziImage,int finalIndex,Vector2 point)
+        public void RollDiceAnimation(Image touziImage,int finalIndex)
         {
+            PocketTouZi pocketTouZi = touziImage.GetComponent<PocketTouZi>();
             finalIndex -= 1;
             Sequence diceSequence = DOTween.Sequence();
             // 添加持续摇晃效果
@@ -74,7 +76,7 @@ namespace UI.Panel
                 randomness: 90, // 随机性
                 fadeOut: true // 衰减
             );
-            Tween MoveTween=touziImage.transform.DOMove(point, ANIMATION_DURATION);
+            // Tween MoveTween=touziImage.transform.DOMove(point, ANIMATION_DURATION);
             // 添加骰子面滚动动画
             for (int i = 0; i < SPIN_COUNT; i++)
             {
@@ -83,11 +85,11 @@ namespace UI.Panel
                 diceSequence.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
             }
 
-            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex]; });
+            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex];});
             diceSequence.Play();
         }
 
-
+        
         #region debug
 
         [SerializeField] [Range(0, 5)] private int testIndex;

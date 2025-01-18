@@ -35,7 +35,15 @@ namespace GamePlay.Core
         public static GameState GameState { get; private set; } = GameState.Idle;
         public static GameMode GameMode { get; set; } = GameMode.Native;
         public static GameManager Instance { get; private set; }
-
+        // public List<GameObject> holeCardPanels;//放底牌的地方
+        public void AddHoleCard( PocketTouZi pocketTouZi)
+        {
+            int nub=Random.Range(1, 7);
+            pocketTouZi.gameObject.SetActive(true);
+            pocketTouZi.RollDiceAnimation(nub);
+            pocketTouZi.gameObject.SetActive(true);
+            // RollDiceAnimation(touZiImage, finalIndex);
+        }
         /// <summary>
         /// 当前玩家Id
         /// </summary>
@@ -60,6 +68,16 @@ namespace GamePlay.Core
 
         [SerializeField] private int curScore;
 
+        public int holeCardNumber;//第几个底牌，
+        public HoleCardManager[] holeCardManagers;
+
+
+        public void SetCurScore(int number,int score)
+        {
+            holeCardNumber = number;
+            // Debug.Log();
+            curScore = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
+        }
         private void Awake()
         {
             Application.targetFrameRate = 9999;
@@ -68,6 +86,9 @@ namespace GamePlay.Core
             for (int i = 0; i < nodeQueueManagers.Length; i++)
             {
                 nodeQueueManagers[i].Init(i);
+            }
+            for (int i = 0; i < holeCardManagers.Length; i++){
+                holeCardManagers[i].Init(i);
             }
             // StartGame(123);
         }
@@ -79,6 +100,10 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
+            
+            AddHoleCard(holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber]);
+            holeCardNumber = 0;
+            curScore=holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
@@ -87,10 +112,13 @@ namespace GamePlay.Core
         {
             GameState = GameState.Gaming;
             Random.InitState(seed);
-            curScore = Random.Range(1, 7);
+            // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
             Debug.Log(GameUIPanel.Instance);
-            HoleCard.Instance.HoleCardsInit();
+            curPlayerId = 0;
+            holeCardManagers[0].GetFirstHoleCard();
+            holeCardManagers[1].GetFirstHoleCard();
+            // HoleCardManager.Instance.HoleCardsInit();
         }
 
         /// <summary>
@@ -99,7 +127,7 @@ namespace GamePlay.Core
         public void NextTurn()
         {
             NextToPlayerId();
-            curScore = Random.Range(1, 7);
+            // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
@@ -146,7 +174,7 @@ namespace GamePlay.Core
         private void Reset()
         {
             GameState = GameState.Idle;
-            curScore = Random.Range(1, 7);
+            // curScore = Random.Range(1, 7);
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
@@ -159,7 +187,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 
@@ -167,7 +195,7 @@ namespace GamePlay.Core
         private void TestStartGame()
         {
             StartGame(123);
-        } 
+        }
 
         [ContextMenu("add")]
         private void Test()
