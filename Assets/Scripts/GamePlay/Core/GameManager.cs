@@ -71,12 +71,15 @@ namespace GamePlay.Core
         public int holeCardNumber;//第几个底牌，
         public HoleCardManager[] holeCardManagers;
 
-
-        public void SetCurScore(int number,int score)
+        public PocketTouZi chooseTouzi;
+        public void SetCurScore(int number=0)
         {
             holeCardNumber = number;
+            chooseTouzi?.HideHalo();
             // Debug.Log();
-            curScore = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
+            chooseTouzi=holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber];
+            chooseTouzi.ShowHalo();
+            curScore = chooseTouzi.touZiNub;
         }
         private void Awake()
         {
@@ -119,6 +122,7 @@ namespace GamePlay.Core
             holeCardManagers[0].GetFirstHoleCard();
             holeCardManagers[1].GetFirstHoleCard();
             // HoleCardManager.Instance.HoleCardsInit();
+            SetCurScore(0);
         }
 
         /// <summary>
@@ -127,6 +131,7 @@ namespace GamePlay.Core
         public void NextTurn()
         {
             NextToPlayerId();
+            SetCurScore(0);
             // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
