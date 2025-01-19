@@ -67,11 +67,13 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         [SerializeField] private int curScore;
+        
+        public const int A_STAGE_ROUND=5;//一个阶段几个回合
 
         public int holeCardNumber;//第几个底牌，
-        public HoleCardManager[] holeCardManagers;
+        public HoleCardManager[] holeCardManagers;//底牌管理器（非单例，一个玩家一个
 
-        public PocketTouZi chooseTouzi;
+        public PocketTouZi chooseTouzi;//当前选中的骰子
         public void SetCurScore(int number=0)
         {
             holeCardNumber = number;
@@ -81,6 +83,15 @@ namespace GamePlay.Core
             chooseTouzi.ShowHalo();
             curScore = chooseTouzi.touZiNub;
         }
+        
+
+
+        #region 奖池相关
+
+        #endregion
+
+
+
         private void Awake()
         {
             Application.targetFrameRate = 9999;
@@ -132,6 +143,7 @@ namespace GamePlay.Core
         {
             NextToPlayerId();
             SetCurScore(0);
+            StageManager.Instance.NewRound(curPlayerId);
             // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
