@@ -7,6 +7,7 @@
 public static class MyGlobal
 {
     public const int MAX_PLAYER_COUNT = 2; //说不定呢，以后能做个2V2
+    public const int A_STAGE_ROUND=5;//一个阶段几个回合
     public const string CLIENT_PREFABS_PATH = "Prefabs/Network/MyClient";
     public const string SERVER_PREFABS_PATH = "Prefabs/Network/MyServer";
 }

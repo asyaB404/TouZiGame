@@ -68,6 +68,7 @@ namespace GamePlay.Node
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             transform.DOKill(); // 停止所有当前的动画
             transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
         }
@@ -98,15 +99,16 @@ namespace GamePlay.Node
                     GameManager.Instance.AddTouzi(id); // 在本地模式下，向游戏中添加骰子
                     break;
                 case GameMode.Online:
-                    if(playerId == 1) return;
+                    if (playerId == 1) return;
                     MyClient.Instance.AddTouziRequest(GameManager.CurPlayerId, id,
                         GameManager.CurScore);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
             }
+
             transform.DOKill(); // 停止动画
-            transform.DOScale(initialScale, 0.3f); 
+            transform.DOScale(initialScale, 0.3f);
         }
 
         //添加一个节点

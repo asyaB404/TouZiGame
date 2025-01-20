@@ -34,16 +34,11 @@ namespace GamePlay.Core
     {
         public static GameState GameState { get; private set; } = GameState.Idle;
         public static GameMode GameMode { get; set; } = GameMode.Native;
+
         public static GameManager Instance { get; private set; }
+
         // public List<GameObject> holeCardPanels;//放底牌的地方
-        public void AddHoleCard( PocketTouZi pocketTouZi)
-        {
-            int nub=Random.Range(1, 7);
-            pocketTouZi.gameObject.SetActive(true);
-            pocketTouZi.RollDiceAnimation(nub);
-            pocketTouZi.gameObject.SetActive(true);
-            // RollDiceAnimation(touZiImage, finalIndex);
-        }
+
         /// <summary>
         /// 当前玩家Id
         /// </summary>
@@ -67,29 +62,36 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         [SerializeField] private int curScore;
-        
-        public const int A_STAGE_ROUND=5;//一个阶段几个回合
 
-        public int holeCardNumber;//第几个底牌，
-        public HoleCardManager[] holeCardManagers;//底牌管理器（非单例，一个玩家一个
+        public int holeCardNumber; //第几个底牌，
 
-        public PocketTouZi chooseTouzi;//当前选中的骰子
-        public void SetCurScore(int number=0)
+        public HoleCardManager[] holeCardManagers; //底牌管理器（非单例，一个玩家一个
+
+        public PocketTouZi chooseTouzi; //当前选中的骰子
+
+        public void AddHoleCard(PocketTouZi pocketTouZi)
+        {
+            int nub = Random.Range(1, 7);
+            pocketTouZi.gameObject.SetActive(true);
+            pocketTouZi.RollDiceAnimation(nub);
+            pocketTouZi.gameObject.SetActive(true);
+            // RollDiceAnimation(touZiImage, finalIndex);
+        }
+
+        public void SetCurScore(int number = 0)
         {
             holeCardNumber = number;
             chooseTouzi?.HideHalo();
             // Debug.Log();
-            chooseTouzi=holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber];
+            chooseTouzi = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber];
             chooseTouzi.ShowHalo();
             curScore = chooseTouzi.touZiNub;
         }
-        
 
 
         #region 奖池相关
 
         #endregion
-
 
 
         private void Awake()
@@ -101,7 +103,9 @@ namespace GamePlay.Core
             {
                 nodeQueueManagers[i].Init(i);
             }
-            for (int i = 0; i < holeCardManagers.Length; i++){
+
+            for (int i = 0; i < holeCardManagers.Length; i++)
+            {
                 holeCardManagers[i].Init(i);
             }
             // StartGame(123);
@@ -114,10 +118,9 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
-            
             AddHoleCard(holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber]);
             holeCardNumber = 0;
-            curScore=holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
+            curScore = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
@@ -176,7 +179,6 @@ namespace GamePlay.Core
             AddTouzi(curPlayerId, id, curScore);
         }
 
-
         public bool RemoveTouzi(int playerId, int id, int score)
         {
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
@@ -187,6 +189,7 @@ namespace GamePlay.Core
         {
             Reset();
         }
+
         //重置
         private void Reset()
         {
@@ -204,7 +207,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)][SerializeField] private int t1 = 0;
+        [Space(10)] [SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 

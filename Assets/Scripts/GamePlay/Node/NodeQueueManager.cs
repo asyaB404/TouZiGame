@@ -28,6 +28,7 @@ namespace GamePlay.Node
 
         //一列最多存多少个Node
         public const int MAX_QUEUE_NODE = 3;
+
         /// <summary>
         /// 每次调用都将会遍历计算一次node队列的总和分数
         /// </summary>

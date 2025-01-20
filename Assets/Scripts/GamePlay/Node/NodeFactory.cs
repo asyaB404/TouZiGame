@@ -9,9 +9,9 @@
 
 using GamePlay.Core;
 using UnityEngine;
+
 namespace GamePlay.Node
 {
-
     public static class NodeFactory
     {
         /// <summary>
@@ -23,13 +23,14 @@ namespace GamePlay.Node
         public static GameObject CreateNode(int score, Transform parent = null)
         {
             //将分数转为下标
-            score--; 
+            score--;
             //验证GameManager实例和索引有效性
             if (GameManager.Instance == null || score < 0 || score >= GameManager.Instance.Touzi.Count)
             {
                 Debug.LogError($"无效的索引 {score} 或 GameManager 未初始化。");
                 return null;
             }
+
             Sprite sprite = GameManager.Instance.Touzi[score];
             GameObject nodeGameObject = new GameObject("Node");
 
@@ -46,5 +47,4 @@ namespace GamePlay.Node
             return nodeGameObject;
         }
     }
-
 }
