@@ -28,11 +28,12 @@ namespace UI.Panel
         // [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
-        
+
 
         private void Awake()
         {
-            GetControl<Button>("testBtn").onClick.AddListener(() => {MyServer.Instance.StartGame(); });
+            GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
+            SetButtonClick();
         }
         //计算分数
         public void UpdateScoreUI(int playerId, NodeQueueManager nodeQueueManager)
@@ -56,7 +57,7 @@ namespace UI.Panel
             }
         }
         //摇骰子动画，finalIndex是最终结果
-        public void RollDiceAnimation(Image touziImage,int finalIndex)
+        public void RollDiceAnimation(Image touziImage, int finalIndex)
         {
             PocketTouZi pocketTouZi = touziImage.GetComponent<PocketTouZi>();
             finalIndex -= 1;
@@ -85,14 +86,61 @@ namespace UI.Panel
                 diceSequence.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
             }
 
-            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex];});
+            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex]; });
             diceSequence.Play();
         }
+        #region 底注和回合数相关
+        [SerializeField] private TextMeshProUGUI handNubText;//第几局
+        [SerializeField] private TextMeshProUGUI stageNubText;//第几次加注
+        [SerializeField] private TextMeshProUGUI roundNubText;//第几回合
 
-        
+        [SerializeField] private RectTransform buttonPanel;//按钮页面
+        [SerializeField] private Button CallButton;//跟注按钮
+        [SerializeField] private Button raiseButton;//加注按钮
+        [SerializeField] private Button foldButton;//弃牌按钮
+
+        public void SetRaiseButton(bool flag)
+        {
+            buttonPanel.gameObject.SetActive(flag);
+            Debug.Log(flag);
+        }
+        public void SetHandNub(int handNub)
+        {
+            handNubText.text = handNub.ToString();
+        }
+        public void SetStageNub(int stageNub)
+        {
+            stageNubText.text = stageNub.ToString();
+        }
+        public void SetRoundNub(int roundNub)
+        {
+            roundNubText.text = roundNub.ToString();
+        }
+        private void SetButtonClick()
+        {
+            CallButton.onClick.AddListener(CallButtonClick);
+            raiseButton.onClick.AddListener(RaiseButtonClick);
+            foldButton.onClick.AddListener(FoldButtonClick);
+        }
+        private void CallButtonClick()
+        {
+            SetRaiseButton(false);
+            StageManager.Instance.NewStage();
+        }
+        private void RaiseButtonClick()
+        {
+            SetRaiseButton(false);
+            StageManager.Instance.NewStage();
+        }
+        private void FoldButtonClick()
+        {
+            SetRaiseButton(false);
+            StageManager.Instance.NewHand(1);
+        }
+        #endregion
         #region debug
 
-        [SerializeField] [Range(0, 5)] private int testIndex;
+        [SerializeField][Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()

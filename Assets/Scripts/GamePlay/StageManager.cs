@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GamePlay.Core;
+using UI.Panel;
 using UnityEngine;
 
 public class StageManager
@@ -24,6 +25,7 @@ public class StageManager
         HandNub++;
         Round = 0;
         Stage = 0;
+        SetText();
     }
 
     /// <summary>
@@ -34,12 +36,23 @@ public class StageManager
     {
         if (nowPlayerId != firstPlayerId) return false;
         Round++;
-        if (Round > MyGlobal.A_STAGE_ROUND)
+        SetText();
+        if (Round >= MyGlobal.A_STAGE_ROUND)
         {
+            GameUIPanel.Instance.SetRaiseButton(true);
             return true;
             //进入下一个阶段
         }
-
         return false;
+    }
+    public void NewStage(){
+        Stage++;
+        Round=0;
+        SetText();
+    }
+    public void SetText(){
+        GameUIPanel.Instance.SetRoundNub(Round+1);
+        GameUIPanel.Instance.SetStageNub(Stage+1);
+        GameUIPanel.Instance.SetHandNub(HandNub+1);
     }
 }

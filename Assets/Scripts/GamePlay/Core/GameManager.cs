@@ -69,12 +69,12 @@ namespace GamePlay.Core
 
         public PocketTouZi chooseTouzi; //当前选中的骰子
 
-        public void AddHoleCard(PocketTouZi pocketTouZi)
+        public void GetNewHoleCard(int playerId, int holeCardNumber )
         {
             int nub = Random.Range(1, 7);
+            PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
             pocketTouZi.gameObject.SetActive(true);
             pocketTouZi.RollDiceAnimation(nub);
-            pocketTouZi.gameObject.SetActive(true);
             // RollDiceAnimation(touZiImage, finalIndex);
         }
 
@@ -83,7 +83,7 @@ namespace GamePlay.Core
             holeCardNumber = number;
             chooseTouzi?.HideHalo();
             // Debug.Log();
-            chooseTouzi = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber];
+            chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardNumber);
             chooseTouzi.ShowHalo();
             curScore = chooseTouzi.touZiNub;
         }
@@ -118,9 +118,9 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
-            AddHoleCard(holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber]);
+            GetNewHoleCard(CurPlayerId, holeCardNumber);//更新骰子，要在更新玩家id前调用
             holeCardNumber = 0;
-            curScore = holeCardManagers[curPlayerId].pocketTouZis[holeCardNumber].touZiNub;
+            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).touZiNub;
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
@@ -135,6 +135,7 @@ namespace GamePlay.Core
             curPlayerId = 0;
             holeCardManagers[0].GetFirstHoleCard();
             holeCardManagers[1].GetFirstHoleCard();
+            StageManager.Instance.NewHand(curPlayerId);
             // HoleCardManager.Instance.HoleCardsInit();
             SetCurScore(0);
         }
