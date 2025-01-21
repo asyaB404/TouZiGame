@@ -28,7 +28,7 @@ public class HoleCardManager : MonoBehaviour
     }
 
     //获取第一份手牌
-    public void SetFirstHoleCard()
+    public void GetFirstHoleCard()
     {
         for (int i = 0; i < pocketTouZis.Length; i++)
         {

@@ -74,7 +74,6 @@ namespace GamePlay.Core
             PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
             pocketTouZi.gameObject.SetActive(true);
             pocketTouZi.RollDiceAnimation(nub);
-            pocketTouZi.SettouZiNub(nub);
             // RollDiceAnimation(touZiImage, finalIndex);
         }
 
@@ -133,8 +132,8 @@ namespace GamePlay.Core
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
             Debug.Log(GameUIPanel.Instance);
             curPlayerId = 0;
-            holeCardManagers[0].SetFirstHoleCard();
-            holeCardManagers[1].SetFirstHoleCard();
+            holeCardManagers[0].GetFirstHoleCard();
+            holeCardManagers[1].GetFirstHoleCard();
             StageManager.Instance.NewHand(curPlayerId);
             // HoleCardManager.Instance.HoleCardsInit();
             SetCurScore(0);
