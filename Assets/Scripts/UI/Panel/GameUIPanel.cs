@@ -67,19 +67,10 @@ namespace UI.Panel
             Debug.Log(flag);
         }
 
-        public void SetHandNub(int handNub)
-        {
-            handNubText.text = handNub.ToString();
-        }
-
-        public void SetStageNub(int stageNub)
-        {
-            stageNubText.text = stageNub.ToString();
-        }
-
-        public void SetRoundNub(int roundNub)
-        {
-            roundNubText.text = roundNub.ToString();
+        public void SetNub(int handNub, int stageNub, int roundNub){
+            roundNubText.text = (roundNub+1).ToString();
+            handNubText.text = (handNub+1).ToString();
+            stageNubText.text = (stageNub+1).ToString();
         }
 
         private void SetButtonClick()

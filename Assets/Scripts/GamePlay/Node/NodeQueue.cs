@@ -176,7 +176,7 @@ namespace GamePlay.Node
         {
             sumScore = 0;
             scores.Clear();
-
+            Debug.Log("reset");
             // 清除所有节点对象
             for (int i = touziObjs.Count - 1; i >= 0; i--)
             {
