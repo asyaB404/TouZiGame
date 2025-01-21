@@ -15,6 +15,7 @@ using GamePlay.Node;
 using NetWork.Server;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -22,10 +23,7 @@ namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
     {
-        private const int SPIN_COUNT = 15;
-        private const float ANIMATION_DURATION = 2f;
-
-        private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
+        private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
 
         // [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
@@ -52,40 +50,6 @@ namespace UI.Panel
             }
         }
 
-        //摇骰子动画，finalIndex是最终结果
-        public void RollDiceAnimation(Image touziImage, int finalIndex)
-        {
-            PocketTouZi pocketTouZi = touziImage.GetComponent<PocketTouZi>();
-            finalIndex -= 1;
-            Sequence diceSequence = DOTween.Sequence();
-            // 添加持续摇晃效果
-            Tweener doShakePosition = touziImage.transform.DOShakePosition(
-                duration: ANIMATION_DURATION, //持续时间
-                strength: new Vector3(10, 10, 0), // 水平和垂直方向抖动
-                vibrato: 20,
-                randomness: 90,
-                fadeOut: true
-            );
-            Tween shakeTween = touziImage.transform.DOShakeRotation(
-                duration: ANIMATION_DURATION, // 摇晃的总持续时间
-                strength: new Vector3(0, 0, 180), // 主要在 Z 轴方向旋转
-                vibrato: 30, // 震动频率
-                randomness: 90, // 随机性
-                fadeOut: true // 衰减
-            );
-            // Tween MoveTween=touziImage.transform.DOMove(point, ANIMATION_DURATION);
-            // 添加骰子面滚动动画
-            for (int i = 0; i < SPIN_COUNT; i++)
-            {
-                int randomIndex = Random.Range(0, Touzi.Count);
-                diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[randomIndex]; });
-                diceSequence.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
-            }
-
-            diceSequence.AppendCallback(() => { touziImage.sprite = Touzi[finalIndex]; });
-            diceSequence.Play();
-        }
-
         #region 底注和回合数相关
 
         [SerializeField] private TextMeshProUGUI handNubText; //第几局
@@ -93,7 +57,7 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI roundNubText; //第几回合
 
         [SerializeField] private RectTransform buttonPanel; //按钮页面
-        [SerializeField] private Button CallButton; //跟注按钮
+        [FormerlySerializedAs("CallButton")] [SerializeField] private Button callButton; //跟注按钮
         [SerializeField] private Button raiseButton; //加注按钮
         [SerializeField] private Button foldButton; //弃牌按钮
 
@@ -120,7 +84,7 @@ namespace UI.Panel
 
         private void SetButtonClick()
         {
-            CallButton.onClick.AddListener(CallButtonClick);
+            callButton.onClick.AddListener(CallButtonClick);
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
         }

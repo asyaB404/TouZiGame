@@ -63,7 +63,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     private const int SPIN_COUNT = 15;
     private const float ANIMATION_DURATION = 2f;
-    private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.Touzi;
+    private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
 
 
     //当鼠标离开节点时，恢复节点的原始大小

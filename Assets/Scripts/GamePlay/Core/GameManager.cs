@@ -53,23 +53,22 @@ namespace GamePlay.Core
 
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [SerializeField] private Sprite[] touzi;
+        [FormerlySerializedAs("touzi")] [SerializeField]
+        private Sprite[] touziSprites;
 
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
 
-        public IReadOnlyList<Sprite> Touzi => touzi;
+        public IReadOnlyList<Sprite> TouziSprites => touziSprites;
 
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         [SerializeField] private int curScore;
 
-        public int holeCardNumber; //第几个底牌，
-
         public HoleCardManager[] holeCardManagers; //底牌管理器（非单例，一个玩家一个
-
+        public int holeCardNumber; //第几个底牌，
         public PocketTouZi chooseTouzi; //当前选中的骰子
 
-        public void GetNewHoleCard(int playerId, int holeCardNumber )
+        public void GetNewHoleCard(int playerId, int holeCardNumber)
         {
             int nub = Random.Range(1, 7);
             PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
@@ -118,7 +117,7 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
-            GetNewHoleCard(CurPlayerId, holeCardNumber);//更新骰子，要在更新玩家id前调用
+            GetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
             holeCardNumber = 0;
             curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).touZiNub;
             curPlayerId++;
@@ -201,6 +200,7 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
+
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
