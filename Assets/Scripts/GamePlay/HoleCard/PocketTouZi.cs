@@ -39,7 +39,9 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         initialPos = transform.position;
         halo = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
-
+    public void SettouZiNub(int finalIndex){
+        touZiNub = finalIndex;
+    }
     public void OnPointerEnter(PointerEventData data)
     {
         Debug.Log("Enter");
@@ -122,7 +124,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         transform.position = initialPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        touZiNub = finalIndex;
+        
         canChick = false;
         finalIndex -= 1;
         rollAnim = DOTween.Sequence();
