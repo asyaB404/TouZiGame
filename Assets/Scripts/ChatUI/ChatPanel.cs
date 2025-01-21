@@ -1,3 +1,12 @@
+// // ********************************************************************************************
+// //     /\_/\                           @file       ChatPanel.cs
+// //    ( o.o )                          @brief     Game07
+// //     > ^ <                           @author     Basya
+// //    /     \                          @Description 单独的聊天面板
+// //   (       )                         @Modified   202481820
+// //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
+// // ********************************************************************************************
+
 using DG.Tweening;
 using FishNet;
 using FishNet.Broadcast;
@@ -111,7 +120,7 @@ namespace ChatUI
             newMessage.transform.localPosition = pos;
             newMessage.transform.localScale = Vector3.zero;
             newMessage.transform.DOScale(1, 0.5f);
-            _totalLineCount += newMessage.GetComponent<Message>().Init(chatMessage.Sender, chatMessage.Message) + 1;
+            _totalLineCount += newMessage.GetComponent<ChatMessageComponent>().Init(chatMessage.Sender, chatMessage.Message) + 1;
             var size = content.sizeDelta;
             size.y = lineHeight * (_totalLineCount + 2);
             content.sizeDelta = size;

@@ -18,7 +18,7 @@ namespace NetWork
     {
         static NetWorkMgr()
         {
-            InstanceFinder.ServerManager.OnServerConnectionState += (arg) =>
+            InstanceFinder.ServerManager.OnServerConnectionState += arg =>
             {
                 switch (arg.ConnectionState)
                 {
