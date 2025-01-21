@@ -163,9 +163,9 @@ namespace GamePlay.Core
             if (GameState == GameState.Idle) return;
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
-            GameUIPanel.Instance.UpdateScoreUI(curPlayerId, playerNodeQueueManager);
+            GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
             if (RemoveTouzi(NextPlayerId, id, score))
-                GameUIPanel.Instance.UpdateScoreUI(NextPlayerId, nodeQueueManagers[NextPlayerId]);
+                GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
             if (playerNodeQueueManager.CheckIsGameOver())
             {
                 GameOver();
@@ -201,9 +201,8 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
-
-            GameUIPanel.Instance.UpdateScoreUI(0, nodeQueueManagers[0]);
-            GameUIPanel.Instance.UpdateScoreUI(1, nodeQueueManagers[1]);
+            GameUIPanel.Instance.UpdateScoreUI(0);
+            GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
         #region Debug
