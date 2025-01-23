@@ -52,14 +52,15 @@ public class JackpotManager
     public static JackpotManager instance;
     public void JackpotCalculation(int willerId)
     {
-        if (willerId == 0)myJetton+=SumJackpotNub;
-        else if (willerId == 1)theJetton+=SumJackpotNub;
+        if (willerId == 0)MyJetton+=SumJackpotNub;
+        else if (willerId == 1)TheJetton+=SumJackpotNub;
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
         AnteNub = StageManager.Instance.handNub + 1;
         jackpotNub0 = 0;
         jackpotNub1 = 0;
+        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
     public void Call(int playerid)
     {

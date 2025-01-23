@@ -29,11 +29,8 @@ namespace GamePlay.Core
             stage = 0;
             SetText();
         }
-        public int loseID{
+        int loseID{
             get{return GameManager.Instance.NodeQueueManagers[0].SumScore>GameManager.Instance.NodeQueueManagers[1].SumScore?1:0;}
-        }
-        public int winID{
-            get{return GameManager.Instance.NodeQueueManagers[0].SumScore>GameManager.Instance.NodeQueueManagers[1].SumScore?0:1;} 
         }
 
         /// <summary>
