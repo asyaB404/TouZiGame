@@ -10982,8 +10982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0755a2d0ddac45ecacdeb0d88c381bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myJetton: 0
-  theJetton: 0
   curPlayerId: 0
   touziSprites:
   - {fileID: 688475534, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
@@ -14218,6 +14216,9 @@ MonoBehaviour:
   - {fileID: 833729480}
   - {fileID: 1101567547}
   confirmButton: {fileID: 495534123}
+  JackpotTexts:
+  - {fileID: 1851238084}
+  - {fileID: 1178311501}
   handNubText: {fileID: 1456987915}
   stageNubText: {fileID: 1726116763}
   roundNubText: {fileID: 226218411}

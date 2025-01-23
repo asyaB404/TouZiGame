@@ -120,7 +120,7 @@ namespace UI.Panel
         private void RaiseButtonClick()
         {
             HideRaiseButton();
-            JackpotManager.Instance.Call(1);
+            JackpotManager.Instance.Raise(0);
             StageManager.Instance.NewStage();
         }
         private void FoldButtonClick()

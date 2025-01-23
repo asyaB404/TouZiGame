@@ -23,9 +23,11 @@ public class JackpotManager
     public void Call(int playerid){
         if(playerid==0){
             jackpotNub0+=anteNub;
+            GameManager.Instance.MyJetton -= anteNub;
         }
         else{
             jackpotNub1+=anteNub;
+            GameManager.Instance.TheJetton -=anteNub;            
         }
     }
     public void Raise(int playerId){

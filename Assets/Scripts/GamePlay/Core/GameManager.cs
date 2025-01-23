@@ -194,6 +194,9 @@ namespace GamePlay.Core
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
             Debug.Log(GameUIPanel.Instance);
             curPlayerId = 0;
+            MyJetton=MyGlobal.INITIAL_CHIP;
+            TheJetton=MyGlobal.INITIAL_CHIP;
+            JackpotManager.Instance.NewHand();
             holeCardManagers[0].SetFirstHoleCard();
             holeCardManagers[1].SetFirstHoleCard();
             StageManager.Instance.NewHand(curPlayerId);
