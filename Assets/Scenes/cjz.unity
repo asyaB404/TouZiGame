@@ -1739,7 +1739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 0
-  pocketTouZis:
+  holeCards:
   - {fileID: 1428818733}
   - {fileID: 638536084}
   - {fileID: 1611935348}
@@ -11132,7 +11132,6 @@ MonoBehaviour:
   - {fileID: 2050836750}
   - {fileID: 330236584}
   holeCardNumber: 0
-  chooseTouzi: {fileID: 0}
   t1: 0
   t2: 0
   t3: 0
@@ -14037,7 +14036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 0
-  pocketTouZis:
+  holeCards:
   - {fileID: 785718589}
   - {fileID: 1837884636}
   - {fileID: 1505506492}

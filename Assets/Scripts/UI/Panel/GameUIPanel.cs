@@ -111,7 +111,12 @@ namespace UI.Panel
             anteText.text = anteNub.ToString();
         public void SetJackpot(int sumJackpotNub) =>
             jackpotText.text = sumJackpotNub.ToString();
-        public void ShowRaisePanel(int loseID)
+        public void ShowRaisePanel(int loseID){
+            if(loseID==0)ShowRaisePanel(loseID,JackpotManager.Instance.MyJetton);
+            else ShowRaisePanel(loseID,JackpotManager.Instance.TheJetton);
+        }
+        //打开加注页面
+        public void ShowRaisePanel(int loseID,int losePlayerJetton)
         {
             // WaitPanel.gameObject.SetActive(false);
             curPlayerId = loseID;
@@ -119,14 +124,7 @@ namespace UI.Panel
             if (GameManager.GameMode == GameMode.Native)
             {
                 raisePanelTitleText.text = (loseID == 0 ? "你" : "对手")+"加注时间";
-                if (curPlayerId == 0)
-                {
-                    ShowRaiseButton(GameManager.Instance.MyJetton);
-                }
-                else if (curPlayerId == 1)
-                {
-                    ShowRaiseButton(GameManager.Instance.TheJetton);
-                }
+                ShowRaiseButtons(losePlayerJetton);
                 buttonPanel.gameObject.SetActive(true);
             }
             else if (GameManager.GameMode == GameMode.Online)
@@ -141,9 +139,8 @@ namespace UI.Panel
                     // WaitPanel.gameObject.SetActive(true);
                 }
             }
-
         }
-        private void ShowRaiseButton(int jeeton)
+        private void ShowRaiseButtons(int jeeton)
         {
             raiseButton.gameObject.SetActive(jeeton >= JackpotManager.Instance.AnteNub);//设置是否可以跟注和加注
             callButton.gameObject.SetActive(jeeton != 0);
