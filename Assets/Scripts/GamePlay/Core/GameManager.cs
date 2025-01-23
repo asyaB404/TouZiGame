@@ -218,7 +218,7 @@ namespace GamePlay.Core
         public void NewStage()
         {
             loseID=NodeQueueManagers[0].SumScore>NodeQueueManagers[1].SumScore?1:0;
-            GameUIPanel.Instance.ShowRaiseButton(loseID);
+            GameUIPanel.Instance.ShowRaisePanel(loseID);
         }
         #endregion
         private void Awake()

@@ -28,7 +28,7 @@ public class JackpotManager
 
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
-        AnteNub = StageManager.Instance.handNub;
+        AnteNub = StageManager.Instance.handNub+1;
         jackpotNub0 = 0;
         jackpotNub1 = 0;
     }
