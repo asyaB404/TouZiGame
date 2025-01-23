@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace NetWork.Client
 {
-    public class MyClient : NetworkBehaviour
+    public partial class MyClient : NetworkBehaviour
     {
         public static MyClient Instance { get; private set; }
 
@@ -19,9 +19,6 @@ namespace NetWork.Client
         {
             GameObject prefabRes = Resources.Load<GameObject>(MyGlobal.CLIENT_PREFABS_PATH);
             return Instantiate(prefabRes);
-            // GameObject obj = new GameObject("MyClient");
-            // obj.AddComponent<NetworkObject>();
-            // return obj.AddComponent<MyClient>();
         }
 
         public override void OnStartClient()
@@ -37,21 +34,6 @@ namespace NetWork.Client
             }
         }
 
-        #region GetReady
-
-        public void GetReadyRequest()
-        {
-            MyServer.Instance.HandleGetReady();
-        }
-
-        [ObserversRpc]
-        public void GetReadyResponse()
-        {
-            //TODO:准备成功的UI
-        }
-
-        #endregion
-        
         #region GameStart
 
         [ObserversRpc]
@@ -63,35 +45,6 @@ namespace NetWork.Client
             GameManager.Instance.StartGame(MyServer.Instance.Seed.Value);
             //让客户端后手
             GameManager.Instance.NextToPlayerId();
-        }
-
-        #endregion
-
-        #region AddTouzi
-
-        public void AddTouziRequest(int playerId, int id, int score)
-        {
-            MyServer.Instance.HandleAddTouziRequest(playerId, id, score);
-        }
-
-        [ObserversRpc]
-        public void AddTouziResponse(int playerId, int id, int score)
-        {
-            if (IsServerStarted)
-            {
-                //由于服务端那边已经在请求中处理了，所以这里不用做处理
-            }
-            else
-            {
-                if (playerId == GameManager.CurPlayerId)
-                {
-                    GameManager.Instance.AddTouzi(playerId, id, score);
-                }
-                else
-                {
-                    GameManager.Instance.AddTouzi(MyTool.GetNextPlayerId(playerId), id, score);
-                }
-            }
         }
 
         #endregion
