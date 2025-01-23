@@ -69,33 +69,20 @@ namespace UI.Panel
             HandOverTexts[2].text = $"对手一共获得了：{score1}分";
         }
         [SerializeField] private TextMeshProUGUI[] JackpotTexts; //
-        public void SetJackpot(int jackpot0,int jackpot1)
+        public void SetJetton(int jackpot0, int jackpot1)
         {
-            JackpotTexts[0].text=jackpot0.ToString();
-            JackpotTexts[1].text=jackpot1.ToString();
+            JackpotTexts[0].text = jackpot0.ToString();
+            JackpotTexts[1].text = jackpot1.ToString();
+            Debug.Log(jackpot0 + "   " + jackpot1);
         }
-        #region 底注和回合数相关
+        #region 回合数
 
         [SerializeField] private TextMeshProUGUI handNubText; //第几局
         [SerializeField] private TextMeshProUGUI stageNubText; //第几次加注
         [SerializeField] private TextMeshProUGUI roundNubText; //第几回合
 
-        [SerializeField] private RectTransform buttonPanel; //按钮页面
-        [FormerlySerializedAs("CallButton")][SerializeField] private Button callButton; //跟注按钮
-        [SerializeField] private Button raiseButton; //加注按钮
-        [SerializeField] private Button foldButton; //弃牌按钮
 
 
-        public void ShowRaiseButton()
-        {
-            buttonPanel.gameObject.SetActive(true);
-            raiseButton.gameObject.SetActive(GameManager.Instance.MyJetton >= JackpotManager.Instance.anteNub);//设置是否可以跟注和加注
-            callButton.gameObject.SetActive(GameManager.Instance.MyJetton != 0);
-        }
-        public void HideRaiseButton()
-        {
-            buttonPanel.gameObject.SetActive(false);
-        }
         public void SetStageNub(int handNub, int stageNub, int roundNub)
         {
             handNubText.text = handNub.ToString();
@@ -103,35 +90,71 @@ namespace UI.Panel
             roundNubText.text = roundNub.ToString();
         }
 
+
+
+        #endregion
+        #region 筹码底注和奖池
+        [SerializeField] private RectTransform buttonPanel; //按钮页面
+        [FormerlySerializedAs("CallButton")][SerializeField] private Button callButton; //跟注按钮
+        [SerializeField] private Button raiseButton; //加注按钮
+        [SerializeField] private Button foldButton; //弃牌按钮
+        [SerializeField] private Button testButton; //对手加注按钮
+
+        [SerializeField] private TextMeshProUGUI anteText;//底注
+        [SerializeField] private TextMeshProUGUI jackpotText;//奖池
+        [SerializeField] private RectTransform WaitPanel;
+        public void SetAnte(int anteNub) =>
+            anteText.text = anteNub.ToString();
+        public void SetJackpot(int sumJackpotNub) =>
+            jackpotText.text = sumJackpotNub.ToString();
+        public void ShowRaiseButton(int loseID)
+        {
+            // WaitPanel.gameObject.SetActive(false);
+            curPlayerId=loseID;
+            buttonPanel.gameObject.SetActive(true);
+            raiseButton.gameObject.SetActive(GameManager.Instance.MyJetton >= JackpotManager.Instance.AnteNub);//设置是否可以跟注和加注
+            callButton.gameObject.SetActive(GameManager.Instance.MyJetton != 0);
+        }
+        public void HideRaiseButton()
+        {
+            buttonPanel.gameObject.SetActive(false);
+        }
+        // 设置按钮的点击事件监听器。
         private void SetButtonClick()
         {
             callButton.onClick.AddListener(CallButtonClick);
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
-        }
 
+            testButton.onClick.AddListener(TestButtonClick);
+        }
+        private int curPlayerId;//哪个玩家进行的加注/跟注/弃牌
+        
+        // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
-            HideRaiseButton();
-            JackpotManager.Instance.Call(0);
+            // HideRaiseButton();
+            JackpotManager.Instance.Call(curPlayerId);
             StageManager.Instance.NewStage();
-
         }
+        // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            HideRaiseButton();
-            JackpotManager.Instance.Raise(0);
+            // HideRaiseButton();
+            JackpotManager.Instance.Raise(curPlayerId);
             StageManager.Instance.NewStage();
         }
+        // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
-            HideRaiseButton();
+            // HideRaiseButton();
             GameManager.Instance.OverOneHand();
-            StageManager.Instance.NewHand(1);
         }
+        private void TestButtonClick()
+        {
 
+        }
         #endregion
-
         #region debug
 
         [SerializeField][Range(0, 5)] private int testIndex;

@@ -10982,6 +10982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0755a2d0ddac45ecacdeb0d88c381bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myJetton: 0
   curPlayerId: 0
   touziSprites:
   - {fileID: 688475534, guid: 4bdb1c397f8a3f147937f9ea31ca60bb, type: 3}
@@ -11880,7 +11881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1714286394}
   m_Layer: 5
-  m_Name: buttonPanel
+  m_Name: refuelPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14226,6 +14227,8 @@ MonoBehaviour:
   callButton: {fileID: 385601092}
   raiseButton: {fileID: 592669530}
   foldButton: {fileID: 1993980959}
+  anteText: {fileID: 352459293}
+  jackpotText: {fileID: 142772310}
   testIndex: 0
 --- !u!1 &2115031866
 GameObject:
