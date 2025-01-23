@@ -14,7 +14,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     public bool canChick; //是否可以点击,动画状态下就不能点击
     public int playerId = -1; //表示这个玩家
     public int id = -1; //表示第几个骰子
-    public int touZiNub = -1; //这枚骰子的数字
+    public int TouZiNub { get; private set; } = -1; //这枚骰子的数字
     private const float HOVER_SCALE_FACTOR = 1.2f; // 鼠标悬停时放大的缩放因子
     public SpriteRenderer spriteRenderer;
     private Vector3 initialScale = new(1, 1); // 初始缩放大小
@@ -112,7 +112,10 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     Tweener doShakePosition;
     Tween shakeTween;
     private Vector3 point = new(0.2f, .2f);
-
+    public void SetTouZiNub(int finalIndex)
+    {
+        TouZiNub = finalIndex;
+    }
     public void RollDiceAnimation(int finalIndex)
     {
         rollAnim?.Kill();
@@ -122,7 +125,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         transform.position = initialPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        touZiNub = finalIndex;
+
         canChick = false;
         finalIndex -= 1;
         rollAnim = DOTween.Sequence();

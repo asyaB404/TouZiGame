@@ -37,7 +37,7 @@ namespace GamePlay.Core
 
         public static GameManager Instance { get; private set; }
 
-        // public List<GameObject> holeCardPanels;//放底牌的地方
+        #region 
 
         /// <summary>
         /// 当前玩家Id
@@ -64,20 +64,112 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
 
         [SerializeField] private int curScore;
-
+        #endregion
         public HoleCardManager[] holeCardManagers; //底牌管理器（非单例，一个玩家一个
-        public int holeCardNumber; //第几个底牌，
+        public int holeCardNumber; //当前选中的是第几个底牌，
         public PocketTouZi chooseTouzi; //当前选中的骰子
 
+        //重置
+        private void Reset()
+        {
+            GameState = GameState.Idle;
+            // curScore = Random.Range(1, 7);
+            curPlayerId = 0;
+            foreach (var nodeQueueManager in nodeQueueManagers)
+            {
+                nodeQueueManager.Reset();
+            }
+
+            GameUIPanel.Instance.UpdateScoreUI(0);
+            GameUIPanel.Instance.UpdateScoreUI(1);
+        }
+        //开始游戏
+        public void StartGame(int seed)
+        {
+            GameState = GameState.Gaming;
+            Random.InitState(seed);
+            // curScore = Random.Range(1, 7);
+            // GameUIPanel.Instance.RollDiceAnimation(curScore);
+            Debug.Log(GameUIPanel.Instance);
+            curPlayerId = 0;
+            MyJetton = MyGlobal.INITIAL_CHIP;
+            TheJetton = MyGlobal.INITIAL_CHIP;
+            JackpotManager.Instance.NewHand();
+            holeCardManagers[0].SetFirstHoleCard();
+            holeCardManagers[1].SetFirstHoleCard();
+            StageManager.Instance.NewHand();
+            // HoleCardManager.Instance.HoleCardsInit();
+            SetCurScore(0);
+        }
+        public void SetStage(int stage, int round, int handNub)
+        {
+            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: round + 1, stageNub: stage + 1);
+        }
+        #region 一个回合内发生的事
+        public void NextToPlayerId()
+        {
+            SetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
+            holeCardNumber = 0;
+            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).TouZiNub;
+            curPlayerId++;
+            curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
+        }
+        /// <summary>
+        /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
+        /// </summary>
+        public void NextTurn()
+        {
+            NextToPlayerId();
+            SetCurScore(0);
+            StageManager.Instance.NewRound(curPlayerId);
+            // curScore = Random.Range(1, 7);
+            // GameUIPanel.Instance.RollDiceAnimation(curScore);
+        }
+        /// <summary>
+        /// 添加骰子,将骰子添加到场上
+        /// </summary>
+        /// <param name="playerId">玩家id</param>
+        /// <param name="id">第几行</param>
+        /// <param name="score">骰子点数大小</param>
+
+        public void AddTouzi(int playerId, int id, int score)
+        {
+            if (GameState == GameState.Idle) return;
+            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
+            if (!playerNodeQueueManager.AddTouzi(id, score)) return;
+            GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
+            if (RemoveTouzi(NextPlayerId, id, score))
+                GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
+            if (playerNodeQueueManager.CheckIsGameOver())
+            {
+                OverOneHand();
+                return;
+            }
+
+            NextTurn();
+        }
+
+        public void AddTouzi(int id)
+        {
+            AddTouzi(curPlayerId, id, curScore);
+        }
+
+        public bool RemoveTouzi(int playerId, int id, int score)
+        {
+            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
+            return playerNodeQueueManager.RemoveTouzi(id, score);
+        }
+        //设置一个新的骰子
         public void SetNewHoleCard(int playerId, int holeCardNumber)
         {
             int nub = Random.Range(1, 7);
             PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
             pocketTouZi.gameObject.SetActive(true);
             pocketTouZi.RollDiceAnimation(nub);
+            pocketTouZi.SetTouZiNub(nub);
             // RollDiceAnimation(touZiImage, finalIndex);
         }
-
+        //设置选中的骰子的效果
         public void SetCurScore(int number = 0)
         {
             holeCardNumber = number;
@@ -85,15 +177,50 @@ namespace GamePlay.Core
             // Debug.Log();
             chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardNumber);
             chooseTouzi.ShowHalo();
-            curScore = chooseTouzi.touZiNub;
+            curScore = chooseTouzi.TouZiNub;
         }
-
-
-        #region 奖池相关
-
         #endregion
 
-
+        #region 加注/一个阶段内发生的事
+        public int MyJetton
+        {
+            set
+            {
+                myJetton = value;
+                GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+            }
+            get => myJetton;
+        }
+        private int myJetton;
+        private int theJetton;
+        public int TheJetton
+        {
+            get => theJetton;
+            set
+            {
+                theJetton = value;
+                GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+            }
+        }
+        // public void ShowRaiseButton()
+        // {
+        //     GameUIPanel.Instance.ShowRaiseButton();
+        // }
+        public void SetAnte(int value)
+        {
+            GameUIPanel.Instance.SetAnte(value);
+        }
+        public void SetJackpot(int SumJackpotNub)
+        {
+            GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+        }
+        int loseID;
+        public void NewStage()
+        {
+            loseID=NodeQueueManagers[0].SumScore>NodeQueueManagers[1].SumScore?1:0;
+            GameUIPanel.Instance.ShowRaiseButton(loseID);
+        }
+        #endregion
         private void Awake()
         {
             Application.targetFrameRate = 9999;
@@ -111,94 +238,12 @@ namespace GamePlay.Core
             // StartGame(123);
         }
 
-        private void Start()
-        {
-            // StartGame(123);
-        }
 
-        public void NextToPlayerId()
-        {
-            SetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
-            holeCardNumber = 0;
-            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).touZiNub;
-            curPlayerId++;
-            curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
-        }
+        #region 一hand的起始和结束
 
-        public void StartGame(int seed)
+        //开始新的一轮游戏
+        public void ResetChessboard()
         {
-            GameState = GameState.Gaming;
-            Random.InitState(seed);
-            // curScore = Random.Range(1, 7);
-            // GameUIPanel.Instance.RollDiceAnimation(curScore);
-            Debug.Log(GameUIPanel.Instance);
-            curPlayerId = 0;
-            holeCardManagers[0].GetFirstHoleCard();
-            holeCardManagers[1].GetFirstHoleCard();
-            StageManager.Instance.NewHand(curPlayerId);
-            // HoleCardManager.Instance.HoleCardsInit();
-            SetCurScore(0);
-        }
-
-        /// <summary>
-        /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
-        /// </summary>
-        public void NextTurn()
-        {
-            NextToPlayerId();
-            SetCurScore(0);
-            StageManager.Instance.NewRound(curPlayerId);
-            // curScore = Random.Range(1, 7);
-            // GameUIPanel.Instance.RollDiceAnimation(curScore);
-        }
-
-        /// <summary>
-        /// 添加骰子,将骰子添加到场上
-        /// </summary>
-        /// <param name="playerId">玩家id</param>
-        /// <param name="id">第几行</param>
-        /// <param name="score">骰子点数大小</param>
-        public void AddTouzi(int playerId, int id, int score)
-        {
-            if (GameState == GameState.Idle) return;
-            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
-            if (!playerNodeQueueManager.AddTouzi(id, score)) return;
-            GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
-            if (RemoveTouzi(NextPlayerId, id, score))
-                GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
-            if (playerNodeQueueManager.CheckIsGameOver())
-            {
-                GameOver();
-                return;
-            }
-
-            NextTurn();
-        }
-
-        public void AddTouzi(int id)
-        {
-            AddTouzi(curPlayerId, id, curScore);
-        }
-
-        public bool RemoveTouzi(int playerId, int id, int score)
-        {
-            NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
-            return playerNodeQueueManager.RemoveTouzi(id, score);
-        }
-        public void EndAHand()
-        {
-            
-        }
-        private void GameOver()
-        {
-            Reset();
-        }
-
-        //重置
-        private void Reset()
-        {
-            GameState = GameState.Idle;
-            // curScore = Random.Range(1, 7);
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
@@ -207,7 +252,32 @@ namespace GamePlay.Core
 
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            JackpotManager.Instance.NewHand();
+            StageManager.Instance.NewHand();//TODO先手权的转移
+
         }
+
+
+        //一轮结束
+        public void OverOneHand()
+        {
+            if (NodeQueueManagers[0].SumScore > NodeQueueManagers[1].SumScore)
+            {
+                MyJetton += JackpotManager.Instance.SumJackpotNub;
+            }
+            else if (NodeQueueManagers[0].SumScore < NodeQueueManagers[1].SumScore)
+            {
+                TheJetton += JackpotManager.Instance.SumJackpotNub;
+            }
+            if (NodeQueueManagers[0].SumScore == 0 || NodeQueueManagers[1].SumScore == 0)
+            {
+                //彻底结束   
+            }
+            JackpotManager.Instance.NewHand();
+            GameUIPanel.Instance.ShowOverPanel(NodeQueueManagers[0].SumScore, NodeQueueManagers[1].SumScore);
+        }
+        #endregion
+
 
         #region Debug
 
@@ -219,6 +289,11 @@ namespace GamePlay.Core
         private void TestStartGame()
         {
             StartGame(123);
+        }
+        [ContextMenu("ReSetGame")]
+        private void TestResetGame()
+        {
+            Reset();
         }
 
         [ContextMenu("add")]
