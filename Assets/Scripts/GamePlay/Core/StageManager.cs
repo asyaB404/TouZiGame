@@ -38,14 +38,13 @@ namespace GamePlay.Core
         {
             if (nowPlayerId != firstPlayerId) return false;
             round++;
-            SetText();
             if (round >= MyGlobal.A_STAGE_ROUND)
             {
-                GameUIPanel.Instance.SetRaiseButton(true);
+                GameUIPanel.Instance.ShowRaiseButton();
                 return true;
                 //进入下一个阶段
             }
-
+            SetText();
             return false;
         }
 

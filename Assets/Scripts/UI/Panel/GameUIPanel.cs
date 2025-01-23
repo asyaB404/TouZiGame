@@ -34,13 +34,14 @@ namespace UI.Panel
         {
             GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
             SetButtonClick();
+            SetConfirmButton();
         }
 
         //计算分数
         public void UpdateScoreUI(int playerId)
         {
             var texts = playerId == 0 ? p1ScoreTexts : p2ScoreTexts;
-            var nodeQueueManager = GameManager.Instance.NodeQueueManagers[playerId]; 
+            var nodeQueueManager = GameManager.Instance.NodeQueueManagers[playerId];
             texts[^1].text = nodeQueueManager.SumScore.ToString();
             int i = 0;
             foreach (var nodeQueue in nodeQueueManager.NodeQueues)
@@ -50,6 +51,24 @@ namespace UI.Panel
             }
         }
 
+
+
+        [SerializeField] private GameObject HandOverPanel;//结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
+        [SerializeField] private TextMeshProUGUI[] HandOverTexts;//显示玩家分数
+        [SerializeField] private Button confirmButton;//确认按钮
+        private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
+        {
+            HandOverPanel.SetActive(false);
+            GameManager.Instance.ResetChessboard();
+        });
+        public void ShowOverPanel(int score0, int score1)
+        {
+            HandOverPanel.SetActive(true);
+            HandOverTexts[0].text = score0 > score1 ? "赢" : "输" + "了";
+            HandOverTexts[1].text = $"你一共获得了：{score0}分";
+            HandOverTexts[2].text = $"对手一共获得了：{score1}分";
+        }
+
         #region 底注和回合数相关
 
         [SerializeField] private TextMeshProUGUI handNubText; //第几局
@@ -57,31 +76,23 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI roundNubText; //第几回合
 
         [SerializeField] private RectTransform buttonPanel; //按钮页面
-        [FormerlySerializedAs("CallButton")] [SerializeField] private Button callButton; //跟注按钮
+        [FormerlySerializedAs("CallButton")][SerializeField] private Button callButton; //跟注按钮
         [SerializeField] private Button raiseButton; //加注按钮
         [SerializeField] private Button foldButton; //弃牌按钮
 
-        public void SetRaiseButton(bool flag)
+
+        public void ShowRaiseButton()
         {
-            buttonPanel.gameObject.SetActive(flag);
-            Debug.Log(flag);
+            buttonPanel.gameObject.SetActive(true);
+            raiseButton.gameObject.SetActive(GameManager.Instance.myJetton >= JackpotManager.Instance.anteNub);//设置是否可以跟注和加注
+            callButton.gameObject.SetActive(GameManager.Instance.myJetton != 0);
         }
-
-        // public void SetHandNub(int handNub)
-        // {
-        //     handNubText.text = handNub.ToString();
-        // }
-
-        // public void SetStageNub(int stageNub)
-        // {
-        //     stageNubText.text = stageNub.ToString();
-        // }
-
-        // public void SetRoundNub(int roundNub)
-        // {
-        //     roundNubText.text = roundNub.ToString();
-        // }
-        public void SetNub(int handNub, int stageNub, int roundNub){
+        public void HideRaiseButton()
+        {
+            buttonPanel.gameObject.SetActive(false);
+        }
+        public void SetNub(int handNub, int stageNub, int roundNub)
+        {
             handNubText.text = handNub.ToString();
             stageNubText.text = stageNub.ToString();
             roundNubText.text = roundNub.ToString();
@@ -96,19 +107,21 @@ namespace UI.Panel
 
         private void CallButtonClick()
         {
-            SetRaiseButton(false);
+            HideRaiseButton();
+            JackpotManager.Instance.Call(0);
             StageManager.Instance.NewStage();
-        }
 
+        }
         private void RaiseButtonClick()
         {
-            SetRaiseButton(false);
+            HideRaiseButton();
+            JackpotManager.Instance.Call(1);
             StageManager.Instance.NewStage();
         }
-
         private void FoldButtonClick()
         {
-            SetRaiseButton(false);
+            HideRaiseButton();
+            GameManager.Instance.OverOneHand();
             StageManager.Instance.NewHand(1);
         }
 
@@ -116,7 +129,7 @@ namespace UI.Panel
 
         #region debug
 
-        [SerializeField] [Range(0, 5)] private int testIndex;
+        [SerializeField][Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()
