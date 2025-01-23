@@ -57,7 +57,7 @@ namespace GamePlay.Core
 
         public void SetText()
         {
-            GameUIPanel.Instance.SetNub(handNub: handNub + 1, roundNub: round + 1, stageNub: stage + 1);
+            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: round + 1, stageNub: stage + 1);
         }
     }
 }

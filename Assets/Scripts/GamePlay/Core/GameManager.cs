@@ -36,8 +36,24 @@ namespace GamePlay.Core
         public static GameMode GameMode { get; set; } = GameMode.Native;
 
         public static GameManager Instance { get; private set; }
-        public int myJetton;//筹码数量
-        public int theJetton;//筹码数量
+        public int MyJetton
+        {
+            set
+            {
+                myJetton = value;
+                GameUIPanel.Instance.SetJackpot(myJetton, theJetton);
+            }
+            get => myJetton;
+        }
+        private int myJetton;
+        private int theJetton;
+        public int TheJetton{
+            get => theJetton;
+            set{
+                theJetton = value;
+                GameUIPanel.Instance.SetJackpot(myJetton, theJetton);
+            }
+        }
 
         // public List<GameObject> holeCardPanels;//放底牌的地方
 
@@ -215,13 +231,14 @@ namespace GamePlay.Core
         {
             if (NodeQueueManagers[0].SumScore > NodeQueueManagers[1].SumScore)
             {
-                myJetton += JackpotManager.Instance.SumJackpotNub;
+                MyJetton += JackpotManager.Instance.SumJackpotNub;
             }
             else if (NodeQueueManagers[0].SumScore < NodeQueueManagers[1].SumScore)
             {
-                theJetton += JackpotManager.Instance.SumJackpotNub;
+                TheJetton += JackpotManager.Instance.SumJackpotNub;
             }
-            if(NodeQueueManagers[0].SumScore + NodeQueueManagers[1].SumScore==0){
+            if (NodeQueueManagers[0].SumScore + NodeQueueManagers[1].SumScore == 0)
+            {
                 //彻底结束   
             }
             JackpotManager.Instance.NewHand();

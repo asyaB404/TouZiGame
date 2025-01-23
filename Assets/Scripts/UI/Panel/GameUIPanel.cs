@@ -64,11 +64,16 @@ namespace UI.Panel
         public void ShowOverPanel(int score0, int score1)
         {
             HandOverPanel.SetActive(true);
-            HandOverTexts[0].text = score0 > score1 ? "赢" : "输" + "了";
+            HandOverTexts[0].text = "你" + (score0 > score1 ? "赢" : "输") + "了";
             HandOverTexts[1].text = $"你一共获得了：{score0}分";
             HandOverTexts[2].text = $"对手一共获得了：{score1}分";
         }
-
+        [SerializeField] private TextMeshProUGUI[] JackpotTexts; //
+        public void SetJackpot(int jackpot0,int jackpot1)
+        {
+            JackpotTexts[0].text=jackpot0.ToString();
+            JackpotTexts[1].text=jackpot1.ToString();
+        }
         #region 底注和回合数相关
 
         [SerializeField] private TextMeshProUGUI handNubText; //第几局
@@ -84,14 +89,14 @@ namespace UI.Panel
         public void ShowRaiseButton()
         {
             buttonPanel.gameObject.SetActive(true);
-            raiseButton.gameObject.SetActive(GameManager.Instance.myJetton >= JackpotManager.Instance.anteNub);//设置是否可以跟注和加注
-            callButton.gameObject.SetActive(GameManager.Instance.myJetton != 0);
+            raiseButton.gameObject.SetActive(GameManager.Instance.MyJetton >= JackpotManager.Instance.anteNub);//设置是否可以跟注和加注
+            callButton.gameObject.SetActive(GameManager.Instance.MyJetton != 0);
         }
         public void HideRaiseButton()
         {
             buttonPanel.gameObject.SetActive(false);
         }
-        public void SetNub(int handNub, int stageNub, int roundNub)
+        public void SetStageNub(int handNub, int stageNub, int roundNub)
         {
             handNubText.text = handNub.ToString();
             stageNubText.text = stageNub.ToString();
