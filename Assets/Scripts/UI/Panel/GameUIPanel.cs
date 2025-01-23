@@ -64,12 +64,11 @@ namespace UI.Panel
         public void SetRaiseButton(bool flag)
         {
             buttonPanel.gameObject.SetActive(flag);
-            Debug.Log(flag);
         }
 
         public void SetNub(int handNub, int stageNub, int roundNub){
             roundNubText.text = (roundNub+1).ToString();
-            handNubText.text = (handNub+1).ToString();
+            handNubText.text = (handNub).ToString();
             stageNubText.text = (stageNub+1).ToString();
         }
 

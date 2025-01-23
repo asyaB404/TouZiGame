@@ -21,6 +21,7 @@ public class StageManager
 
     public void NewHand(int newPlayerId)
     {
+        GameManager.Instance.EndAHand();
         firstPlayerId = newPlayerId;
         handNub++;
         round = 0;
@@ -47,11 +48,12 @@ public class StageManager
         return false;
     }
     public void NewStage(){
+        Debug.Log("Round:"+round+"Stage:"+stage+"Hand:"+handNub);
         stage++;
         round=0;
         SetText();
     }
     public void SetText(){
-        GameUIPanel.Instance.SetNub(handNub,round,stage);
+        GameUIPanel.Instance.SetNub(handNub,stage,round);
     }
 }
