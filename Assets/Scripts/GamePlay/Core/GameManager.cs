@@ -53,7 +53,8 @@ namespace GamePlay.Core
 
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")] [SerializeField]
+        [FormerlySerializedAs("touzi")]
+        [SerializeField]
         private Sprite[] touziSprites;
 
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
@@ -68,7 +69,7 @@ namespace GamePlay.Core
         public int holeCardNumber; //第几个底牌，
         public PocketTouZi chooseTouzi; //当前选中的骰子
 
-        public void GetNewHoleCard(int playerId, int holeCardNumber)
+        public void SetNewHoleCard(int playerId, int holeCardNumber)
         {
             int nub = Random.Range(1, 7);
             PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
@@ -117,7 +118,7 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
-            GetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
+            SetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
             holeCardNumber = 0;
             curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).touZiNub;
             curPlayerId++;
@@ -184,7 +185,10 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             return playerNodeQueueManager.RemoveTouzi(id, score);
         }
-
+        public void EndAHand()
+        {
+            
+        }
         private void GameOver()
         {
             Reset();
@@ -207,7 +211,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 

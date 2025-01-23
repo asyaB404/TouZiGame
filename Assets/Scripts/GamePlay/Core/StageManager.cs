@@ -16,17 +16,17 @@ namespace GamePlay.Core
         private static StageManager instance;
 
         //TODO开放性有待商榷
-        public int HandNub { get; private set; } //Hand 主要用于扑克等卡牌游戏，表示从发牌到结束的一局，即游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
-        public int Round { get; private set; } //回合数（敌方放一次我放一次为一个回合
-        public int Stage { get; private set; } //阶段数（决定是否加注的时候为一个阶段
+        public int handNub { get; private set; } //Hand 主要用于扑克等卡牌游戏，表示从发牌到结束的一局，即游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public int round { get; private set; } //回合数（敌方放一次我放一次为一个回合
+        public int stage { get; private set; } //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId; //这个hand内先手玩家的id
 
         public void NewHand(int newPlayerId)
         {
             firstPlayerId = newPlayerId;
-            HandNub++;
-            Round = 0;
-            Stage = 0;
+            handNub++;
+            round = 0;
+            stage = 0;
             SetText();
         }
 
@@ -37,30 +37,27 @@ namespace GamePlay.Core
         public bool NewRound(int nowPlayerId)
         {
             if (nowPlayerId != firstPlayerId) return false;
-            Round++;
-            SetText();
-            if (Round >= MyGlobal.A_STAGE_ROUND)
+            round++;
+            if (round >= MyGlobal.A_STAGE_ROUND)
             {
                 GameUIPanel.Instance.SetRaiseButton(true);
                 return true;
                 //进入下一个阶段
             }
-
+            SetText();
             return false;
         }
 
         public void NewStage()
         {
-            Stage++;
-            Round = 0;
+            stage++;
+            round = 0;
             SetText();
         }
 
         public void SetText()
         {
-            GameUIPanel.Instance.SetRoundNub(Round + 1);
-            GameUIPanel.Instance.SetStageNub(Stage + 1);
-            GameUIPanel.Instance.SetHandNub(HandNub + 1);
+            GameUIPanel.Instance.SetNub(handNub, stage, round);
         }
     }
 }

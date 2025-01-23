@@ -33,7 +33,7 @@ public class HoleCardManager : MonoBehaviour
         for (int i = 0; i < pocketTouZis.Length; i++)
         {
             pocketTouZis[i].gameObject.SetActive(true);
-            GameManager.Instance.GetNewHoleCard(playerId, i);
+            GameManager.Instance.SetNewHoleCard(playerId, i);
         }
     }
     public PocketTouZi GetPocket(int holeCardNumber)
