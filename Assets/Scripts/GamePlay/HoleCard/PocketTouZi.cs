@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.Core;
-// using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
+
 
 /// <summary>
 /// 底牌骰子
@@ -40,7 +38,6 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     public void OnPointerEnter(PointerEventData data)
     {
         Debug.Log("Enter");
-        // halo.gameObject.SetActive(true);
         if (GameManager.GameState == GameState.Idle) return;
         switch (GameManager.GameMode)
         {
@@ -88,10 +85,11 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
             default:
                 throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
         }
+
         if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
-    
+
     public void SetTouZiScore(int amount)
     {
         TouZiScore = amount;

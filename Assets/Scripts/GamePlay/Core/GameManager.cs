@@ -35,7 +35,7 @@ namespace GamePlay.Core
         /// <summary>
         /// 当前骰子点数大小
         /// </summary>
-        public static int CurScore => Instance.curScore;
+        public int CurScore => HoleCardManagers[curPlayerId].CurHoleCardScore;
 
         [SerializeField] private int curPlayerId = 0;
 
@@ -49,8 +49,6 @@ namespace GamePlay.Core
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
 
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
-
-        [SerializeField] private int curScore;
 
         [SerializeField] private HoleCardManager[] holeCardManagers;
 
@@ -111,8 +109,7 @@ namespace GamePlay.Core
         public void NextToPlayerId()
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
-            curScore =
-                curPlayerId++;
+            curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
 
@@ -153,7 +150,7 @@ namespace GamePlay.Core
 
         public void AddTouzi(int id)
         {
-            AddTouzi(curPlayerId, id, curScore);
+            AddTouzi(curPlayerId, id, CurScore);
         }
 
         /// <summary>

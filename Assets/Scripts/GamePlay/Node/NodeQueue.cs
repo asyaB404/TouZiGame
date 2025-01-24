@@ -98,7 +98,7 @@ namespace GamePlay.Node
                 case GameMode.Online:
                     if (playerId == 1) return;
                     MyClient.Instance.AddTouziRequest(GameManager.CurPlayerId, id,
-                        GameManager.CurScore);
+                        GameManager.Instance.CurScore);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
