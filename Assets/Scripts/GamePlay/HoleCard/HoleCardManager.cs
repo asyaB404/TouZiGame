@@ -9,12 +9,10 @@ using UnityEngine.UI;
 
 public class HoleCardManager : MonoBehaviour
 {
-    // public int maxCardNub;//最大底牌量
     public int playerId; //属于的玩家id
 
-    [SerializeField]private PocketTouZi[] holeCards;
+    [SerializeField] private PocketTouZi[] holeCards;
 
-    //初始化
     public void Init(int playerId)
     {
         this.playerId = playerId;
@@ -26,6 +24,19 @@ public class HoleCardManager : MonoBehaviour
             holeCards[j].gameObject.SetActive(false);
         }
     }
+    
+    /// <summary>
+    /// 设置新的底牌
+    /// </summary>
+    /// <param name="holeCardIndex"></param>
+    /// <param name="amount"></param>
+    public void SetHoleCard(int holeCardIndex,int amount)
+    {
+        PocketTouZi pocketTouZi = GetPocket(holeCardIndex);
+        pocketTouZi.gameObject.SetActive(true);
+        pocketTouZi.RollDiceAnimation(amount);
+        pocketTouZi.SetTouZiNub(amount);
+    }
 
     //获取第一份手牌
     public void SetFirstHoleCard()
@@ -36,8 +47,9 @@ public class HoleCardManager : MonoBehaviour
             GameManager.Instance.SetNewHoleCard(playerId, i);
         }
     }
-    public PocketTouZi GetPocket(int holeCardNumber)
+
+    public PocketTouZi GetPocket(int holeCardIndex)
     {
-        return holeCards[holeCardNumber];
+        return holeCards[holeCardIndex];
     }
 }

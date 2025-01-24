@@ -26,7 +26,7 @@ namespace GamePlay.Core
 
     public enum GameState
     {
-        Idle = 0,//游戏未开始
+        Idle = 0, //游戏未开始
         Gaming = 1,
     }
 
@@ -37,7 +37,7 @@ namespace GamePlay.Core
 
         public static GameManager Instance { get; private set; }
 
-        #region 
+        #region
 
         /// <summary>
         /// 当前玩家Id
@@ -53,8 +53,7 @@ namespace GamePlay.Core
 
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")]
-        [SerializeField]
+        [FormerlySerializedAs("touzi")] [SerializeField]
         private Sprite[] touziSprites;
 
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
@@ -63,9 +62,16 @@ namespace GamePlay.Core
 
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
         [SerializeField] private int curScore;
+
         #endregion
-        public HoleCardManager[] holeCardManagers; //底牌管理器（非单例，一个玩家一个
-        public int holeCardNumber; //当前选中的是第几个底牌，
+
+        public HoleCardManager[] holeCardManagers; 
+
+        /// <summary>
+        /// 当前选中的底牌下标
+        /// </summary>
+        [FormerlySerializedAs("holeCardNumber")]
+        public int holeCardIndex;
 
         //重置
         private void Reset()
@@ -81,6 +87,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
+
         //开始游戏
         public void StartGame(int seed)
         {
@@ -99,15 +106,18 @@ namespace GamePlay.Core
             // HoleCardManager.Instance.HoleCardsInit();
             SetCurScore(0);
         }
+
         #region 一个回合内发生的事
+
         public void NextToPlayerId()
         {
-            SetNewHoleCard(CurPlayerId, holeCardNumber); //更新骰子，要在更新玩家id前调用
-            holeCardNumber = 0;
-            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardNumber).TouZiNub;
+            SetNewHoleCard(CurPlayerId, holeCardIndex); //更新骰子，要在更新玩家id前调用
+            holeCardIndex = 0;
+            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardIndex).TouZiNub;
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
+
         /// <summary>
         /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
         /// </summary>
@@ -119,6 +129,7 @@ namespace GamePlay.Core
             // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
+
         /// <summary>
         /// 添加骰子,将骰子添加到场上
         /// </summary>
@@ -147,32 +158,41 @@ namespace GamePlay.Core
             AddTouzi(curPlayerId, id, curScore);
         }
 
+        /// <summary>
+        /// 移除骰子，一般用于对面骰子与自己骰子点数相同时
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="id"></param>
+        /// <param name="score"></param>
+        /// <returns></returns>
         public bool RemoveTouzi(int playerId, int id, int score)
         {
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             return playerNodeQueueManager.RemoveTouzi(id, score);
         }
-        //在playerId的holeCardNumber位置上生成一个新的底牌
+
+        /// <summary>
+        /// 获得新的底牌骰子
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="holeCardNumber"></param>
         public void SetNewHoleCard(int playerId, int holeCardNumber)
         {
             int nub = Random.Range(1, 7);
-            PocketTouZi pocketTouZi = holeCardManagers[playerId].GetPocket(holeCardNumber);
-            pocketTouZi.gameObject.SetActive(true);
-            pocketTouZi.RollDiceAnimation(nub);
-            pocketTouZi.SetTouZiNub(nub);
-            // RollDiceAnimation(touZiImage, finalIndex);
+            holeCardManagers[playerId].SetHoleCard(holeCardNumber, nub);
         }
+
         //设置选中的骰子的效果
         public void SetCurScore(int number = 0)
         {
-            PocketTouZi chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardNumber);
-            holeCardNumber = number;
-            chooseTouzi?.HideHalo();
-            // Debug.Log();
-            chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardNumber);
+            PocketTouZi chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardIndex);
+            holeCardIndex = number;
+            chooseTouzi.HideHalo();
+            chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardIndex);
             chooseTouzi.ShowHalo();
             curScore = chooseTouzi.TouZiNub;
         }
+
         #endregion
 
         private void Awake()
@@ -195,7 +215,10 @@ namespace GamePlay.Core
 
         #region 一hand的起始和结束
 
-        //一hand结束,分发奖池
+
+        /// <summary>
+        /// 结束一轮Hand，结算奖池
+        /// </summary>
         public void OverOneHand()
         {
             int SumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
@@ -203,35 +226,34 @@ namespace GamePlay.Core
             JackpotManager.Instance.JackpotCalculation(SumScore0 > SumScore1 ? 0 : 1);
             if (SumScore0 == 0 || SumScore1 == 0)
             {
-                //彻底结束
+                //TODO:彻底结束
             }
+
             JackpotManager.Instance.NewHand();
             GameUIPanel.Instance.ShowOverPanel(SumScore0, SumScore1);
         }
+
         //重新开始第二hand，清空棋盘，分数，奖池
         public void ResetChessboard()
         {
             curPlayerId = 0;
-            foreach (var nodeQueueManager in nodeQueueManagers)//清空棋盘
+            foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
             {
                 nodeQueueManager.Reset();
             }
+
             GameUIPanel.Instance.UpdateScoreUI(0);
-            GameUIPanel.Instance.UpdateScoreUI(1);//重新计算分数（清空分数
-            JackpotManager.Instance.NewHand();//奖池清零（奖池结算在
-            StageManager.Instance.NewHand();//TODO先手权的转移
+            GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
+            JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
+            StageManager.Instance.NewHand(); //TODO先手权的转移
         }
-
-
-
-
 
         #endregion
 
 
         #region Debug
 
-        [Space(10)][SerializeField] private int t1 = 0;
+        [Space(10)] [SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 
@@ -240,6 +262,7 @@ namespace GamePlay.Core
         {
             StartGame(123);
         }
+
         [ContextMenu("ReSetGame")]
         private void TestResetGame()
         {

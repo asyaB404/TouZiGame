@@ -10,28 +10,34 @@ namespace GamePlay.Core
     {
         public static StageManager Instance
         {
-            get { return instance ??= new StageManager(); }
+            get { return _instance ??= new StageManager(); }
         }
 
-        private static StageManager instance;
+        private static StageManager _instance;
+        
+        /// <summary>
+        /// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        /// </summary>
+        public int HandNub { get; private set; } = -1;
 
-        //TODO开放性有待商榷
-        public int handNub { get; private set; }=-1; //Hand 主要用于扑克等卡牌游戏，表示从发牌到结束的一局，即游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
-        public int round { get; private set; }=0; //回合数（敌方放一次我放一次为一个回合
-        public int stage { get; private set; }=0; //阶段数（决定是否加注的时候为一个阶段
-        public int firstPlayerId=-1; //这个hand内先手玩家的id
+        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合
+        public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
+        public int FirstPlayerId = -1; //这个hand内先手玩家的id
 
         public void NewHand()
         {
-            firstPlayerId = (firstPlayerId+1)%2;
-            handNub++;
-            round = 0;
-            stage = 0;
+            FirstPlayerId = (FirstPlayerId + 1) % 2;
+            HandNub++;
+            Round = 0;
+            Stage = 0;
             SetText();
         }
-        int loseID{
-            get{return GameManager.Instance.NodeQueueManagers[0].SumScore>GameManager.Instance.NodeQueueManagers[1].SumScore?1:0;}
-        }
+
+        private static int LoseID =>
+            GameManager.Instance.NodeQueueManagers[0].SumScore >
+            GameManager.Instance.NodeQueueManagers[1].SumScore
+                ? 1
+                : 0;
 
         /// <summary>
         /// 返回是否进入下一个阶段
@@ -39,32 +45,29 @@ namespace GamePlay.Core
         /// <param name="nowPlayerId">下个回合玩家的id，会在内部确认是否进入了新的回合</param>
         public bool NewRound(int nowPlayerId)
         {
-            if (nowPlayerId != firstPlayerId) return false;
-            round++;
-            if (round >= MyGlobal.A_STAGE_ROUND)
+            if (nowPlayerId != FirstPlayerId) return false;
+            Round++;
+            if (Round >= MyGlobal.A_STAGE_ROUND)
             {
-                GameUIPanel.Instance.ShowRaisePanel(loseID);//todo?
-                // GameManager.Instance.ShowRaiseButton();
+                GameUIPanel.Instance.ShowRaisePanel(LoseID); 
                 return true;
-                //进入下一个阶段
             }
+
             SetText();
             return false;
         }
 
         public void NewStage()
         {
-            stage++;
-            round = 0;
+            Stage++;
+            Round = 0;
             SetText();
         }
 
         private void SetText()
         {
-            Debug.Log($"handNub:{handNub},round:{round},stage:{stage}");
-            GameUIPanel.Instance.SetStageNub(handNub: handNub +1, roundNub: round+1 , stageNub: stage+1 );
+            Debug.Log($"handNub:{HandNub},round:{Round},stage:{Stage}");
+            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
         }
-
-        
     }
 }

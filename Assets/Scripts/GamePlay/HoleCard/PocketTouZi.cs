@@ -6,23 +6,24 @@ using GamePlay.Core;
 // using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
     IPointerExitHandler
 {
-    public bool canChick; //是否可以点击,动画状态下就不能点击
+    [FormerlySerializedAs("canChick")] public bool canClick; //是否可以点击,动画状态下就不能点击
     public int playerId = -1; //表示这个玩家
     public int id = -1; //表示第几个骰子
     public int TouZiNub { get; private set; } = -1; //这枚骰子的数字
     private const float HOVER_SCALE_FACTOR = 1.2f; // 鼠标悬停时放大的缩放因子
+    private const float INITIAL_SCALE = 1; // 初始缩放大小
     public SpriteRenderer spriteRenderer;
-    private Vector3 initialScale = new(1, 1); // 初始缩放大小
 
     [SerializeField] private SpriteRenderer halo;
 
-    private Vector3 initialPos;
-    Tweener scaleAnim;
+    private Vector3 _initialPos;
+    private Tweener _scaleAnim;
 
     public void ShowHalo()
     {
@@ -36,7 +37,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     void Awake()
     {
-        initialPos = transform.position;
+        _initialPos = transform.position;
         halo = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
@@ -57,35 +58,27 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 throw new ArgumentOutOfRangeException();
         }
 
-        if (scaleAnim != null) scaleAnim.Kill(); // 停止缩放相关的动画
-        scaleAnim = transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
+        if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
+        _scaleAnim = transform.DOScale(INITIAL_SCALE * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
     }
 
-    private const int SPIN_COUNT = 15;
-    private const float ANIMATION_DURATION = 2f;
-    private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
-
-
-    //当鼠标离开节点时，恢复节点的原始大小
     public void OnPointerExit(PointerEventData data)
     {
         if (GameManager.GameState == GameState.Idle) return;
-        if (scaleAnim != null) scaleAnim.Kill(); // 停止缩放相关的动画
-        scaleAnim = transform.DOScale(initialScale, 0.3f); // 恢复节点的原始缩放
+        if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
+        _scaleAnim = transform.DOScale(INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
 
-    //当鼠标按下时
     public void OnPointerDown(PointerEventData data)
     {
     }
 
-    // 当鼠标松开时，根据游戏模式执行相应操作
     public void OnPointerUp(PointerEventData data)
     {
         if (data.pointerCurrentRaycast.gameObject != gameObject //不是这个节点
             || playerId != GameManager.CurPlayerId //不是当前玩家
             || GameManager.GameState == GameState.Idle //游戏状态不是Idle
-            || !canChick //不能点击
+            || !canClick //不能点击
            )
             return;
         switch (GameManager.GameMode)
@@ -104,29 +97,35 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
         }
 
-        if (scaleAnim != null) scaleAnim.Kill(); // 停止缩放相关的动画
-        scaleAnim = transform.DOScale(initialScale, 0.3f); // 恢复节点的原始缩放
+        if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
+        _scaleAnim = transform.DOScale(INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
 
-    Sequence rollAnim;
-    Tweener doShakePosition;
-    Tween shakeTween;
-    private Vector3 point = new(0.2f, .2f);
+
     public void SetTouZiNub(int finalIndex)
     {
         TouZiNub = finalIndex;
     }
+
+    private const int SPIN_COUNT = 15;
+    private const float ANIMATION_DURATION = 2f;
+    private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
+    private Sequence rollAnim;
+    private Tweener doShakePosition;
+    private Tween shakeTween;
+    private Vector3 point = new(0.2f, .2f);
+
     public void RollDiceAnimation(int finalIndex)
     {
         rollAnim?.Kill();
         doShakePosition?.Kill();
         shakeTween?.Kill();
 
-        transform.position = initialPos;
+        transform.position = _initialPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
 
 
-        canChick = false;
+        canClick = false;
         finalIndex -= 1;
         rollAnim = DOTween.Sequence();
         // 添加持续摇晃效果
@@ -156,7 +155,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         rollAnim.AppendCallback(() =>
         {
             spriteRenderer.sprite = Touzi[finalIndex];
-            canChick = true;
+            canClick = true;
         });
         rollAnim.Play();
     }

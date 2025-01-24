@@ -17,18 +17,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
     {
-        private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
-
-        // [SerializeField] private Image touziImage;
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
-
 
         private void Awake()
         {
@@ -37,7 +32,6 @@ namespace UI.Panel
             SetConfirmButton();
         }
 
-        //计算分数
         public void UpdateScoreUI(int playerId)
         {
             var texts = playerId == 0 ? p1ScoreTexts : p2ScoreTexts;
@@ -52,34 +46,41 @@ namespace UI.Panel
         }
 
 
+        [FormerlySerializedAs("HandOverPanel")] [SerializeField]
+        private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
 
-        [SerializeField] private GameObject HandOverPanel;//结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
-        [SerializeField] private TextMeshProUGUI[] HandOverTexts;//显示玩家分数
-        
+        [FormerlySerializedAs("HandOverTexts")] [SerializeField]
+        private TextMeshProUGUI[] handOverTexts; //显示玩家分数
+
         //打开分数确认页面
         public void ShowOverPanel(int score0, int score1)
         {
-            HandOverPanel.SetActive(true);
-            HandOverTexts[0].text = "你" + (score0 > score1 ? "赢" : "输") + "了";
-            HandOverTexts[1].text = $"你一共获得了：{score0}分";
-            HandOverTexts[2].text = $"对手一共获得了：{score1}分";
-            
+            handOverPanel.SetActive(true);
+            handOverTexts[0].text = "你" + (score0 > score1 ? "赢" : "输") + "了";
+            handOverTexts[1].text = $"你一共获得了：{score0}分";
+            handOverTexts[2].text = $"对手一共获得了：{score1}分";
         }
-        [SerializeField] private Button confirmButton;//分数确认页面的关闭按钮
+
+        [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
+
         //设置分数确认页面的关闭按钮的监听
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
-            HandOverPanel.SetActive(false);
+            handOverPanel.SetActive(false);
             GameManager.Instance.ResetChessboard();
         });
-        [SerializeField] private TextMeshProUGUI[] JackpotTexts; //双方的筹码的显示ui
+
+        [FormerlySerializedAs("JackpotTexts")] [SerializeField]
+        private TextMeshProUGUI[] jackpotTexts; //双方的筹码的显示ui
+
         //设置筹码ui数值
         public void SetJetton(int jackpot0, int jackpot1)
         {
-            JackpotTexts[0].text = jackpot0.ToString();
-            JackpotTexts[1].text = jackpot1.ToString();
+            jackpotTexts[0].text = jackpot0.ToString();
+            jackpotTexts[1].text = jackpot1.ToString();
             Debug.Log(jackpot0 + "   " + jackpot1);
         }
+
         #region 回合数
 
         [SerializeField] private TextMeshProUGUI handNubText; //第几局
@@ -95,64 +96,76 @@ namespace UI.Panel
             roundNubText.text = roundNub.ToString();
         }
 
-
-
         #endregion
-        
+
         #region 筹码底注和奖池
+
         [SerializeField] private RectTransform buttonPanel; //按钮页面
-        [FormerlySerializedAs("CallButton")][SerializeField] private Button callButton; //跟注按钮
+
+        [FormerlySerializedAs("CallButton")] [SerializeField]
+        private Button callButton; //跟注按钮
+
         [SerializeField] private Button raiseButton; //加注按钮
         [SerializeField] private Button foldButton; //弃牌按钮
-        [SerializeField] private TextMeshProUGUI raisePanelTitleText;//加注页面标题(显示谁来加注)
-        [SerializeField] private TextMeshProUGUI anteText;//底注
-        [SerializeField] private TextMeshProUGUI jackpotText;//奖池
-        [SerializeField] private RectTransform WaitPanel;//等待对方加注（计划在线模式使用
+        [SerializeField] private TextMeshProUGUI raisePanelTitleText; //加注页面标题(显示谁来加注)
+        [SerializeField] private TextMeshProUGUI anteText; //底注
+        [SerializeField] private TextMeshProUGUI jackpotText; //奖池
+
+        [FormerlySerializedAs("WaitPanel")] [SerializeField]
+        private RectTransform waitPanel; //等待对方加注（计划在线模式使用
 
         //设置底牌ui
         public void SetAnte(int anteNub) =>
             anteText.text = anteNub.ToString();
+
         //设置奖池ui
         public void SetJackpot(int sumJackpotNub) =>
             jackpotText.text = sumJackpotNub.ToString();
-        public int curPlayerId;//哪个玩家进行的加注/跟注/弃牌
+
+        public int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
+
         private int loseID;
+
         //打开加注页面
-        public void ShowRaisePanel(int loseID){
-            if(loseID==0)ShowRaisePanel(loseID,JackpotManager.Instance.MyJetton);
-            else ShowRaisePanel(loseID,JackpotManager.Instance.TheJetton);
-        }
-        
-        //打开加注页面
-        private void ShowRaisePanel(int loseID,int losePlayerJetton)
+        public void ShowRaisePanel(int loseID)
         {
-            curPlayerId = loseID;//当前加注的玩家
-            this.loseID = loseID;//输家，用来确认双方都进行过加注
+            if (loseID == 0) ShowRaisePanel(loseID, JackpotManager.Instance.MyJetton);
+            else ShowRaisePanel(loseID, JackpotManager.Instance.TheJetton);
+        }
+
+        //打开加注页面
+        private void ShowRaisePanel(int loseID, int losePlayerJetton)
+        {
+            curPlayerId = loseID; //当前加注的玩家
+            this.loseID = loseID; //输家，用来确认双方都进行过加注
             if (GameManager.GameMode == GameMode.Native)
             {
-                raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2")+"玩家的加注时间";
-                raiseButton.gameObject.SetActive(losePlayerJetton > JackpotManager.Instance.AnteNub);//有钱且钱大于底注才能加注
-            callButton.gameObject.SetActive(losePlayerJetton != 0);//有钱就能跟注（钱不够时应该把按钮改成allin
+                raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
+                raiseButton.gameObject.SetActive(losePlayerJetton > JackpotManager.Instance.AnteNub); //有钱且钱大于底注才能加注
+                callButton.gameObject.SetActive(losePlayerJetton != 0); //有钱就能跟注（钱不够时应该把按钮改成allin
                 buttonPanel.gameObject.SetActive(true);
             }
-            else if (GameManager.GameMode == GameMode.Online)//我猜测的写法
+            else if (GameManager.GameMode == GameMode.Online) //我猜测的写法
             {
                 if (curPlayerId == 0)
                 {
                     // WaitPanel.gameObject.SetActive(false);
                     // ShowRaiseButton(GameManager.Instance.TheJetton);
                 }
-                else if (curPlayerId == 1){
+                else if (curPlayerId == 1)
+                {
                     // HideRaiseButton();
                     // WaitPanel.gameObject.SetActive(true);
                 }
             }
         }
+
         //关闭加注页面
         private void HideRaisePanel()
         {
             buttonPanel.gameObject.SetActive(false);
         }
+
         // 设置按钮的点击事件监听器。
         private void SetButtonClick()
         {
@@ -162,7 +175,7 @@ namespace UI.Panel
 
             // testButton.onClick.AddListener(TestButtonClick);
         }
-        
+
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
@@ -170,18 +183,19 @@ namespace UI.Panel
             JackpotManager.Instance.Call(curPlayerId);
             NextPlayer();
         }
+
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
             JackpotManager.Instance.Raise(curPlayerId);
             NextPlayer();
         }
+
         //一名玩家加注后另一名玩家进行加注
         private void NextPlayer()
         {
             if (GameManager.GameMode == GameMode.Native)
             {
-                
                 if (curPlayerId != loseID)
                 {
                     HideRaisePanel();
@@ -189,9 +203,10 @@ namespace UI.Panel
                 }
                 else
                 {
-                    curPlayerId=(curPlayerId+1)%2;
+                    curPlayerId = (curPlayerId + 1) % 2;
                 }
-                raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2")+"玩家的加注时间";
+
+                raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
             }
             else if (GameManager.GameMode == GameMode.Online)
             {
@@ -200,22 +215,25 @@ namespace UI.Panel
                     // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写，我也不懂
                     // ShowRaiseButton(GameManager.Instance.TheJetton);
                 }
-                else if (curPlayerId == 1){
+                else if (curPlayerId == 1)
+                {
                     // HideRaiseButton();
                     // WaitPanel.gameObject.SetActive(true);
                 }
             }
-
         }
+
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
             GameManager.Instance.OverOneHand();
         }
+
         #endregion
+
         #region debug
 
-        [SerializeField][Range(0, 5)] private int testIndex;
+        [SerializeField] [Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()
