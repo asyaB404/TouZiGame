@@ -7,10 +7,8 @@
     //但是也只有在所有客户端中仅有一个而已
 *********************************************************************/
 
-using System.Collections.Generic;
-using FishNet;
+
 using FishNet.CodeGenerating;
-using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GamePlay.Core;
@@ -44,7 +42,7 @@ namespace NetWork.Server
             GameManager.Instance.StartGame(Seed.Value);
             MyClient.Instance.StartGameResponse();
         }
-        
+
 
         public void ResetState()
         {
