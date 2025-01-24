@@ -52,13 +52,9 @@ namespace GamePlay.Core
 
         [SerializeField] private int curScore;
 
-        public HoleCardManager[] holeCardManagers;
+        [SerializeField] private HoleCardManager[] holeCardManagers;
 
-        /// <summary>
-        /// 当前选中的底牌下标
-        /// </summary>
-        [FormerlySerializedAs("holeCardNumber")]
-        public int holeCardIndex;
+        public IReadOnlyList<HoleCardManager> HoleCardManagers => holeCardManagers;
 
         #endregion
 
@@ -106,21 +102,17 @@ namespace GamePlay.Core
             StageManager.Instance.NewHand();
             JackpotManager.Instance.NewGame();
             JackpotManager.Instance.NewHand();
-            holeCardManagers[0].SetFirstHoleCard();
-            holeCardManagers[1].SetFirstHoleCard();
-
-            // HoleCardManager.Instance.HoleCardsInit();
-            SetCurScore(0);
+            holeCardManagers[0].ResetAllHoleCards();
+            holeCardManagers[1].ResetAllHoleCards();
         }
 
         #region 一个回合内发生的事
 
         public void NextToPlayerId()
         {
-            SetNewHoleCard(CurPlayerId, holeCardIndex); //更新骰子，要在更新玩家id前调用
-            holeCardIndex = 0;
-            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardIndex).TouZiScore;
-            curPlayerId++;
+            SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
+            curScore =
+                curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
 
@@ -130,7 +122,6 @@ namespace GamePlay.Core
         public void NextTurn()
         {
             NextToPlayerId();
-            SetCurScore(0);
             StageManager.Instance.NewRound(curPlayerId);
             // curScore = Random.Range(1, 7);
             // GameUIPanel.Instance.RollDiceAnimation(curScore);
@@ -148,6 +139,7 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
+            //如果移除了对面的骰子同时更新对面的UI，不过老实说这点性能无所谓的，应该把对面的和我的分数UI合在一起的
             if (RemoveTouzi(NextPlayerId, id, score))
                 GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
             if (playerNodeQueueManager.CheckIsGameOver())
@@ -181,21 +173,9 @@ namespace GamePlay.Core
         /// 获得新的底牌骰子
         /// </summary>
         /// <param name="playerId"></param>
-        /// <param name="holeCardNumber"></param>
-        public void SetNewHoleCard(int playerId, int holeCardNumber)
+        public void SetNewHoleCard(int playerId)
         {
-            int nub = Random.Range(1, 7);
-            holeCardManagers[playerId].SetHoleCard(holeCardNumber, nub);
-        }
-
-        /// <summary>
-        /// 设置当前骰子点数大小
-        /// </summary>
-        /// <param name="amount"></param>
-
-        public void SetCurScore(int amount = 0)
-        {
-            curScore = amount;
+            holeCardManagers[playerId].SetHoleCard();
         }
 
         #endregion

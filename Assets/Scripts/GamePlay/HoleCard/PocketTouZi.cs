@@ -26,17 +26,12 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     private Vector3 _initialPos;
     private Tweener _scaleAnim;
 
-    public void ShowHalo()
+    public void SetHalo(bool isActive)
     {
-        halo.gameObject.SetActive(true);
+        halo.gameObject.SetActive(isActive);
     }
 
-    public void HideHalo()
-    {
-        halo.gameObject.SetActive(false);
-    }
-
-    void Awake()
+    private void Awake()
     {
         _initialPos = transform.position;
         halo = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -59,7 +54,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 throw new ArgumentOutOfRangeException();
         }
 
-        if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
+        _scaleAnim?.Kill(); // 停止缩放相关的动画
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
     }
 
@@ -85,7 +80,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
-                GameManager.Instance.SetCurScore(TouZiScore);
+                GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
                 break;
             case GameMode.Online:
                 if (playerId == 1) return;
@@ -93,30 +88,28 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
             default:
                 throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
         }
-
         if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
-
-
-    public void SetTouZiNub(int finalIndex)
+    
+    public void SetTouZiScore(int amount)
     {
-        TouZiScore = finalIndex;
+        TouZiScore = amount;
     }
 
     private const int SPIN_COUNT = 15;
     private const float ANIMATION_DURATION = 2f;
     private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
-    private Sequence rollAnim;
-    private Tweener doShakePosition;
-    private Tween shakeTween;
-    private Vector3 point = new(0.2f, .2f);
+    private Sequence _rollAnim;
+    private Tweener _doShakePosition;
+    private Tween _shakeTween;
+    private readonly Vector3 _point = new(0.2f, .2f);
 
     public void RollDiceAnimation(int finalIndex)
     {
-        rollAnim?.Kill();
-        doShakePosition?.Kill();
-        shakeTween?.Kill();
+        _rollAnim?.Kill();
+        _doShakePosition?.Kill();
+        _shakeTween?.Kill();
 
         transform.position = _initialPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -124,16 +117,16 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
         canClick = false;
         finalIndex -= 1;
-        rollAnim = DOTween.Sequence();
+        _rollAnim = DOTween.Sequence();
         // 添加持续摇晃效果
-        doShakePosition = transform.DOShakePosition(
+        _doShakePosition = transform.DOShakePosition(
             duration: ANIMATION_DURATION, //持续时间
-            strength: point, // 水平和垂直方向抖动
+            strength: _point, // 水平和垂直方向抖动
             vibrato: 20,
             randomness: 90,
             fadeOut: true
         );
-        shakeTween = transform.DOShakeRotation(
+        _shakeTween = transform.DOShakeRotation(
             duration: ANIMATION_DURATION, // 摇晃的总持续时间
             strength: new Vector3(0, 0, 180), // 主要在 Z 轴方向旋转
             vibrato: 30, // 震动频率
@@ -145,15 +138,15 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         for (int i = 0; i < SPIN_COUNT; i++)
         {
             int randomIndex = UnityEngine.Random.Range(0, Touzi.Count);
-            rollAnim.AppendCallback(() => { spriteRenderer.sprite = Touzi[randomIndex]; });
-            rollAnim.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
+            _rollAnim.AppendCallback(() => { spriteRenderer.sprite = Touzi[randomIndex]; });
+            _rollAnim.AppendInterval(ANIMATION_DURATION / SPIN_COUNT);
         }
 
-        rollAnim.AppendCallback(() =>
+        _rollAnim.AppendCallback(() =>
         {
             spriteRenderer.sprite = Touzi[finalIndex];
             canClick = true;
         });
-        rollAnim.Play();
+        _rollAnim.Play();
     }
 }

@@ -1,58 +1,79 @@
-using System.Collections;
-using System.Collections.Generic;
-using GamePlay.Core;
-
-// using Microsoft.Unity.VisualStudio.Editor;
-using UI.Panel;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 /// <summary>
 /// 底牌骰子管理器
 /// </summary>
 public class HoleCardManager : MonoBehaviour
 {
-    public int playerId; //属于的玩家id
-
+    public int ownerId; //属于的玩家id
+    
+    /// <summary>
+    /// 底牌骰子们
+    /// </summary>
     [SerializeField] private PocketTouZi[] holeCards;
+
+    /// <summary>
+    /// 当前选中的骰子索引
+    /// </summary>
+    [SerializeField] private int curIndex;
+
+    public int CurIndex
+    {
+        get => curIndex;
+        set
+        {
+            if (value < 0 || value >= holeCards.Length) return;
+            curIndex = value;
+            for (int i = 0; i < holeCards.Length; i++)
+            {
+                holeCards[i].SetHalo(i == curIndex);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 当前选中的骰子点数大小
+    /// </summary>
+    public int CurHoleCardScore => holeCards[curIndex].TouZiScore;
 
     public void Init(int playerId)
     {
-        this.playerId = playerId;
+        ownerId = playerId;
         for (int j = 0; j < holeCards.Length; j++)
         {
             holeCards[j].playerId = playerId;
             holeCards[j].id = j;
-            // GameManager.Instance.AddHoleCard(pocketTouZis[j]);
             holeCards[j].gameObject.SetActive(false);
         }
     }
-    
+
     /// <summary>
     /// 设置新的底牌
     /// </summary>
-    /// <param name="holeCardIndex"></param>
-    /// <param name="amount"></param>
-    public void SetHoleCard(int holeCardIndex,int amount)
+    public void SetHoleCard()
     {
-        PocketTouZi pocketTouZi = GetPocket(holeCardIndex);
-        pocketTouZi.gameObject.SetActive(true);
-        pocketTouZi.RollDiceAnimation(amount);
-        pocketTouZi.SetTouZiNub(amount);
+        int nub = Random.Range(1, 7);
+        SetHoleCard(curIndex, nub);
     }
 
-    //获取第一份手牌
-    public void SetFirstHoleCard()
+    private void SetHoleCard(int index, int amount)
+    {
+        PocketTouZi pocketTouZi = holeCards[index];
+        pocketTouZi.gameObject.SetActive(true);
+        pocketTouZi.RollDiceAnimation(amount);
+        pocketTouZi.SetTouZiScore(amount);
+    }
+
+    /// <summary>
+    /// 重置所有底牌大小
+    /// </summary>
+    public void ResetAllHoleCards()
     {
         for (int i = 0; i < holeCards.Length; i++)
         {
             holeCards[i].gameObject.SetActive(true);
-            GameManager.Instance.SetNewHoleCard(playerId, i);
+            SetHoleCard(i, Random.Range(1, 7));
         }
-    }
-
-    public PocketTouZi GetPocket(int holeCardIndex)
-    {
-        return holeCards[holeCardIndex];
     }
 }
