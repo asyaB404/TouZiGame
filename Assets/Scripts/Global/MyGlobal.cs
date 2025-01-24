@@ -11,4 +11,7 @@ public static class MyGlobal
     public const int INITIAL_CHIP = 10; //最大局数
     public const string CLIENT_PREFABS_PATH = "Prefabs/Network/MyClient";
     public const string SERVER_PREFABS_PATH = "Prefabs/Network/MyServer";
+    
+    public const float HOVER_SCALE_FACTOR = 1.2f; // 鼠标悬停时放大的缩放因子
+    public const float INITIAL_SCALE = 1; // 初始缩放大小
 }

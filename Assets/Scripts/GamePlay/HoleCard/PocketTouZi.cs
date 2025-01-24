@@ -9,15 +9,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+/// <summary>
+/// 底牌骰子
+/// </summary>
 public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
     IPointerExitHandler
 {
     [FormerlySerializedAs("canChick")] public bool canClick; //是否可以点击,动画状态下就不能点击
     public int playerId = -1; //表示这个玩家
     public int id = -1; //表示第几个骰子
-    public int TouZiNub { get; private set; } = -1; //这枚骰子的数字
-    private const float HOVER_SCALE_FACTOR = 1.2f; // 鼠标悬停时放大的缩放因子
-    private const float INITIAL_SCALE = 1; // 初始缩放大小
+    public int TouZiScore { get; private set; } = -1; //这枚骰子的点数大小
     public SpriteRenderer spriteRenderer;
 
     [SerializeField] private SpriteRenderer halo;
@@ -59,14 +60,14 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         }
 
         if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
-        _scaleAnim = transform.DOScale(INITIAL_SCALE * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
+        _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
     }
 
     public void OnPointerExit(PointerEventData data)
     {
         if (GameManager.GameState == GameState.Idle) return;
         if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
-        _scaleAnim = transform.DOScale(INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
+        _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
 
     public void OnPointerDown(PointerEventData data)
@@ -84,27 +85,23 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
-                // GameManager.Instance.AddTouzi(id); // 在本地模式下，向游戏中添加骰子
-                GameManager.Instance.SetCurScore(id); //TODO
+                GameManager.Instance.SetCurScore(TouZiScore);
                 break;
             case GameMode.Online:
                 if (playerId == 1) return;
-                GameManager.Instance.SetCurScore(id);
-                // MyClient.Instance.AddTouziRequest(GameManager.CurPlayerId, id,
-                //     GameManager.CurScore);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
         }
 
         if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
-        _scaleAnim = transform.DOScale(INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
+        _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
     }
 
 
     public void SetTouZiNub(int finalIndex)
     {
-        TouZiNub = finalIndex;
+        TouZiScore = finalIndex;
     }
 
     private const int SPIN_COUNT = 15;

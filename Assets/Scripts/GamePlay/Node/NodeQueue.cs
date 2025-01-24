@@ -27,7 +27,6 @@ namespace GamePlay.Node
     {
         public int playerId = -1; //表示这个
         public int id = -1; //表示第几列
-        private const float HOVER_SCALE_FACTOR = 1.1f; // 鼠标悬停时放大的缩放因子
         private static int MaxQueueNode => NodeQueueManager.MAX_QUEUE_NODE; // 最大节点数（从NodeQueueManager获取）
 
         [SerializeField] private int sumScore; // 当前节点队列的总点数
@@ -38,8 +37,6 @@ namespace GamePlay.Node
             get => sumScore;
             private set => sumScore = value;
         }
-
-        [SerializeField] private Vector3 initialScale; // 初始缩放大小
 
         [FormerlySerializedAs("nodePos")] [SerializeField]
         private Transform[] touziPos; // 节点的位置数组（每个节点的放置位置）
@@ -70,7 +67,7 @@ namespace GamePlay.Node
             }
 
             transform.DOKill(); // 停止所有当前的动画
-            transform.DOScale(initialScale * HOVER_SCALE_FACTOR, 0.3f); // 放大节点
+            transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
         }
 
         //当鼠标离开节点时，恢复节点的原始大小
@@ -78,7 +75,7 @@ namespace GamePlay.Node
         {
             if (GameManager.GameState == GameState.Idle) return;
             transform.DOKill(); // 停止当前动画
-            transform.DOScale(initialScale, 0.3f); // 恢复节点的原始缩放
+            transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
         }
 
         //当鼠标按下时
@@ -108,7 +105,7 @@ namespace GamePlay.Node
             }
 
             transform.DOKill(); // 停止动画
-            transform.DOScale(initialScale, 0.3f);
+            transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f);
         }
 
         //添加一个节点

@@ -7,6 +7,9 @@ using UI.Panel;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 底牌骰子管理器
+/// </summary>
 public class HoleCardManager : MonoBehaviour
 {
     public int playerId; //属于的玩家id

@@ -7,10 +7,9 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
-using System;
+
 using System.Collections.Generic;
 using GamePlay.Node;
-using NetWork;
 using UI.Panel;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,26 +17,15 @@ using Random = UnityEngine.Random;
 
 namespace GamePlay.Core
 {
-    public enum GameMode
-    {
-        Native = 0,
-        Online = 1
-    }
-
-    public enum GameState
-    {
-        Idle = 0, //游戏未开始
-        Gaming = 1,
-    }
-
     public class GameManager : MonoBehaviour
     {
+        #region 字段以及属性
+
         public static GameState GameState { get; private set; } = GameState.Idle;
+
         public static GameMode GameMode { get; set; } = GameMode.Native;
 
         public static GameManager Instance { get; private set; }
-
-        #region
 
         /// <summary>
         /// 当前玩家Id
@@ -61,11 +49,10 @@ namespace GamePlay.Core
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
 
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
+
         [SerializeField] private int curScore;
 
-        #endregion
-
-        public HoleCardManager[] holeCardManagers; 
+        public HoleCardManager[] holeCardManagers;
 
         /// <summary>
         /// 当前选中的底牌下标
@@ -73,7 +60,25 @@ namespace GamePlay.Core
         [FormerlySerializedAs("holeCardNumber")]
         public int holeCardIndex;
 
+        #endregion
+
+        private void Awake()
+        {
+            Instance = this;
+            for (int i = 0; i < nodeQueueManagers.Length; i++)
+            {
+                nodeQueueManagers[i].Init(i);
+            }
+
+            for (int i = 0; i < holeCardManagers.Length; i++)
+            {
+                holeCardManagers[i].Init(i);
+            }
+        }
+
+
         //重置
+
         private void Reset()
         {
             GameState = GameState.Idle;
@@ -89,6 +94,7 @@ namespace GamePlay.Core
         }
 
         //开始游戏
+
         public void StartGame(int seed)
         {
             GameState = GameState.Gaming;
@@ -113,7 +119,7 @@ namespace GamePlay.Core
         {
             SetNewHoleCard(CurPlayerId, holeCardIndex); //更新骰子，要在更新玩家id前调用
             holeCardIndex = 0;
-            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardIndex).TouZiNub;
+            curScore = holeCardManagers[curPlayerId].GetPocket(holeCardIndex).TouZiScore;
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
@@ -182,55 +188,36 @@ namespace GamePlay.Core
             holeCardManagers[playerId].SetHoleCard(holeCardNumber, nub);
         }
 
-        //设置选中的骰子的效果
-        public void SetCurScore(int number = 0)
+        /// <summary>
+        /// 设置当前骰子点数大小
+        /// </summary>
+        /// <param name="amount"></param>
+
+        public void SetCurScore(int amount = 0)
         {
-            PocketTouZi chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardIndex);
-            holeCardIndex = number;
-            chooseTouzi.HideHalo();
-            chooseTouzi = holeCardManagers[curPlayerId].GetPocket(holeCardIndex);
-            chooseTouzi.ShowHalo();
-            curScore = chooseTouzi.TouZiNub;
+            curScore = amount;
         }
 
         #endregion
 
-        private void Awake()
-        {
-            Application.targetFrameRate = 9999;
-            Debug.Log(NetWorkMgr.CloseServer()); //激活静态构造函数，测试用test
-            Instance = this;
-            for (int i = 0; i < nodeQueueManagers.Length; i++)
-            {
-                nodeQueueManagers[i].Init(i);
-            }
-
-            for (int i = 0; i < holeCardManagers.Length; i++)
-            {
-                holeCardManagers[i].Init(i);
-            }
-            // StartGame(123);
-        }
-
 
         #region 一hand的起始和结束
-
 
         /// <summary>
         /// 结束一轮Hand，结算奖池
         /// </summary>
         public void OverOneHand()
         {
-            int SumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
-            int SumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
-            JackpotManager.Instance.JackpotCalculation(SumScore0 > SumScore1 ? 0 : 1);
-            if (SumScore0 == 0 || SumScore1 == 0)
+            int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
+            int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
+            JackpotManager.Instance.JackpotCalculation(sumScore0 > sumScore1 ? 0 : 1);
+            if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
             }
 
             JackpotManager.Instance.NewHand();
-            GameUIPanel.Instance.ShowOverPanel(SumScore0, SumScore1);
+            GameUIPanel.Instance.ShowOverPanel(sumScore0, sumScore1);
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池
@@ -288,5 +275,17 @@ namespace GamePlay.Core
         }
 
         #endregion
+    }
+
+    public enum GameMode
+    {
+        Native = 0,
+        Online = 1
+    }
+
+    public enum GameState
+    {
+        Idle = 0, //游戏未开始
+        Gaming = 1,
     }
 }
