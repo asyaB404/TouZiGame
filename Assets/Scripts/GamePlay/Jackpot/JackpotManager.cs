@@ -9,12 +9,37 @@ using UnityEngine.UI;
 /// </summary>
 public class JackpotManager
 {
+    public int MyJetton
+    {
+        set
+        {
+            myJetton = value;
+            GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+        }
+        get => myJetton;
+    }
+    private int myJetton;
+    private int theJetton;
+    public int TheJetton
+    {
+        get => theJetton;
+        set
+        {
+            theJetton = value;
+            GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+        }
+    }
+    public void NewGame()
+    {
+        MyJetton = MyGlobal.INITIAL_CHIP;
+        TheJetton = MyGlobal.INITIAL_CHIP;
+    }
     public int AnteNub
     {
         set
         {
             anteNub = value;
-            GameManager.Instance.SetAnte(value);
+            GameUIPanel.Instance.SetAnte(value);
         }
         get => anteNub;
     } //底注大小
@@ -25,26 +50,31 @@ public class JackpotManager
 
     public static JackpotManager Instance { get { if (instance == null) instance = new JackpotManager(); return instance; } }
     public static JackpotManager instance;
-
+    public void JackpotCalculation(int willerId)
+    {
+        if (willerId == 0)MyJetton+=SumJackpotNub;
+        else if (willerId == 1)TheJetton+=SumJackpotNub;
+    }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
-        AnteNub = StageManager.Instance.handNub+1;
+        AnteNub = StageManager.Instance.handNub + 1;
         jackpotNub0 = 0;
         jackpotNub1 = 0;
+        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
     public void Call(int playerid)
     {
         if (playerid == 0)
         {
             jackpotNub0 += AnteNub;
-            GameManager.Instance.MyJetton -= AnteNub;
+            MyJetton -= AnteNub;
         }
         else
         {
             jackpotNub1 += AnteNub;
-            GameManager.Instance.TheJetton -= AnteNub;
+            TheJetton -= AnteNub;
         }
-        GameManager.Instance.SetJackpot( SumJackpotNub);
+        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
     public void Raise(int playerId)
     {
