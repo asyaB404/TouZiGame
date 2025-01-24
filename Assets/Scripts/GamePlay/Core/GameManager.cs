@@ -38,20 +38,14 @@ namespace GamePlay.Core
         public int CurScore => HoleCardManagers[curPlayerId].CurHoleCardScore;
 
         [SerializeField] private int curPlayerId = 0;
-
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
         [FormerlySerializedAs("touzi")] [SerializeField]
         private Sprite[] touziSprites;
-
-        [SerializeField] private NodeQueueManager[] nodeQueueManagers;
-
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
-
+        [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
-
         [SerializeField] private HoleCardManager[] holeCardManagers;
-
         public IReadOnlyList<HoleCardManager> HoleCardManagers => holeCardManagers;
 
         #endregion
