@@ -14,16 +14,31 @@ namespace GamePlay.Core
         }
 
         private static StageManager _instance;
-        
-        /// <summary>
-        /// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
-        /// </summary>
-        public int HandNub { get; private set; } = -1;
+        public int HandNub { get; private set; } = -1;// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int FirstPlayerId = -1; //这个hand内先手玩家的id
 
+
+
+        public static int LoseID =>
+            GameManager.Instance.NodeQueueManagers[0].SumScore >
+            GameManager.Instance.NodeQueueManagers[1].SumScore
+                ? 1
+                : 0;
+        public void NewGame()
+        {
+            HandNub = 0;
+            Stage = 0;
+            Round = 0;
+            if (GameManager.GameMode == GameMode.Native)
+            {
+                GameUIPanel.Instance.ShowRaisePanel(false,MyGlobal.INITIAL_CHIP,1,false,GameMode.Native);
+                FirstPlayerId=0;
+            }
+            SetText();
+        }
         public void NewHand()
         {
             FirstPlayerId = (FirstPlayerId + 1) % 2;
@@ -32,13 +47,12 @@ namespace GamePlay.Core
             Stage = 0;
             SetText();
         }
-
-        private static int LoseID =>
-            GameManager.Instance.NodeQueueManagers[0].SumScore >
-            GameManager.Instance.NodeQueueManagers[1].SumScore
-                ? 1
-                : 0;
-
+        public void NewStage()
+        {
+            
+            Round = 0;
+            SetText();
+        }
         /// <summary>
         /// 返回是否进入下一个阶段
         /// </summary>
@@ -49,7 +63,9 @@ namespace GamePlay.Core
             Round++;
             if (Round >= MyGlobal.A_STAGE_ROUND)
             {
-                GameUIPanel.Instance.ShowRaisePanel(LoseID); 
+                // GameUIPanel.Instance.ShowRaise(LoseID==0);
+                JackpotManager.Instance.EnterRaise(LoseID);
+                Stage++;
                 return true;
             }
 
@@ -57,17 +73,12 @@ namespace GamePlay.Core
             return false;
         }
 
-        public void NewStage()
-        {
-            Stage++;
-            Round = 0;
-            SetText();
-        }
+
 
         private void SetText()
         {
             Debug.Log($"handNub:{HandNub},round:{Round},stage:{Stage}");
-            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
+            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage+1 );
         }
     }
 }

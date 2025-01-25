@@ -46,10 +46,12 @@ namespace UI.Panel
         }
 
 
-        [FormerlySerializedAs("HandOverPanel")] [SerializeField]
+        [FormerlySerializedAs("HandOverPanel")]
+        [SerializeField]
         private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
 
-        [FormerlySerializedAs("HandOverTexts")] [SerializeField]
+        [FormerlySerializedAs("HandOverTexts")]
+        [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
         //打开分数确认页面
@@ -70,7 +72,8 @@ namespace UI.Panel
             GameManager.Instance.ResetChessboard();
         });
 
-        [FormerlySerializedAs("JackpotTexts")] [SerializeField]
+        [FormerlySerializedAs("JackpotTexts")]
+        [SerializeField]
         private TextMeshProUGUI[] jackpotTexts; //双方的筹码的显示ui
 
         //设置筹码ui数值
@@ -102,7 +105,8 @@ namespace UI.Panel
 
         [SerializeField] private RectTransform buttonPanel; //按钮页面
 
-        [FormerlySerializedAs("CallButton")] [SerializeField]
+        [FormerlySerializedAs("CallButton")]
+        [SerializeField]
         private Button callButton; //跟注按钮
 
         [SerializeField] private Button raiseButton; //加注按钮
@@ -111,7 +115,8 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI anteText; //底注
         [SerializeField] private TextMeshProUGUI jackpotText; //奖池
 
-        [FormerlySerializedAs("WaitPanel")] [SerializeField]
+        [FormerlySerializedAs("WaitPanel")]
+        [SerializeField]
         private RectTransform waitPanel; //等待对方加注（计划在线模式使用
 
         //设置底牌ui
@@ -124,42 +129,36 @@ namespace UI.Panel
 
         public int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
 
-        private int loseID;
+        private int firstRaisePlayerId;
 
+
+
+        private TextMeshProUGUI callText;
         //打开加注页面
-        public void ShowRaisePanel(int loseID)
+        public void ShowRaisePanel(bool isP1, int haveJackpot, int needFackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
         {
-            if (loseID == 0) ShowRaisePanel(loseID, JackpotManager.Instance.MyJetton);
-            else ShowRaisePanel(loseID, JackpotManager.Instance.TheJetton);
-        }
+            firstRaisePlayerId = isP1 ? 0 : 1;//用来判断加注环节被双方都进行过了一遍
+            curPlayerId = firstRaisePlayerId;
+            if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            SetRaiseButtons(isP1, haveJackpot, needFackpot, canFold);
 
-        //打开加注页面
-        private void ShowRaisePanel(int loseID, int losePlayerJetton)
+            if (gameMode == GameMode.Native) buttonPanel.gameObject.SetActive(true);
+            // else if (gameMode == GameMode.Online)//我觉得应该这样写
+            // {
+            //     waitPanel.gameObject.SetActive(!isP1);
+            //     buttonPanel.gameObject.SetActive(isP1);
+            // }
+        }
+        private void SetRaiseButtons(bool isP1, int haveJackpot, int needFackpot, bool canFold = true)
         {
-            curPlayerId = loseID; //当前加注的玩家
-            this.loseID = loseID; //输家，用来确认双方都进行过加注
-            if (GameManager.GameMode == GameMode.Native)
-            {
-                raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
-                raiseButton.gameObject.SetActive(losePlayerJetton > JackpotManager.Instance.AnteNub); //有钱且钱大于底注才能加注
-                callButton.gameObject.SetActive(losePlayerJetton != 0); //有钱就能跟注（钱不够时应该把按钮改成allin
-                buttonPanel.gameObject.SetActive(true);
-            }
-            else if (GameManager.GameMode == GameMode.Online) //我猜测的写法
-            {
-                if (curPlayerId == 0)
-                {
-                    // WaitPanel.gameObject.SetActive(false);
-                    // ShowRaiseButton(GameManager.Instance.TheJetton);
-                }
-                else if (curPlayerId == 1)
-                {
-                    // HideRaiseButton();
-                    // WaitPanel.gameObject.SetActive(true);
-                }
-            }
-        }
+            raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
+            callButton.gameObject.SetActive(haveJackpot >= needFackpot);
+            raiseButton.gameObject.SetActive(haveJackpot > needFackpot);
+            callText.text = haveJackpot > needFackpot ? "跟注" : "AllIn!!!!";
+
+            foldButton.gameObject.SetActive(canFold);
+        }
         //关闭加注页面
         private void HideRaisePanel()
         {
@@ -194,46 +193,53 @@ namespace UI.Panel
         //一名玩家加注后另一名玩家进行加注
         private void NextPlayer()
         {
+            if (curPlayerId != firstRaisePlayerId)//说明双方都已经加过注了，可以进入下一个阶段了
+            {
+                HideRaisePanel();
+                waitPanel.gameObject.SetActive(false);
+                StageManager.Instance.NewStage();
+            }
             if (GameManager.GameMode == GameMode.Native)
             {
-                if (curPlayerId != loseID)
-                {
-                    HideRaisePanel();
-                    StageManager.Instance.NewStage();
-                }
-                else
-                {
-                    curPlayerId = (curPlayerId + 1) % 2;
-                }
-
+                curPlayerId = (curPlayerId + 1) % 2;
                 raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
+                SetRaiseButtons(curPlayerId == 0,curPlayerId == 0?JackpotManager.Instance.MyJetton:JackpotManager.Instance.TheJetton,
+                                                JackpotManager.Instance.AnteNub);
             }
-            else if (GameManager.GameMode == GameMode.Online)
-            {
-                if (curPlayerId == 0)
-                {
-                    // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写，我也不懂
-                    // ShowRaiseButton(GameManager.Instance.TheJetton);
-                }
-                else if (curPlayerId == 1)
-                {
-                    // HideRaiseButton();
-                    // WaitPanel.gameObject.SetActive(true);
-                }
-            }
+            // else if (GameManager.GameMode == GameMode.Online)
+            // {
+            //     if (curPlayerId == 0)
+            //     {
+            //         // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写
+            //         // ShowRaiseButton(GameManager.Instance.TheJetton);
+            //     }
+            //     else if (curPlayerId == 1)
+            //     {
+            //         // HideRaiseButton();
+            //         // WaitPanel.gameObject.SetActive(true);
+            //     }
+            // }
         }
 
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
+            HideRaisePanel();
             GameManager.Instance.OverOneHand();
         }
 
         #endregion
 
+        // public void GameStart(GameMode gameMode){//也许应该通过判断在线还是本地来调整一下ui排版
+        //     if(gameMode == GameMode.Native){
+        //         GetControl<Image>("shader")
+        //     }
+        // }
+
+
         #region debug
 
-        [SerializeField] [Range(0, 5)] private int testIndex;
+        [SerializeField][Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()

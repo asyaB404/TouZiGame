@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 底牌骰子管理器
 /// </summary>
-public class HoleCardManager : MonoBehaviour
+public class HoleCardManager : MonoBehaviour//非单例
 {
     public int ownerId; //属于的玩家id
     

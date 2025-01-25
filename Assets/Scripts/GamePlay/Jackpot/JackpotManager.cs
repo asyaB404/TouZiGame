@@ -29,11 +29,6 @@ public class JackpotManager
             GameUIPanel.Instance.SetJetton(myJetton, theJetton);
         }
     }
-    public void NewGame()
-    {
-        MyJetton = MyGlobal.INITIAL_CHIP;
-        TheJetton = MyGlobal.INITIAL_CHIP;
-    }
     public int AnteNub
     {
         set
@@ -44,24 +39,42 @@ public class JackpotManager
         get => anteNub;
     } //底注大小
     private int anteNub;
+
     private int jackpotNub0; //0是自己的奖池，1是对手的奖池
     private int jackpotNub1;
     public int SumJackpotNub { get { return jackpotNub0 + jackpotNub1; } }
-
     public static JackpotManager Instance { get { if (instance == null) instance = new JackpotManager(); return instance; } }
     public static JackpotManager instance;
-    public void JackpotCalculation(int willerId)
+
+    public void NewGame()
     {
-        if (willerId == 0)MyJetton+=SumJackpotNub;
-        else if (willerId == 1)TheJetton+=SumJackpotNub;
+        AnteNub=1;
+        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+        MyJetton = MyGlobal.INITIAL_CHIP;
+        TheJetton = MyGlobal.INITIAL_CHIP;
+    }
+    //进入加注环节
+    public void EnterRaise(int loseID)
+    {
+        GameUIPanel.Instance.ShowRaisePanel(loseID==0,loseID==0?MyJetton:TheJetton,AnteNub,gameMode:GameManager.GameMode);
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
         AnteNub = StageManager.Instance.HandNub + 1;
-        jackpotNub0 = 0;
-        jackpotNub1 = 0;
+        // int nub = MyJetton > AnteNub ? AnteNub : MyJetton;
+        // MyJetton -= nub;
+        // jackpotNub0 = nub;
+        // nub = TheJetton > AnteNub ? AnteNub : TheJetton;
+        // TheJetton -= nub;
+        // jackpotNub1 = nub;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
+    public void JackpotCalculation(int willerId)
+    {
+        if (willerId == 0) MyJetton += SumJackpotNub;
+        else if (willerId == 1) TheJetton += SumJackpotNub;
+    }
+
     public void Call(int playerid)
     {
         if (playerid == 0)

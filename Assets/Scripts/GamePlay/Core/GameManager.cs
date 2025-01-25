@@ -87,13 +87,15 @@ namespace GamePlay.Core
         {
             GameState = GameState.Gaming;
             Random.InitState(seed);
-            // curScore = Random.Range(1, 7);
-            // GameUIPanel.Instance.RollDiceAnimation(curScore);
+
             Debug.Log(GameUIPanel.Instance);
             curPlayerId = 0;
-            StageManager.Instance.NewHand();
             JackpotManager.Instance.NewGame();
-            JackpotManager.Instance.NewHand();
+            StageManager.Instance.NewGame();
+            
+            // JackpotManager.Instance.NewHand();//开始游戏会自动
+            // JackpotManager.Instance.EnterRaise(StageManager.LoseID);
+
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
@@ -187,7 +189,7 @@ namespace GamePlay.Core
                 //TODO:彻底结束
             }
 
-            JackpotManager.Instance.NewHand();
+            // JackpotManager.Instance.NewHand();
             GameUIPanel.Instance.ShowOverPanel(sumScore0, sumScore1);
         }
 
