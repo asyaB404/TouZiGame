@@ -18,7 +18,7 @@ namespace GamePlay.Core
 
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
-        public int FirstPlayerId = -1; //这个hand内先手玩家的id
+        public int firstPlayerId = -1; //这个hand内先手玩家的id
 
 
 
@@ -32,16 +32,18 @@ namespace GamePlay.Core
             HandNub = 0;
             Stage = 0;
             Round = 0;
-            if (GameManager.GameMode == GameMode.Native)
+            if (GameManager.GameMode == GameMode.Native)//本地模式默认起手玩家为p1
             {
-                GameUIPanel.Instance.ShowRaisePanel(false,MyGlobal.INITIAL_CHIP,1,false,GameMode.Native);
-                FirstPlayerId=0;
+                
+                firstPlayerId=0;
             }
+            JackpotManager.Instance.EnterRaise(~firstPlayerId,false);
             SetText();
         }
         public void NewHand()
         {
-            FirstPlayerId = (FirstPlayerId + 1) % 2;
+            firstPlayerId = (firstPlayerId + 1) % 2;
+            JackpotManager.Instance.EnterRaise(~firstPlayerId,false);
             HandNub++;
             Round = 0;
             Stage = 0;
@@ -59,7 +61,7 @@ namespace GamePlay.Core
         /// <param name="nowPlayerId">下个回合玩家的id，会在内部确认是否进入了新的回合</param>
         public bool NewRound(int nowPlayerId)
         {
-            if (nowPlayerId != FirstPlayerId) return false;
+            if (nowPlayerId != firstPlayerId) return false;
             Round++;
             if (Round >= MyGlobal.A_STAGE_ROUND)
             {

@@ -88,18 +88,13 @@ namespace GamePlay.Core
         {
             GameState = GameState.Gaming;
             Random.InitState(seed);
-
-            Debug.Log(GameUIPanel.Instance);
-            if (GameMode == GameMode.Native)//单人模式默认初始玩家为0号玩家
-            {
-                curPlayerId = 0;
-            }
-            else if (GameMode == GameMode.Online)
-            {
-                //
-            }
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
+            Debug.Log(GameUIPanel.Instance);
+
+            curPlayerId = StageManager.Instance.firstPlayerId;
+
+
 
             // JackpotManager.Instance.NewHand();//开始游戏会自动
             // JackpotManager.Instance.EnterRaise(StageManager.LoseID);
@@ -204,7 +199,7 @@ namespace GamePlay.Core
         //重新开始第二hand，清空棋盘，分数，奖池
         public void ResetChessboard()
         {
-            
+
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
             {
                 nodeQueueManager.Reset();
@@ -216,7 +211,7 @@ namespace GamePlay.Core
             JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
             StageManager.Instance.NewHand(); //
 
-            curPlayerId = StageManager.Instance.FirstPlayerId;
+            curPlayerId = StageManager.Instance.firstPlayerId;
         }
 
         #endregion

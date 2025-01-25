@@ -54,13 +54,15 @@ public class JackpotManager
         TheJetton = MyGlobal.INITIAL_CHIP;
     }
     //进入加注环节
-    public void EnterRaise(int loseID)
+    public void EnterRaise(int FirstPlayerId,bool canFold=true)
     {
-        GameUIPanel.Instance.ShowRaisePanel(loseID == 0, loseID == 0 ? MyJetton : TheJetton, AnteNub, gameMode: GameManager.GameMode);
+        GameUIPanel.Instance.ShowRaisePanel(FirstPlayerId == 0, FirstPlayerId == 0 ? MyJetton : TheJetton, AnteNub, canFold,gameMode: GameManager.GameMode);
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
         AnteNub = StageManager.Instance.HandNub + 1;
+        jackpotNub0 = 0;
+        jackpotNub1 = 0;
         // int nub = MyJetton > AnteNub ? AnteNub : MyJetton;
         // MyJetton -= nub;
         // jackpotNub0 = nub;
