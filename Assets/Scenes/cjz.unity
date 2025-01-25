@@ -513,7 +513,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 1096935279}
   - {fileID: 1411161905}
@@ -960,7 +959,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 8.979}
+  m_AnchoredPosition: {x: 0, y: 8.979004}
   m_SizeDelta: {x: -799.9999, y: -78.8251}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &174817827
@@ -1738,11 +1737,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e19cafea9cf4b44ab139e1092561d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerId: 0
+  ownerId: 0
   holeCards:
   - {fileID: 1428818733}
   - {fileID: 638536084}
   - {fileID: 1611935348}
+  curIndex: 0
 --- !u!1 &340216187
 GameObject:
   m_ObjectHideFlags: 0
@@ -2117,7 +2117,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 883042790}
   - {fileID: 1369884582}
@@ -2689,7 +2688,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 1966424998}
   - {fileID: 1975081714}
@@ -3151,7 +3149,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 780374861}
   - {fileID: 596650318}
@@ -4423,7 +4420,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 1148858968}
   - {fileID: 1877177631}
@@ -9089,7 +9085,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1251483056
 Transform:
   m_ObjectHideFlags: 0
@@ -11127,11 +11123,9 @@ MonoBehaviour:
   nodeQueueManagers:
   - {fileID: 1388458615}
   - {fileID: 740797945}
-  curScore: 0
   holeCardManagers:
   - {fileID: 2050836750}
   - {fileID: 330236584}
-  holeCardNumber: 0
   t1: 0
   t2: 0
   t3: 0
@@ -12717,7 +12711,6 @@ MonoBehaviour:
   playerId: -1
   id: -1
   sumScore: 0
-  initialScale: {x: 1, y: 1, z: 1}
   touziPos:
   - {fileID: 2108107947}
   - {fileID: 1483725636}
@@ -14035,11 +14028,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e19cafea9cf4b44ab139e1092561d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerId: 0
+  ownerId: 0
   holeCards:
   - {fileID: 785718589}
   - {fileID: 1837884636}
   - {fileID: 1505506492}
+  curIndex: 0
 --- !u!1001 &2094536391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14420,13 +14414,13 @@ MonoBehaviour:
   - {fileID: 1461739434}
   - {fileID: 1661151936}
   - {fileID: 839523385}
-  HandOverPanel: {fileID: 174817825}
-  HandOverTexts:
+  handOverPanel: {fileID: 174817825}
+  handOverTexts:
   - {fileID: 1487425438}
   - {fileID: 833729480}
   - {fileID: 1101567547}
   confirmButton: {fileID: 495534123}
-  JackpotTexts:
+  jackpotTexts:
   - {fileID: 1851238084}
   - {fileID: 1178311501}
   handNubText: {fileID: 1456987915}
@@ -14439,7 +14433,8 @@ MonoBehaviour:
   raisePanelTitleText: {fileID: 720961817}
   anteText: {fileID: 352459293}
   jackpotText: {fileID: 142772310}
-  WaitPanel: {fileID: 1945720286}
+  waitPanel: {fileID: 1945720286}
+  curPlayerId: 0
   testIndex: 0
 --- !u!1 &2115031866
 GameObject:

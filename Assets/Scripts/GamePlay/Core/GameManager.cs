@@ -40,7 +40,8 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")] [SerializeField]
+        [FormerlySerializedAs("touzi")]
+        [SerializeField]
         private Sprite[] touziSprites;
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
@@ -89,10 +90,17 @@ namespace GamePlay.Core
             Random.InitState(seed);
 
             Debug.Log(GameUIPanel.Instance);
-            curPlayerId = 0;
+            if (GameMode == GameMode.Native)//单人模式默认初始玩家为0号玩家
+            {
+                curPlayerId = 0;
+            }
+            else if (GameMode == GameMode.Online)
+            {
+                //
+            }
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
-            
+
             // JackpotManager.Instance.NewHand();//开始游戏会自动
             // JackpotManager.Instance.EnterRaise(StageManager.LoseID);
 
@@ -183,7 +191,7 @@ namespace GamePlay.Core
         {
             int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
             int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
-            JackpotManager.Instance.JackpotCalculation(sumScore0 > sumScore1 ? 0 : 1);
+            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
@@ -196,7 +204,7 @@ namespace GamePlay.Core
         //重新开始第二hand，清空棋盘，分数，奖池
         public void ResetChessboard()
         {
-            curPlayerId = 0;
+            
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
             {
                 nodeQueueManager.Reset();
@@ -204,8 +212,11 @@ namespace GamePlay.Core
 
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
+
             JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
-            StageManager.Instance.NewHand(); //TODO先手权的转移
+            StageManager.Instance.NewHand(); //
+
+            curPlayerId = StageManager.Instance.FirstPlayerId;
         }
 
         #endregion
@@ -213,7 +224,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 

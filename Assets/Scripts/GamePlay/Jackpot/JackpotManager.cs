@@ -48,7 +48,7 @@ public class JackpotManager
 
     public void NewGame()
     {
-        AnteNub=1;
+        AnteNub = 1;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
         MyJetton = MyGlobal.INITIAL_CHIP;
         TheJetton = MyGlobal.INITIAL_CHIP;
@@ -56,7 +56,7 @@ public class JackpotManager
     //进入加注环节
     public void EnterRaise(int loseID)
     {
-        GameUIPanel.Instance.ShowRaisePanel(loseID==0,loseID==0?MyJetton:TheJetton,AnteNub,gameMode:GameManager.GameMode);
+        GameUIPanel.Instance.ShowRaisePanel(loseID == 0, loseID == 0 ? MyJetton : TheJetton, AnteNub, gameMode: GameManager.GameMode);
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
@@ -73,6 +73,16 @@ public class JackpotManager
     {
         if (willerId == 0) MyJetton += SumJackpotNub;
         else if (willerId == 1) TheJetton += SumJackpotNub;
+    }
+    public void JackpotCalculation(int score0, int score1)//暂时未处理赢家不跟注的情况
+    {
+        if (score0 > score1) MyJetton += SumJackpotNub;
+        else if (score0 < score1) TheJetton += SumJackpotNub;
+        else if (score0 == score1)
+        {
+            MyJetton += SumJackpotNub / 2;
+            TheJetton += SumJackpotNub / 2;
+        }
     }
 
     public void Call(int playerid)
