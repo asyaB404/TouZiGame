@@ -60,20 +60,12 @@ namespace UI.Panel
         /// <param name="score0">p1</param>
         /// <param name="score1">p2</param>
         /// <param name="score"></param>
-        public void ShowOverPanel(int score0, int score1,int jackpot)
-        {
+        public void ShowOverPanel(string title,string score1,string score2){
             handOverPanel.SetActive(true);
-            if(score0==score1){
-                handOverTexts[0].text=$"打平了。。。给你返还了奖池一半的奖金（向下取整）{(int)jackpot/2}个筹码";   
-            }
-            else{
-                handOverTexts[0].text = $"你{(score0 > score1? "赢" : "输")}了{jackpot}个筹码";
-            }
-            // "你" + (score0 > score1 ? "赢" : "输") + "了"+jackpot;
-            handOverTexts[1].text = $"你一共获得了：{score0}分";
-            handOverTexts[2].text = $"对手一共获得了：{score1}分";
+            handOverTexts[0].text = title;
+            handOverTexts[1].text = score1;
+            handOverTexts[2].text = score2;
         }
-
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
 
         //设置分数确认页面的关闭按钮的监听
@@ -237,7 +229,7 @@ namespace UI.Panel
         private void FoldButtonClick()
         {
             HideRaisePanel();
-            GameManager.Instance.OverOneHand();
+            GameManager.Instance.OverOneHand(isWinerWaiver:curPlayerId!=firstRaisePlayerId);
         }
 
         #endregion

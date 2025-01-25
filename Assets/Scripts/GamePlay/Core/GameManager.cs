@@ -140,7 +140,7 @@ namespace GamePlay.Core
                 GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
             if (playerNodeQueueManager.CheckIsGameOver())
             {
-                OverOneHand();
+                OverOneHand(isSpecial:true);
                 return;
             }
 
@@ -182,19 +182,19 @@ namespace GamePlay.Core
         /// <summary>
         /// 结束一轮Hand，结算奖池
         /// </summary>
-        public void OverOneHand()
+        /// <param name="isSpecial">是否特殊方式结束</param>
+        /// <param name="isWinerWaiver">是否胜者弃权</param>
+        public void OverOneHand(bool isSpecial=false,bool isWinerWaiver=false)
         {
             int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
             int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
             
-            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1);
+            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1,isWinerWaiver);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
             }
-
             // JackpotManager.Instance.NewHand();
-            
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池
