@@ -54,11 +54,22 @@ namespace UI.Panel
         [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
-        //打开分数确认页面
-        public void ShowOverPanel(int score0, int score1)
+        /// <summary>
+        /// 打开分数确认页面
+        /// </summary>
+        /// <param name="score0">p1</param>
+        /// <param name="score1">p2</param>
+        /// <param name="score"></param>
+        public void ShowOverPanel(int score0, int score1,int jackpot)
         {
             handOverPanel.SetActive(true);
-            handOverTexts[0].text = "你" + (score0 > score1 ? "赢" : "输") + "了";
+            if(score0==score1){
+                handOverTexts[0].text=$"打平了。。。给你返还了奖池一半的奖金（向下取整）{(int)jackpot/2}个筹码";   
+            }
+            else{
+                handOverTexts[0].text = $"你{(score0 > score1? "赢" : "输")}了{jackpot}个筹码";
+            }
+            // "你" + (score0 > score1 ? "赢" : "输") + "了"+jackpot;
             handOverTexts[1].text = $"你一共获得了：{score0}分";
             handOverTexts[2].text = $"对手一共获得了：{score1}分";
         }

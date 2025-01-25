@@ -186,7 +186,7 @@ namespace GamePlay.Core
         {
             int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
             int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
-            GameUIPanel.Instance.ShowOverPanel(sumScore0, sumScore1);//todo添加关于赢了多少筹码的描述
+            
             JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1);
             if (sumScore0 == 0 || sumScore1 == 0)
             {

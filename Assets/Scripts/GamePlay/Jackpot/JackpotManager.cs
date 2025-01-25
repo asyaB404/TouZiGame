@@ -76,15 +76,21 @@ public class JackpotManager
         if (willerId == 0) MyJetton += SumJackpotNub;
         else if (willerId == 1) TheJetton += SumJackpotNub;
     }
-    public void JackpotCalculation(int score0, int score1)//暂时未处理赢家不跟注的情况
+    /// <summary>
+    /// 根据分数分发处理奖池
+    /// </summary>
+    /// <param name="score0">p1得分</param>
+    /// <param name="score1">p2得分</param>
+    public void JackpotCalculation(int score0, int score1)//暂未处理赢家不跟注的情况
     {
         if (score0 > score1) MyJetton += SumJackpotNub;
         else if (score0 < score1) TheJetton += SumJackpotNub;
         else if (score0 == score1)
         {
-            MyJetton += SumJackpotNub / 2;
-            TheJetton += SumJackpotNub / 2;
+            MyJetton += (int)SumJackpotNub / 2;
+            TheJetton += (int)SumJackpotNub / 2;
         }
+        GameUIPanel.Instance.ShowOverPanel(score0, score1,SumJackpotNub);//todo添加关于赢了多少筹码的描述
     }
 
     public void Call(int playerid)
