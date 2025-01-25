@@ -14,9 +14,9 @@ namespace GamePlay.Core
         }
 
         private static StageManager _instance;
-        public int HandNub { get; private set; } = -1;// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public int handNub { get; private set; } = -1;// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
-        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合
+        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId = -1; //这个hand内先手玩家的id
 
@@ -29,7 +29,7 @@ namespace GamePlay.Core
                 : 0;
         public void NewGame()
         {
-            HandNub = 0;
+            handNub = 0;
             Stage = 0;
             Round = 0;
             if (GameManager.GameMode == GameMode.Native)//本地模式默认起手玩家为p1
@@ -44,7 +44,7 @@ namespace GamePlay.Core
         {
             firstPlayerId = (firstPlayerId + 1) % 2;
             JackpotManager.Instance.EnterRaise(~firstPlayerId,false);
-            HandNub++;
+            handNub++;
             Round = 0;
             Stage = 0;
             SetText();
@@ -79,8 +79,8 @@ namespace GamePlay.Core
 
         private void SetText()
         {
-            Debug.Log($"handNub:{HandNub},round:{Round},stage:{Stage}");
-            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage+1 );
+            Debug.Log($"handNub:{handNub},round:{Round},stage:{Stage}");
+            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: Round + 1, stageNub: Stage+1 );
         }
     }
 }

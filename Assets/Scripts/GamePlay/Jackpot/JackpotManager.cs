@@ -60,7 +60,7 @@ public class JackpotManager
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
-        AnteNub = StageManager.Instance.HandNub + 1;
+        AnteNub = StageManager.Instance.handNub + 1;
         jackpotNub0 = 0;
         jackpotNub1 = 0;
         // int nub = MyJetton > AnteNub ? AnteNub : MyJetton;
@@ -89,15 +89,18 @@ public class JackpotManager
 
     public void Call(int playerid)
     {
+        int nub;
         if (playerid == 0)
         {
-            jackpotNub0 += AnteNub;
-            MyJetton -= AnteNub;
+            nub=MyJetton > AnteNub? AnteNub : MyJetton;
+            jackpotNub0 += nub;
+            MyJetton -= nub;
         }
         else
         {
-            jackpotNub1 += AnteNub;
-            TheJetton -= AnteNub;
+            nub=TheJetton > AnteNub? AnteNub : TheJetton;
+            jackpotNub1 += nub;
+            TheJetton -= nub;
         }
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }

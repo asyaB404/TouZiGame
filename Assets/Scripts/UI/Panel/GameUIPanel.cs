@@ -153,7 +153,7 @@ namespace UI.Panel
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
-            callButton.gameObject.SetActive(haveJackpot >= needFackpot);
+            callButton.gameObject.SetActive(haveJackpot!=0);
             raiseButton.gameObject.SetActive(haveJackpot > needFackpot);
             callText.text = haveJackpot > needFackpot ? "跟注" : "AllIn!!!!";
 
@@ -201,10 +201,11 @@ namespace UI.Panel
             }
             if (GameManager.GameMode == GameMode.Native)
             {
+                bool isFirstRaise = StageManager.Stage==0;
                 curPlayerId = (curPlayerId + 1) % 2;
                 raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
                 SetRaiseButtons(curPlayerId == 0,curPlayerId == 0?JackpotManager.Instance.MyJetton:JackpotManager.Instance.TheJetton,
-                                                JackpotManager.Instance.AnteNub);
+                                                JackpotManager.Instance.AnteNub,!isFirstRaise);
             }
             // else if (GameManager.GameMode == GameMode.Online)
             // {
