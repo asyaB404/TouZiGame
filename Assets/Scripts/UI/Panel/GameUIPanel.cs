@@ -172,6 +172,7 @@ namespace UI.Panel
         private void SetButtonClick()
         {
             callButton.onClick.AddListener(CallButtonClick);
+            // callButton.mo
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
 
@@ -230,6 +231,11 @@ namespace UI.Panel
         {
             HideRaisePanel();
             GameManager.Instance.OverOneHand(isWinerWaiver:curPlayerId!=firstRaisePlayerId);
+        }
+
+        public void SetHint(string str){
+            GetControl<TextMeshProUGUI>("HintText").text = str;
+            Debug.Log(GetControl<TextMeshProUGUI>("HintText"));
         }
 
         #endregion

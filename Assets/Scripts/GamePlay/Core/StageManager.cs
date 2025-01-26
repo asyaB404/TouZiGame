@@ -6,6 +6,14 @@ using UnityEngine;
 
 namespace GamePlay.Core
 {
+    public enum GameStage
+    {
+        init,
+        Raise,
+        Place,
+        Calculation,
+    }
+
     public class StageManager
     {
         public static StageManager Instance
@@ -20,8 +28,12 @@ namespace GamePlay.Core
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId = -1; //这个hand内先手玩家的id
 
-
-
+        public static GameStage gameStage;
+        public static void SetStage(GameStage stage)
+        {
+            gameStage = stage;
+            HintManager.Instance.SetHint0(stage.ToString());
+        }
         public static int LoseID =>
             GameManager.Instance.NodeQueueManagers[0].SumScore >
             GameManager.Instance.NodeQueueManagers[1].SumScore
@@ -34,16 +46,18 @@ namespace GamePlay.Core
             Round = 0;
             if (GameManager.GameMode == GameMode.Native)//本地模式默认起手玩家为p1
             {
-                
-                firstPlayerId=0;
+
+                firstPlayerId = 0;
             }
-            JackpotManager.Instance.EnterRaise(~firstPlayerId,false);
+            JackpotManager.Instance.EnterRaise(~firstPlayerId, false);
+
             SetText();
         }
         public void NewHand()
         {
             firstPlayerId = (firstPlayerId + 1) % 2;
-            JackpotManager.Instance.EnterRaise(~firstPlayerId,false);
+            JackpotManager.Instance.EnterRaise(~firstPlayerId, false);
+
             handNub++;
             Round = 0;
             Stage = 0;
@@ -51,7 +65,7 @@ namespace GamePlay.Core
         }
         public void NewStage()
         {
-            
+            SetStage(GameStage.Place);
             Round = 0;
             SetText();
         }
@@ -61,8 +75,13 @@ namespace GamePlay.Core
         /// <param name="nowPlayerId">下个回合玩家的id，会在内部确认是否进入了新的回合</param>
         public bool NewRound(int nowPlayerId)
         {
+            if (Round == MyGlobal.A_STAGE_ROUND - 1)
+            {
+                HintManager.Instance.SetHint1("EndPlace");
+            }
             if (nowPlayerId != firstPlayerId) return false;
             Round++;
+
             if (Round >= MyGlobal.A_STAGE_ROUND)
             {
                 // GameUIPanel.Instance.ShowRaise(LoseID==0);
@@ -80,7 +99,7 @@ namespace GamePlay.Core
         private void SetText()
         {
             // Debug.Log($"handNub:{handNub},round:{Round},stage:{Stage}");
-            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: Round + 1, stageNub: Stage+1 );
+            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
         }
     }
 }

@@ -68,6 +68,7 @@ namespace GamePlay.Node
 
             transform.DOKill(); // 停止所有当前的动画
             transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
+            HintManager.Instance.SetHint2("NodeQueue");
         }
 
         //当鼠标离开节点时，恢复节点的原始大小
@@ -76,6 +77,7 @@ namespace GamePlay.Node
             if (GameManager.GameState == GameState.Idle) return;
             transform.DOKill(); // 停止当前动画
             transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
+            HintManager.Instance.SetHint2("");
         }
 
         //当鼠标按下时

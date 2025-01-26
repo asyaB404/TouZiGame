@@ -59,6 +59,7 @@ public class JackpotManager
     public void EnterRaise(int FirstPlayerId, bool canFold = true)
     {
         GameUIPanel.Instance.ShowRaisePanel(FirstPlayerId == 0, FirstPlayerId == 0 ? MyJetton : TheJetton, AnteNub, canFold, gameMode: GameManager.GameMode);
+        StageManager.SetStage(GameStage.Raise);
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {
@@ -72,6 +73,7 @@ public class JackpotManager
         // TheJetton -= nub;
         // jackpotNub1 = nub;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+        HintManager.Instance.SetHint1("FirstRaise");
     }
     /// <summary>
     /// 根据分数分发处理奖池
@@ -102,31 +104,31 @@ public class JackpotManager
         }
         text1 = $"你一共获得了：{score0}分";
         text2 = $"对手一共获得了：{score1}分";
-
+        StageManager.SetStage(GameStage.Calculation);
         GameUIPanel.Instance.ShowOverPanel(title, text1, text2);//todo添加关于赢了多少筹码的描述
     }
 
     public void Call(int playerid)
     {
         int nub;
-        string export;
+        // string export;
         if (playerid == 0)
         {
             nub = MyJetton > AnteNub ? AnteNub : MyJetton;
             jackpotNub0 += nub;
             MyJetton -= nub;
-            export = $"p1加注{nub}";
+            // export = $"p1加注{nub}";
         }
         else
         {
             nub = TheJetton > AnteNub ? AnteNub : TheJetton;
             jackpotNub1 += nub;
             TheJetton -= nub;
-            export = $"p2加注{nub}";
+            // export = $"p2加注{nub}";
         }
-        export += $"此时奖池为{SumJackpotNub},其中我方奖池为{jackpotNub0},对方奖池为{jackpotNub1},额外奖池为{extraJackpot}，{playerid}的筹码为{(playerid == 0 ? MyJetton : TheJetton)},{(playerid == 0 ? "p2" : "p1")}的筹码为{(playerid == 0 ? TheJetton : MyJetton)}";
+        // export += $"此时奖池为{SumJackpotNub},其中我方奖池为{jackpotNub0},对方奖池为{jackpotNub1},额外奖池为{extraJackpot}，{playerid}的筹码为{(playerid == 0 ? MyJetton : TheJetton)},{(playerid == 0 ? "p2" : "p1")}的筹码为{(playerid == 0 ? TheJetton : MyJetton)}";
 
-        Debug.Log(export);
+        // Debug.Log(export);
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
     public void Raise(int playerId)

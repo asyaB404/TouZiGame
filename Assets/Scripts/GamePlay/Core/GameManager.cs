@@ -248,7 +248,8 @@ namespace GamePlay.Core
         [ContextMenu("add1")]
         private void Test1()
         {
-            AddTouzi(curPlayerId, t2, t3);
+            // AddTouzi(curPlayerId, t2, t3);
+            GameUIPanel.Instance.SetHint("你好0");
         }
 
         [ContextMenu("clear")]
