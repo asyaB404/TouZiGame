@@ -197,7 +197,7 @@ namespace GamePlay.Core
             // JackpotManager.Instance.NewHand();
         }
 
-        //重新开始第二hand，清空棋盘，分数，奖池
+        //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
         public void ResetChessboard()
         {
 
@@ -212,6 +212,8 @@ namespace GamePlay.Core
             StageManager.Instance.NewHand(); //
             JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
 
+            holeCardManagers[0].ResetAllHoleCards();
+            holeCardManagers[1].ResetAllHoleCards();
 
             curPlayerId = StageManager.Instance.firstPlayerId;
         }
