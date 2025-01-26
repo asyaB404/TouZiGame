@@ -84,7 +84,7 @@ namespace UI.Panel
         {
             jackpotTexts[0].text = jackpot0.ToString();
             jackpotTexts[1].text = jackpot1.ToString();
-            Debug.Log(jackpot0 + "   " + jackpot1);
+            // Debug.Log(jackpot0 + "   " + jackpot1);
         }
 
         #region 回合数

@@ -37,7 +37,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerEnter(PointerEventData data)
     {
-        Debug.Log("Enter");
+        // Debug.Log("Enter");
         if (GameManager.GameState == GameState.Idle) return;
         switch (GameManager.GameMode)
         {

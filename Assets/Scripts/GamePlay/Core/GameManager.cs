@@ -90,7 +90,7 @@ namespace GamePlay.Core
             Random.InitState(seed);
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
-            Debug.Log(GameUIPanel.Instance);
+            // Debug.Log(GameUIPanel.Instance);
 
             curPlayerId = StageManager.Instance.firstPlayerId;
 
@@ -140,7 +140,7 @@ namespace GamePlay.Core
                 GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
             if (playerNodeQueueManager.CheckIsGameOver())
             {
-                OverOneHand(isSpecial:true);
+                OverOneHand(isSpecial: true);
                 return;
             }
 
@@ -184,12 +184,12 @@ namespace GamePlay.Core
         /// </summary>
         /// <param name="isSpecial">是否特殊方式结束</param>
         /// <param name="isWinerWaiver">是否胜者弃权</param>
-        public void OverOneHand(bool isSpecial=false,bool isWinerWaiver=false)
+        public void OverOneHand(bool isSpecial = false, bool isWinerWaiver = false)
         {
             int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
             int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
-            
-            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1,isWinerWaiver);
+
+            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
@@ -209,8 +209,9 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
 
-            JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
             StageManager.Instance.NewHand(); //
+            JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
+
 
             curPlayerId = StageManager.Instance.firstPlayerId;
         }

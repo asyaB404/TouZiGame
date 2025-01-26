@@ -79,7 +79,7 @@ namespace GamePlay.Core
 
         private void SetText()
         {
-            Debug.Log($"handNub:{handNub},round:{Round},stage:{Stage}");
+            // Debug.Log($"handNub:{handNub},round:{Round},stage:{Stage}");
             GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: Round + 1, stageNub: Stage+1 );
         }
     }
