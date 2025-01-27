@@ -60,6 +60,9 @@ public class JackpotManager
     {
         GameUIPanel.Instance.ShowRaisePanel(FirstPlayerId == 0, FirstPlayerId == 0 ? MyJetton : TheJetton, AnteNub, canFold, gameMode: GameManager.GameMode);
         StageManager.SetStage(GameStage.Raise);
+        if(GameManager.GameMode == GameMode.Native){
+            GameUIPanel.Instance.ShowSwitchoverButton(isRaise:true);
+        }
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 public class HoleCardManager : MonoBehaviour//非单例
 {
     public int ownerId; //属于的玩家id
-    
+
     /// <summary>
     /// 底牌骰子们
     /// </summary>
@@ -17,6 +17,7 @@ public class HoleCardManager : MonoBehaviour//非单例
     /// 当前选中的骰子索引
     /// </summary>
     [SerializeField] private int curIndex;
+    [SerializeField] private GameObject myShader;
 
     public int CurIndex
     {
@@ -75,5 +76,13 @@ public class HoleCardManager : MonoBehaviour//非单例
             holeCards[i].gameObject.SetActive(true);
             SetHoleCard(i, Random.Range(1, 7));
         }
+    }
+
+    public void ShowShader()
+    {
+        myShader.SetActive(true);
+    }
+    public void HideShader(){
+        myShader.SetActive(false);
     }
 }

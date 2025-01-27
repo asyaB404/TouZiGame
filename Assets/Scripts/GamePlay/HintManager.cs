@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class HintManager
 {
-    string hint0;
-    string hint1;
-    string hint2;
+    string hint0="";
+    string hint1="";
+    string hint2="";
     // string hintStr;
     public static HintManager Instance
     {

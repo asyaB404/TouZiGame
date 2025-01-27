@@ -104,6 +104,20 @@ namespace UI.Panel
             roundNubText.text = roundNub.ToString();
         }
 
+
+        bool isRaise;//表示是加注阶段的切换玩家还是放置阶段的切换玩家
+        //单机多人模式使用的按钮，用于切换玩家使遮挡屏幕
+        public void ShowSwitchoverButton(bool isRaise = false)
+        {
+            this.isRaise = isRaise;
+            GetControl<Button>("SwitchoverButton").gameObject.SetActive(true);
+        }
+        private void SwitchoverButtonChick()//确认切换了玩家后的按钮的点击事件
+        {
+            GetControl<Button>("SwitchoverButton").gameObject.SetActive(false);
+            if (!isRaise) StageManager.Instance.HideBlankScreen();
+            else StageManager.Instance.HideBlankScreen(curPlayerId);
+        }
         #endregion
 
         #region 筹码底注和奖池
@@ -132,16 +146,17 @@ namespace UI.Panel
         public void SetJackpot(int sumJackpotNub) =>
             jackpotText.text = sumJackpotNub.ToString();
 
-        public int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
+        private int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
 
         private int firstRaisePlayerId;
 
 
-
+        [SerializeField]
         private TextMeshProUGUI callText;
         //打开加注页面
         public void ShowRaisePanel(bool isP1, int haveJackpot, int needFackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
         {
+
             firstRaisePlayerId = isP1 ? 0 : 1;//用来判断加注环节被双方都进行过了一遍
             curPlayerId = firstRaisePlayerId;
             if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -182,12 +197,14 @@ namespace UI.Panel
             // callButton.mo
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
+
+            GetControl<Button>("SwitchoverButton").onClick.AddListener(SwitchoverButtonChick);
         }
         // 为按钮添加事件触发器,用于显示鼠标进入的提示
         private void SetButtonHint(Button button, string str)
         {
             EventTrigger trigger = button.GetComponent<EventTrigger>();
-            if(trigger == null) trigger = button.gameObject.AddComponent<EventTrigger>();
+            if (trigger == null) trigger = button.gameObject.AddComponent<EventTrigger>();
             EventTrigger.Entry entryEnter = new EventTrigger.Entry
             {
                 eventID = EventTriggerType.PointerEnter,
@@ -239,22 +256,24 @@ namespace UI.Panel
                 bool isFirstRaise = StageManager.Stage == 0;
                 curPlayerId = (curPlayerId + 1) % 2;
                 raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
-                SetRaiseButtons(curPlayerId == 0, curPlayerId == 0 ? JackpotManager.Instance.MyJetton : JackpotManager.Instance.TheJetton,
-                                                JackpotManager.Instance.AnteNub, !isFirstRaise);
+                SetRaiseButtons(curPlayerId == 0,
+                    curPlayerId == 0 ? JackpotManager.Instance.MyJetton : JackpotManager.Instance.TheJetton,
+                        JackpotManager.Instance.AnteNub, !isFirstRaise);
+                ShowSwitchoverButton(isRaise: true);
             }
-            // else if (GameManager.GameMode == GameMode.Online)
-            // {
-            //     if (curPlayerId == 0)
-            //     {
-            //         // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写
-            //         // ShowRaiseButton(GameManager.Instance.TheJetton);
-            //     }
-            //     else if (curPlayerId == 1)
-            //     {
-            //         // HideRaiseButton();
-            //         // WaitPanel.gameObject.SetActive(true);
-            //     }
-            // }
+            else if (GameManager.GameMode == GameMode.Online)
+            {
+                //     if (curPlayerId == 0)
+                //     {
+                //         // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写
+                //         // ShowRaiseButton(GameManager.Instance.TheJetton);
+                //     }
+                //     else if (curPlayerId == 1)
+                //     {
+                //         // HideRaiseButton();
+                //         // WaitPanel.gameObject.SetActive(true);
+                //     }
+            }
         }
 
         // 弃牌按钮的点击事件。

@@ -8,10 +8,13 @@ namespace GamePlay.Core
 {
     public enum GameStage
     {
-        init,
-        Raise,
-        Place,
-        Calculation,
+        init,//等待进入游戏
+        Raise,//加注阶段
+        Place,//放牌阶段
+
+        BlankScreen,//黑屏切换游戏玩家，单机双人使用
+
+        Calculation,//结算阶段
     }
 
     public class StageManager
@@ -28,7 +31,7 @@ namespace GamePlay.Core
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId = -1; //这个hand内先手玩家的id
 
-        public static GameStage gameStage;
+        public static GameStage gameStage{get;private set;}
         public static void SetStage(GameStage stage)
         {
             gameStage = stage;
@@ -75,13 +78,17 @@ namespace GamePlay.Core
         /// <param name="nowPlayerId">下个回合玩家的id，会在内部确认是否进入了新的回合</param>
         public bool NewRound(int nowPlayerId)
         {
+
+            if (GameManager.GameMode == GameMode.Native)
+            {
+                ShowBlankScreen();
+            }
+            if (nowPlayerId != firstPlayerId) return false;
+            Round++;
             if (Round == MyGlobal.A_STAGE_ROUND - 1)
             {
                 HintManager.Instance.SetHint1("EndPlace");
             }
-            if (nowPlayerId != firstPlayerId) return false;
-            Round++;
-
             if (Round >= MyGlobal.A_STAGE_ROUND)
             {
                 // GameUIPanel.Instance.ShowRaise(LoseID==0);
@@ -94,7 +101,21 @@ namespace GamePlay.Core
             return false;
         }
 
+        public void ShowBlankScreen()
+        {
+            GameManager.Instance.HoleCardManagers[0].ShowShader();
+            GameManager.Instance.HoleCardManagers[1].ShowShader();
+            GameUIPanel.Instance.ShowSwitchoverButton(false);
+        }
+        public void HideBlankScreen()
+        {
 
+            GameManager.Instance.HoleCardManagers[GameManager.CurPlayerId].HideShader();
+        }
+        public void HideBlankScreen(int playerId)
+        {
+            GameManager.Instance.HoleCardManagers[playerId].HideShader();
+        }
 
         private void SetText()
         {
