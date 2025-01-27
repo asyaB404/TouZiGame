@@ -15,6 +15,7 @@ using GamePlay.Node;
 using NetWork.Server;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -60,7 +61,8 @@ namespace UI.Panel
         /// <param name="score0">p1</param>
         /// <param name="score1">p2</param>
         /// <param name="score"></param>
-        public void ShowOverPanel(string title,string score1,string score2){
+        public void ShowOverPanel(string title, string score1, string score2)
+        {
             handOverPanel.SetActive(true);
             handOverTexts[0].text = title;
             handOverTexts[1].text = score1;
@@ -152,11 +154,12 @@ namespace UI.Panel
             //     buttonPanel.gameObject.SetActive(isP1);
             // }
         }
+        //设置加注页面按钮
         private void SetRaiseButtons(bool isP1, int haveJackpot, int needFackpot, bool canFold = true)
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
-            callButton.gameObject.SetActive(haveJackpot!=0);
+            callButton.gameObject.SetActive(haveJackpot != 0);
             raiseButton.gameObject.SetActive(haveJackpot > needFackpot);
             callText.text = haveJackpot > needFackpot ? "跟注" : "AllIn!!!!";
 
@@ -171,14 +174,42 @@ namespace UI.Panel
         // 设置按钮的点击事件监听器。
         private void SetButtonClick()
         {
+            SetButtonHint(callButton, "CallButton");
+            SetButtonHint(raiseButton, "RaiseButton");
+            SetButtonHint(foldButton, "FoldButton");
+
             callButton.onClick.AddListener(CallButtonClick);
             // callButton.mo
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
-
-            // testButton.onClick.AddListener(TestButtonClick);
         }
-
+        // 为按钮添加事件触发器,用于显示鼠标进入的提示
+        private void SetButtonHint(Button button, string str)
+        {
+            EventTrigger trigger = button.GetComponent<EventTrigger>();
+            if(trigger == null) trigger = button.gameObject.AddComponent<EventTrigger>();
+            EventTrigger.Entry entryEnter = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerEnter,
+            };
+            entryEnter.callback.AddListener((data) =>
+            {
+                HintManager.Instance.SetHint2(str);
+            });
+            EventTrigger.Entry entryExit = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerExit,
+            };
+            entryExit.callback.AddListener((data) =>
+            {
+                HintManager.Instance.SetHint2("");
+            });
+            Debug.Log(trigger);
+            Debug.Log(entryEnter);
+            Debug.Log(trigger.triggers);
+            trigger.triggers.Add(entryEnter);
+            trigger.triggers.Add(entryExit);
+        }
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
@@ -205,11 +236,11 @@ namespace UI.Panel
             }
             if (GameManager.GameMode == GameMode.Native)
             {
-                bool isFirstRaise = StageManager.Stage==0;
+                bool isFirstRaise = StageManager.Stage == 0;
                 curPlayerId = (curPlayerId + 1) % 2;
                 raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
-                SetRaiseButtons(curPlayerId == 0,curPlayerId == 0?JackpotManager.Instance.MyJetton:JackpotManager.Instance.TheJetton,
-                                                JackpotManager.Instance.AnteNub,!isFirstRaise);
+                SetRaiseButtons(curPlayerId == 0, curPlayerId == 0 ? JackpotManager.Instance.MyJetton : JackpotManager.Instance.TheJetton,
+                                                JackpotManager.Instance.AnteNub, !isFirstRaise);
             }
             // else if (GameManager.GameMode == GameMode.Online)
             // {
@@ -230,10 +261,11 @@ namespace UI.Panel
         private void FoldButtonClick()
         {
             HideRaisePanel();
-            GameManager.Instance.OverOneHand(isWinerWaiver:curPlayerId!=firstRaisePlayerId);
+            GameManager.Instance.OverOneHand(isWinerWaiver: curPlayerId != firstRaisePlayerId);
         }
 
-        public void SetHint(string str){
+        public void SetHint(string str)
+        {
             GetControl<TextMeshProUGUI>("HintText").text = str;
             Debug.Log(GetControl<TextMeshProUGUI>("HintText"));
         }
