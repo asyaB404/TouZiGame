@@ -156,7 +156,6 @@ namespace UI.Panel
         //打开加注页面
         public void ShowRaisePanel(bool isP1, int haveJackpot, int needFackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
         {
-
             firstRaisePlayerId = isP1 ? 0 : 1;//用来判断加注环节被双方都进行过了一遍
             curPlayerId = firstRaisePlayerId;
             if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
