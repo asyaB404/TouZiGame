@@ -31,7 +31,7 @@ namespace GamePlay.Core
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId = -1; //这个hand内先手玩家的id
 
-        public static GameStage gameStage{get;private set;}
+        public static GameStage gameStage { get; private set; }
         public static void SetStage(GameStage stage)
         {
             gameStage = stage;
@@ -52,14 +52,19 @@ namespace GamePlay.Core
 
                 firstPlayerId = 0;
             }
-            JackpotManager.Instance.EnterRaise(~firstPlayerId, false);
+            Debug.Log($"1^firstPlayerId:{1^firstPlayerId}");
+            Debug.Log($"firstPlayerId:{firstPlayerId}");
+            JackpotManager.Instance.EnterRaise(1^firstPlayerId, false);
+            
 
             SetText();
         }
         public void NewHand()
         {
             firstPlayerId = (firstPlayerId + 1) % 2;
-            JackpotManager.Instance.EnterRaise(~firstPlayerId, false);
+            Debug.Log($"firstPlayerId:{firstPlayerId}");
+            Debug.Log($"1^firstPlayerId:{1^firstPlayerId}");
+            JackpotManager.Instance.EnterRaise(1^firstPlayerId, false);
 
             handNub++;
             Round = 0;
@@ -68,9 +73,14 @@ namespace GamePlay.Core
         }
         public void NewStage()
         {
+            if (GameManager.GameMode == GameMode.Native)
+            {
+                ShowBlankScreen();
+            }
             SetStage(GameStage.Place);
             Round = 0;
             SetText();
+
         }
         /// <summary>
         /// 返回是否进入下一个阶段
@@ -100,17 +110,34 @@ namespace GamePlay.Core
             SetText();
             return false;
         }
-
+        int blankId = -1;
         public void ShowBlankScreen()
         {
+
+            bool isRaise = gameStage == GameStage.Raise;
+            int playerId=isRaise?JackpotManager.Instance.curPlayerId:GameManager.CurPlayerId;
+            Debug.Log($"playerId:{playerId},blankId:{blankId}");
+            if (blankId == playerId) return;
+
+            blankId = playerId;
+            string str;
+            if (playerId == 0) str = "P1";
+            else str = "P2";
+            if (isRaise) str += "加注";
+            else str += "回合";
             GameManager.Instance.HoleCardManagers[0].ShowShader();
             GameManager.Instance.HoleCardManagers[1].ShowShader();
-            GameUIPanel.Instance.ShowSwitchoverButton(false);
+            GameUIPanel.Instance.ShowSwitchoverButton(str, isRaise);
+            HintManager.Instance.SetHint1("BlankScreen");
+            Debug.Log("打开黑幕");
         }
+        // public void ShowBlankScreen(){
+        //     ShowBlankScreen(GameManager.CurPlayerId);
+        // }
         public void HideBlankScreen()
         {
 
-            GameManager.Instance.HoleCardManagers[GameManager.CurPlayerId].HideShader();
+            GameManager.Instance.HoleCardManagers[blankId].HideShader();
         }
         public void HideBlankScreen(int playerId)
         {

@@ -14,20 +14,21 @@ public static class HintText
         {"Raise","下注阶段：依据对自己胜利的信心进行下注"},
         {"Place","放置阶段：选择最有利的底牌放入棋盘中，也许将重要的牌在关键时候放置能逆转局势"},
 
-        {"BlankScreen","切换屏幕，请对应的玩家回避"},
+
 
         {"Calculation","结算阶段：依照双方的分数进行结算瓜分奖池"},
         // {"Raise",""},
     };
-    public static readonly Dictionary<string, string> HintText1Dic = new Dictionary<string, string>()//阶段性提示
+    public static readonly Dictionary<string, string> HintText1Dic = new Dictionary<string, string>()//事件性提示
     {
         {"",""},
         {"FirstRaise", "后手玩家(P2)进行第一次加注"},
         { "EndPlace","最后一个放置回合，回合结束后进行结算"},
+        {"BlankScreen","切换屏幕，请对应的玩家回避"},
         // { "",""},
         // { "",""},
     };
-public static readonly Dictionary<string, string> HintText2Dic = new Dictionary<string, string>()//瞬时性提示
+    public static readonly Dictionary<string, string> HintText2Dic = new Dictionary<string, string>()//瞬时性提示
     {
         {"",""},
         {"RaiseButton", "给底注增加1，在此基础上付出底注的筹码"},

@@ -59,9 +59,15 @@ public class JackpotManager
     public void EnterRaise(int FirstPlayerId, bool canFold = true)
     {
         GameUIPanel.Instance.ShowRaisePanel(FirstPlayerId == 0, FirstPlayerId == 0 ? MyJetton : TheJetton, AnteNub, canFold, gameMode: GameManager.GameMode);
+        firstRaisePlayerId = FirstPlayerId;//用来判断加注环节被双方都进行过了一遍
+        curPlayerId = firstRaisePlayerId;
+        Debug.Log($"firstRaisePlayerId:{firstRaisePlayerId},curPlayerId:{curPlayerId}");
         StageManager.SetStage(GameStage.Raise);
-        if(GameManager.GameMode == GameMode.Native){
-            GameUIPanel.Instance.ShowSwitchoverButton(isRaise:true);
+        if (GameManager.GameMode == GameMode.Native)
+        {
+            // GameUIPanel.Instance.ShowSwitchoverButton(isRaise:true);
+            StageManager.Instance.ShowBlankScreen();
+            Debug.Log("????");
         }
     }
     public void NewHand() //在结束了一次距骨骰后开启新的一局使用
@@ -101,7 +107,7 @@ public class JackpotManager
         }
         else
         {
-            extraJackpot=0;
+            extraJackpot = 0;
             if (score0 > score1) MyJetton += SumJackpotNub;
             else TheJetton += SumJackpotNub;
         }
@@ -111,11 +117,11 @@ public class JackpotManager
         GameUIPanel.Instance.ShowOverPanel(title, text1, text2);//todo添加关于赢了多少筹码的描述
     }
 
-    public void Call(int playerid)
+    public void Call()
     {
         int nub;
         // string export;
-        if (playerid == 0)
+        if (curPlayerId == 0)
         {
             nub = MyJetton > AnteNub ? AnteNub : MyJetton;
             jackpotNub0 += nub;
@@ -134,9 +140,55 @@ public class JackpotManager
         // Debug.Log(export);
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
-    public void Raise(int playerId)
+    public void Raise()
     {
         AnteNub += 1;
-        Call(playerId);
+        Call();
+    }
+    public void Fold(){
+        GameManager.Instance.OverOneHand(isWinerWaiver: curPlayerId != firstRaisePlayerId);
+    }
+
+    public int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
+
+    private int firstRaisePlayerId;
+    //一名玩家加注后另一名玩家进行加注
+    public void NextPlayer()
+    {
+        if (GameManager.GameMode == GameMode.Native)
+        {
+
+            if (curPlayerId != firstRaisePlayerId)//说明双方都已经加过注了，可以进入下一个阶段了
+            {
+                GameUIPanel.Instance.HideRaisePanel();
+                GameUIPanel.Instance.SetWaitPanel(false);
+                StageManager.Instance.NewStage();
+                StageManager.Instance.ShowBlankScreen();
+            }
+            else
+            {
+                bool isFirstRaise = StageManager.Stage == 0;
+                curPlayerId = (curPlayerId + 1) % 2;
+                // raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
+                GameUIPanel.Instance.SetRaiseButtons(curPlayerId == 0,
+                    curPlayerId == 0 ? JackpotManager.Instance.MyJetton : JackpotManager.Instance.TheJetton,
+                        JackpotManager.Instance.AnteNub, !isFirstRaise);
+                StageManager.Instance.ShowBlankScreen();
+            }
+
+        }
+        else if (GameManager.GameMode == GameMode.Online)
+        {
+            //     if (curPlayerId == 0)
+            //     {
+            //         // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写
+            //         // ShowRaiseButton(GameManager.Instance.TheJetton);
+            //     }
+            //     else if (curPlayerId == 1)
+            //     {
+            //         // HideRaiseButton();
+            //         // WaitPanel.gameObject.SetActive(true);
+            //     }
+        }
     }
 }
