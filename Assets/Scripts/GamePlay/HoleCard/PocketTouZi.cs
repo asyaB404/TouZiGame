@@ -37,8 +37,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerEnter(PointerEventData data)
     {
-        // Debug.Log("Enter");
-        if (GameManager.GameState == GameState.Idle) return;
+        if (StageManager.CurGameStage != GameStage.Place) return;
         HintManager.Instance.SetHint2("HoleCardChoose");
         switch (GameManager.GameMode)
         {
@@ -52,14 +51,14 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 throw new ArgumentOutOfRangeException();
         }
 
-        _scaleAnim?.Kill(); // 停止缩放相关的动画
+        _scaleAnim?.Kill(); 
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
     }
 
     public void OnPointerExit(PointerEventData data)
     {
-        if (GameManager.GameState == GameState.Idle) return;
-        if (_scaleAnim != null) _scaleAnim.Kill(); // 停止缩放相关的动画
+        if (StageManager.CurGameStage != GameStage.Place) return;
+        _scaleAnim?.Kill(); 
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
         HintManager.Instance.SetHint2("");
     }
@@ -72,7 +71,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     {
         if (data.pointerCurrentRaycast.gameObject != gameObject //不是这个节点
             || playerId != GameManager.CurPlayerId //不是当前玩家
-            || GameManager.GameState == GameState.Idle //游戏状态不是Idle
+            || StageManager.CurGameStage != GameStage.Place //游戏状态不是Idle
             || !canClick //不能点击
            )
             return;

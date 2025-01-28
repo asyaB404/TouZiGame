@@ -21,8 +21,6 @@ namespace GamePlay.Core
     {
         #region 字段以及属性
 
-        public static GameState GameState { get; private set; } = GameState.Idle;
-
         public static GameMode GameMode { get; set; } = GameMode.Native;
 
         public static GameManager Instance { get; private set; }
@@ -40,9 +38,9 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")]
-        [SerializeField]
+        [FormerlySerializedAs("touzi")] [SerializeField]
         private Sprite[] touziSprites;
+
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
@@ -70,8 +68,6 @@ namespace GamePlay.Core
 
         private void Reset()
         {
-            GameState = GameState.Idle;
-            // curScore = Random.Range(1, 7);
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
             {
@@ -86,19 +82,10 @@ namespace GamePlay.Core
 
         public void StartGame(int seed)
         {
-            GameState = GameState.Gaming;
             Random.InitState(seed);
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
-            // Debug.Log(GameUIPanel.Instance);
-
             curPlayerId = StageManager.Instance.firstPlayerId;
-
-
-
-            // JackpotManager.Instance.NewHand();//开始游戏会自动
-            // JackpotManager.Instance.EnterRaise(StageManager.LoseID);
-
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
@@ -107,7 +94,6 @@ namespace GamePlay.Core
 
         public void NextToPlayerId()
         {
-            SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
@@ -117,10 +103,9 @@ namespace GamePlay.Core
         /// </summary>
         public void NextTurn()
         {
+            SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
             StageManager.Instance.NewRound(curPlayerId);
-            // curScore = Random.Range(1, 7);
-            // GameUIPanel.Instance.RollDiceAnimation(curScore);
         }
 
         /// <summary>
@@ -131,7 +116,7 @@ namespace GamePlay.Core
         /// <param name="score">骰子点数大小</param>
         public void AddTouzi(int playerId, int id, int score)
         {
-            if (GameState == GameState.Idle) return;
+            if (StageManager.CurGameStage != GameStage.Place) return;
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
@@ -200,7 +185,6 @@ namespace GamePlay.Core
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
         public void ResetChessboard()
         {
-
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
             {
                 nodeQueueManager.Reset();
@@ -223,7 +207,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)][SerializeField] private int t1 = 0;
+        [Space(10)] [SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 
@@ -265,11 +249,5 @@ namespace GamePlay.Core
     {
         Native = 0,
         Online = 1
-    }
-
-    public enum GameState
-    {
-        Idle = 0, //游戏未开始
-        Gaming = 1,
     }
 }

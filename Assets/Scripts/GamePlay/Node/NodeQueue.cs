@@ -53,7 +53,7 @@ namespace GamePlay.Node
         //当鼠标进入节点时，缩放节点并播放动画
         public void OnPointerEnter(PointerEventData data)
         {
-            if (GameManager.GameState == GameState.Idle) return;
+            if (StageManager.CurGameStage != GameStage.Place) return;
             switch (GameManager.GameMode)
             {
                 case GameMode.Native:
@@ -74,7 +74,7 @@ namespace GamePlay.Node
         //当鼠标离开节点时，恢复节点的原始大小
         public void OnPointerExit(PointerEventData data)
         {
-            if (GameManager.GameState == GameState.Idle) return;
+            if (StageManager.CurGameStage != GameStage.Place) return;
             transform.DOKill(); // 停止当前动画
             transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
             HintManager.Instance.SetHint2("");
@@ -89,7 +89,7 @@ namespace GamePlay.Node
         public void OnPointerUp(PointerEventData data)
         {
             if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.CurPlayerId ||
-                GameManager.GameState == GameState.Idle)
+                StageManager.CurGameStage != GameStage.Place)
                 return; // 确保点击的是当前节点且是当前玩家操作
             // 根据不同的游戏模式执行不同的逻辑
             switch (GameManager.GameMode)

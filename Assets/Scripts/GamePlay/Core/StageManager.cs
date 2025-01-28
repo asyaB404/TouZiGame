@@ -8,12 +8,10 @@ namespace GamePlay.Core
 {
     public enum GameStage
     {
-        init,//等待进入游戏
+        Idle,
         Raise,//加注阶段
         Place,//放牌阶段
-
         BlankScreen,//黑屏切换游戏玩家，单机双人使用
-
         Calculation,//结算阶段
     }
 
@@ -25,16 +23,16 @@ namespace GamePlay.Core
         }
 
         private static StageManager _instance;
-        public int handNub { get; private set; } = -1;// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public int HandNub { get; private set; } = -1;// 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public int firstPlayerId = -1; //这个hand内先手玩家的id
 
-        public static GameStage gameStage { get; private set; }
+        public static GameStage CurGameStage { get; private set; }
         public static void SetStage(GameStage stage)
         {
-            gameStage = stage;
+            CurGameStage = stage;
             HintManager.Instance.SetHint0(stage.ToString());
         }
         public static int LoseID =>
@@ -44,7 +42,7 @@ namespace GamePlay.Core
                 : 0;
         public void NewGame()
         {
-            handNub = 0;
+            HandNub = 0;
             Stage = 0;
             Round = 0;
             if (GameManager.GameMode == GameMode.Native)//本地模式默认起手玩家为p1
@@ -66,7 +64,7 @@ namespace GamePlay.Core
             Debug.Log($"1^firstPlayerId:{1^firstPlayerId}");
             JackpotManager.Instance.EnterRaise(1^firstPlayerId, false);
 
-            handNub++;
+            HandNub++;
             Round = 0;
             Stage = 0;
             SetText();
@@ -114,7 +112,7 @@ namespace GamePlay.Core
         public void ShowBlankScreen()
         {
 
-            bool isRaise = gameStage == GameStage.Raise;
+            bool isRaise = CurGameStage == GameStage.Raise;
             int playerId=isRaise?JackpotManager.Instance.curPlayerId:GameManager.CurPlayerId;
             Debug.Log($"playerId:{playerId},blankId:{blankId}");
             if (blankId == playerId) return;
@@ -131,9 +129,6 @@ namespace GamePlay.Core
             HintManager.Instance.SetHint1("BlankScreen");
             Debug.Log("打开黑幕");
         }
-        // public void ShowBlankScreen(){
-        //     ShowBlankScreen(GameManager.CurPlayerId);
-        // }
         public void HideBlankScreen()
         {
 
@@ -147,7 +142,12 @@ namespace GamePlay.Core
         private void SetText()
         {
             // Debug.Log($"handNub:{handNub},round:{Round},stage:{Stage}");
-            GameUIPanel.Instance.SetStageNub(handNub: handNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
+            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
+        }
+
+        public void Reset()
+        {
+            CurGameStage = GameStage.Idle;
         }
     }
 }

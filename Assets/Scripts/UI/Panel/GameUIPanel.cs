@@ -115,8 +115,6 @@ namespace UI.Panel
         {
             GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
             HintManager.Instance.SetHint1("");
-            // if (!isRaise) StageManager.Instance.HideBlankScreen();
-            // else StageManager.Instance.HideBlankScreen(curPlayerId);
             StageManager.Instance.HideBlankScreen();
         }
         #endregion
@@ -255,12 +253,6 @@ namespace UI.Panel
         }
 
         #endregion
-
-        // public void GameStart(GameMode gameMode){//也许应该通过判断在线还是本地来调整一下ui排版
-        //     if(gameMode == GameMode.Native){
-        //         GetControl<Image>("shader")
-        //     }
-        // }
 
 
         #region debug
