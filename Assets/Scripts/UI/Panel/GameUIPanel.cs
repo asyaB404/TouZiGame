@@ -46,7 +46,6 @@ namespace UI.Panel
             }
         }
 
-
         [FormerlySerializedAs("HandOverPanel")]
         [SerializeField]
         private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家

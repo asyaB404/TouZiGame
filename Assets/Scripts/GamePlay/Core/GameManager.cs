@@ -62,9 +62,7 @@ namespace GamePlay.Core
                 holeCardManagers[i].Init(i);
             }
         }
-
-
-        //重置
+        
 
         private void Reset()
         {
@@ -73,7 +71,7 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
-
+            StageManager.Instance.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
@@ -85,7 +83,6 @@ namespace GamePlay.Core
             Random.InitState(seed);
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
-            curPlayerId = StageManager.Instance.firstPlayerId;
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
@@ -105,7 +102,7 @@ namespace GamePlay.Core
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
-            StageManager.Instance.NewRound(curPlayerId);
+            StageManager.Instance.NewRound();
         }
 
         /// <summary>
@@ -198,8 +195,6 @@ namespace GamePlay.Core
 
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
-
-            curPlayerId = StageManager.Instance.firstPlayerId;
         }
 
         #endregion

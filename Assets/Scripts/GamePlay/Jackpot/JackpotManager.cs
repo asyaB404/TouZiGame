@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GamePlay.Core;
@@ -9,24 +10,24 @@ using UnityEngine.UI;
 /// </summary>
 public class JackpotManager
 {
-    public int MyJetton
+    public int JettonP1
     {
         set
         {
-            myJetton = value;
-            GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+            _jettonP1 = value;
+            GameUIPanel.Instance.SetJetton(_jettonP1, _jettonP2);
         }
-        get => myJetton;
+        get => _jettonP1;
     }
-    private int myJetton;
-    private int theJetton;
-    public int TheJetton
+    private int _jettonP1;
+    private int _jettonP2;
+    public int JettonP2
     {
-        get => theJetton;
+        get => _jettonP2;
         set
         {
-            theJetton = value;
-            GameUIPanel.Instance.SetJetton(myJetton, theJetton);
+            _jettonP2 = value;
+            GameUIPanel.Instance.SetJetton(_jettonP1, _jettonP2);
         }
     }
     public int AnteNub
@@ -52,35 +53,34 @@ public class JackpotManager
     {
         AnteNub = 1;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
-        MyJetton = MyGlobal.INITIAL_CHIP;
-        TheJetton = MyGlobal.INITIAL_CHIP;
+        JettonP1 = MyGlobal.INITIAL_CHIP;
+        JettonP2 = MyGlobal.INITIAL_CHIP;
     }
     //进入加注环节
-    public void EnterRaise(int FirstPlayerId, bool canFold = true)
+    public void EnterRaise(int firstPlayerId, bool canFold = true)
     {
-        GameUIPanel.Instance.ShowRaisePanel(FirstPlayerId == 0, FirstPlayerId == 0 ? MyJetton : TheJetton, AnteNub, canFold, gameMode: GameManager.GameMode);
-        firstRaisePlayerId = FirstPlayerId;//用来判断加注环节被双方都进行过了一遍
+        GameUIPanel.Instance.ShowRaisePanel(firstPlayerId == 0, firstPlayerId == 0 ? JettonP1 : JettonP2, AnteNub, canFold, gameMode: GameManager.GameMode);
+        firstRaisePlayerId = firstPlayerId;//用来判断加注环节被双方都进行过了一遍
         curPlayerId = firstRaisePlayerId;
         Debug.Log($"firstRaisePlayerId:{firstRaisePlayerId},curPlayerId:{curPlayerId}");
         StageManager.SetStage(GameStage.Raise);
-        if (GameManager.GameMode == GameMode.Native)
+        switch (GameManager.GameMode)
         {
-            // GameUIPanel.Instance.ShowSwitchoverButton(isRaise:true);
-            StageManager.Instance.ShowBlankScreen();
-            Debug.Log("????");
+            case GameMode.Native:
+                StageManager.Instance.ShowBlankScreen();
+                Debug.Log("????");
+                break;
+            case GameMode.Online:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
-    public void NewHand() //在结束了一次距骨骰后开启新的一局使用
+    public void NewHand() 
     {
         AnteNub = StageManager.Instance.HandNub + 1;
         jackpotNub0 = 0;
         jackpotNub1 = 0;
-        // int nub = MyJetton > AnteNub ? AnteNub : MyJetton;
-        // MyJetton -= nub;
-        // jackpotNub0 = nub;
-        // nub = TheJetton > AnteNub ? AnteNub : TheJetton;
-        // TheJetton -= nub;
-        // jackpotNub1 = nub;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetHint1("FirstRaise");
     }
@@ -94,11 +94,10 @@ public class JackpotManager
     {
         string title, text1, text2;
         title = $"你{(score0 > score1 ? "赢" : "输")}了{SumJackpotNub}个筹码";
-        // Debug.Log($"jackpotNub0:{jackpotNub0},jackpotNub1:{jackpotNub1},extraJackpot:{extraJackpot}");
         if (score0 == score1 || winerWaiver)//（不跟注时与平局同样处理方式）
         {
-            MyJetton += (int)SumJackpotNub / 2;
-            TheJetton += (int)SumJackpotNub / 2;
+            JettonP1 += (int)SumJackpotNub / 2;
+            JettonP2 += (int)SumJackpotNub / 2;
             extraJackpot = SumJackpotNub % 2;
 
             if (score0 == score1) title = $"打平了。。。给你返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
@@ -108,8 +107,8 @@ public class JackpotManager
         else
         {
             extraJackpot = 0;
-            if (score0 > score1) MyJetton += SumJackpotNub;
-            else TheJetton += SumJackpotNub;
+            if (score0 > score1) JettonP1 += SumJackpotNub;
+            else JettonP2 += SumJackpotNub;
         }
         text1 = $"你一共获得了：{score0}分";
         text2 = $"对手一共获得了：{score1}分";
@@ -123,16 +122,16 @@ public class JackpotManager
         // string export;
         if (curPlayerId == 0)
         {
-            nub = MyJetton > AnteNub ? AnteNub : MyJetton;
+            nub = JettonP1 > AnteNub ? AnteNub : JettonP1;
             jackpotNub0 += nub;
-            MyJetton -= nub;
+            JettonP1 -= nub;
             // export = $"p1加注{nub}";
         }
         else
         {
-            nub = TheJetton > AnteNub ? AnteNub : TheJetton;
+            nub = JettonP2 > AnteNub ? AnteNub : JettonP2;
             jackpotNub1 += nub;
-            TheJetton -= nub;
+            JettonP2 -= nub;
             // export = $"p2加注{nub}";
         }
         // export += $"此时奖池为{SumJackpotNub},其中我方奖池为{jackpotNub0},对方奖池为{jackpotNub1},额外奖池为{extraJackpot}，{playerid}的筹码为{(playerid == 0 ? MyJetton : TheJetton)},{(playerid == 0 ? "p2" : "p1")}的筹码为{(playerid == 0 ? TheJetton : MyJetton)}";
@@ -171,7 +170,7 @@ public class JackpotManager
                 curPlayerId = (curPlayerId + 1) % 2;
                 // raisePanelTitleText.text = (curPlayerId == 0 ? "p1" : "p2") + "玩家的加注时间";
                 GameUIPanel.Instance.SetRaiseButtons(curPlayerId == 0,
-                    curPlayerId == 0 ? JackpotManager.Instance.MyJetton : JackpotManager.Instance.TheJetton,
+                    curPlayerId == 0 ? JackpotManager.Instance.JettonP1 : JackpotManager.Instance.JettonP2,
                         JackpotManager.Instance.AnteNub, !isFirstRaise);
                 StageManager.Instance.ShowBlankScreen();
             }
@@ -179,16 +178,7 @@ public class JackpotManager
         }
         else if (GameManager.GameMode == GameMode.Online)
         {
-            //     if (curPlayerId == 0)
-            //     {
-            //         // WaitPanel.gameObject.SetActive(false);//我猜可能应该这样写
-            //         // ShowRaiseButton(GameManager.Instance.TheJetton);
-            //     }
-            //     else if (curPlayerId == 1)
-            //     {
-            //         // HideRaiseButton();
-            //         // WaitPanel.gameObject.SetActive(true);
-            //     }
+           
         }
     }
 }
