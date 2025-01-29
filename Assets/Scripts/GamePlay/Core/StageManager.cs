@@ -27,7 +27,7 @@ namespace GamePlay.Core
 
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
-        public int FirstPlayerId { get; private set; } = -1;
+        public int FirstPlayerId { get; private set; } = -1;//当前回合先手玩家
 
         public static GameStage CurGameStage { get; private set; }
 
@@ -37,23 +37,18 @@ namespace GamePlay.Core
             HintManager.Instance.SetHint0(stage.ToString());
         }
 
-        public static int LoseID =>
-            GameManager.Instance.NodeQueueManagers[0].SumScore >
-            GameManager.Instance.NodeQueueManagers[1].SumScore
-                ? 1
-                : 0;
-
+        
         public void NewGame()
         {
             FirstPlayerId = GameManager.CurPlayerId;
-            JackpotManager.Instance.EnterRaise(FirstPlayerId, false);
+
             UpdateUI();
         }
 
         public void NewHand()
         {
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
-            JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
+            // JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
             Hand++;
             Round = 0;
             Stage = 0;
@@ -73,32 +68,34 @@ namespace GamePlay.Core
         }
 
         /// <summary>
-        /// 尝试进入下一回合
+        /// 尝试进入下一回合，返回是否进入下一回合
         /// </summary>
-        public bool NextTurn()
+        public bool TryNextRound()
         {
             if (GameManager.GameMode == GameMode.Native)
             {
                 ShowBlankScreen();
             }
 
-            if (GameManager.CurPlayerId != FirstPlayerId) return false;
-            //一个来回之后才加
-            Round++;
-            if (Round == MyGlobal.A_STAGE_ROUND - 1)
-            {
-                HintManager.Instance.SetHint1("EndPlace");
-            }
 
-            if (Round >= MyGlobal.A_STAGE_ROUND)
-            {
-                JackpotManager.Instance.EnterRaise(LoseID);
-                Stage++;
-                return true;
-            }
 
+            if (GameManager.CurPlayerId == FirstPlayerId) //一个来回之后才加
+            {
+                Round++;
+                if (Round == MyGlobal.A_STAGE_ROUND - 1)
+                {
+                    HintManager.Instance.SetHint1("EndPlace");
+                }
+
+                if (Round >= MyGlobal.A_STAGE_ROUND)
+                {
+                    Stage++;
+                    return true;
+                }
+            }
             UpdateUI();
             return false;
+
         }
 
         int blankId = -1;
@@ -106,7 +103,7 @@ namespace GamePlay.Core
         public void ShowBlankScreen()
         {
             bool isRaise = CurGameStage == GameStage.Raise;
-            int playerId = isRaise ? JackpotManager.Instance.curPlayerId : GameManager.CurPlayerId;
+            int playerId =  GameManager.CurPlayerId;
             Debug.Log($"playerId:{playerId},blankId:{blankId}");
             if (blankId == playerId) return;
             blankId = playerId;

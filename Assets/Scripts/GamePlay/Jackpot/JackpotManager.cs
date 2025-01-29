@@ -64,12 +64,12 @@ public class JackpotManager
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
 
-    public void SetRaisePanel(bool isFirstPlayer, bool canFold)=>GameUIPanel.Instance.ShowRaisePanel(isFirstPlayer,isFirstPlayer? JackpotP1 : JackpotP2, AnteNub,
+    public void ShowRaisePanel(bool isFirstPlayer, bool canFold) => GameUIPanel.Instance.ShowRaisePanel(isFirstPlayer, isFirstPlayer ? JackpotP1 : JackpotP2, AnteNub,
             canFold, gameMode: GameManager.GameMode);
 
-    public void NewHand()
+    public void NewHand(int nowhand)
     {
-        AnteNub = StageManager.Instance.Hand + 1;
+        AnteNub =nowhand + 1;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
@@ -103,14 +103,14 @@ public class JackpotManager
 
         var text1 = $"你一共获得了：{score0}分";
         var text2 = $"对手一共获得了：{score1}分";
-        StageManager.SetStage(GameStage.Calculation);
+        // StageManager.SetStage(GameStage.Calculation);
         GameUIPanel.Instance.ShowOverPanel(title, text1, text2); //todo添加关于赢了多少筹码的描述
     }
 
-    public void Call()
+    public void Call(int callPlayerId)
     {
         int nub;
-        if (curPlayerId == 0)
+        if (callPlayerId == 0)
         {
             nub = JackpotP1 > AnteNub ? AnteNub : JackpotP1;
             _jackpotNub0 += nub;
@@ -125,45 +125,26 @@ public class JackpotManager
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
 
-    public void Raise()
+    public void Raise(int callPlayerId)
     {
         AnteNub += 1;
-        Call();
+        Call(callPlayerId);
     }
 
-    public void Fold()
+    // public int GameManager.CurPlayerId; //哪个玩家进行的加注/跟注/弃牌
+
+
+
+    /// <summary>
+    /// 一名玩家加注后另一名玩家进行加注（两人都加过就不用加了
+    /// </summary>
+    /// <param name="isFirstRaise">是否是第一次加注（不能弃牌）</param>
+    /// <returns></returns>
+    public void SetRaiseButtons(bool isFirstRaise)
     {
-        GameManager.Instance.OverOneHand(isWinerWaiver: curPlayerId != firstRaisePlayerId);
-    }
-
-    public int curPlayerId; //哪个玩家进行的加注/跟注/弃牌
-
-    private int firstRaisePlayerId;
-
-    //一名玩家加注后另一名玩家进行加注
-    public void NextPlayer()
-    {
-        if (GameManager.GameMode == GameMode.Native)
-        {
-            if (curPlayerId != firstRaisePlayerId) 
-            {
-                GameUIPanel.Instance.HideRaisePanel();
-                GameUIPanel.Instance.SetWaitPanel(false);
-                StageManager.Instance.NewStage();
-                StageManager.Instance.ShowBlankScreen();
-            }
-            else
-            {
-                bool isFirstRaise = StageManager.Stage == 0;
-                curPlayerId = (curPlayerId + 1) % 2;
-                GameUIPanel.Instance.SetRaiseButtons(curPlayerId == 0,
-                    curPlayerId == 0 ? JackpotManager.Instance.JackpotP1 : JackpotManager.Instance.JackpotP2,
-                    JackpotManager.Instance.AnteNub, !isFirstRaise);
-                StageManager.Instance.ShowBlankScreen();
-            }
-        }
-        else if (GameManager.GameMode == GameMode.Online)
-        {
-        }
+        // bool isFirstRaise = StageManager.Stage == 0;
+        GameUIPanel.Instance.SetRaiseButtons(GameManager.CurPlayerId == 0,
+            GameManager.CurPlayerId == 0 ? JackpotManager.Instance.JackpotP1 : JackpotManager.Instance.JackpotP2,
+            JackpotManager.Instance.AnteNub, !isFirstRaise);
     }
 }

@@ -8,6 +8,7 @@
 // // ********************************************************************************************
 
 
+using System;
 using System.Collections.Generic;
 using GamePlay.Node;
 using UI.Panel;
@@ -38,7 +39,8 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")] [SerializeField]
+        [FormerlySerializedAs("touzi")]
+        [SerializeField]
         private Sprite[] touziSprites;
 
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
@@ -62,7 +64,7 @@ namespace GamePlay.Core
                 holeCardManagers[i].Init(i);
             }
         }
-        
+
 
         private void Reset()
         {
@@ -83,17 +85,18 @@ namespace GamePlay.Core
             Random.InitState(seed);
             JackpotManager.Instance.NewGame();
             StageManager.Instance.NewGame();
+            EnterRaise(1, false);//游戏开始时进入1号玩家的加注环节
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
-
-        #region 一个回合内发生的事
-
         public void NextToPlayerId()
         {
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
         }
+        #region 一个回合内发生的事
+
+
 
         /// <summary>
         /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
@@ -102,10 +105,15 @@ namespace GamePlay.Core
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
-            StageManager.Instance.NextTurn();
+            if (StageManager.Instance.TryNextRound())
+            {
+                EnterRaise();
+            }
         }
-        private void SetCurPlayerId(int id){
-            if(id!=curPlayerId){
+        private void SetCurPlayerId(int id)
+        {
+            if (id != curPlayerId)
+            {
                 NextTurn();
             }
         }
@@ -164,26 +172,65 @@ namespace GamePlay.Core
         #endregion
 
         #region 阶段（stage，两次加注之间的整个阶段）
-        //进入加注环节
-    public void EnterRaise(int firstPlayerId, bool canFold = true)
-    {
-        JackpotManager.Instance.SetRaisePanel(curPlayerId==firstPlayerId, canFold);
-        firstRaisePlayerId = firstPlayerId; //用来判断加注环节被双方都进行过了一遍
-        curPlayerId = firstRaisePlayerId;
-        Debug.Log($"firstRaisePlayerId:{firstRaisePlayerId},curPlayerId:{curPlayerId}");
-        StageManager.SetStage(GameStage.Raise);
-        switch (GameManager.GameMode)
+        private int firstRaisePlayerId;//先加注的玩家
+        // 结束一轮后进入的加注环节，默认是输方先加注
+        public void EnterRaise(bool canFold = true)
         {
-            case GameMode.Native:
-                StageManager.Instance.ShowBlankScreen();
-                Debug.Log("????");
-                break;
-            case GameMode.Online:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            int loseID =
+            NodeQueueManagers[0].SumScore >
+            NodeQueueManagers[1].SumScore
+                ? 1
+                : 0;
+            EnterRaise(loseID, canFold);
         }
-    }
+        /// <summary>
+        /// 进入加注环节
+        /// </summary>
+        /// <param name="firstRaisePlayerId">第一个加注的玩家</param>
+        /// <param name="canFold">是否可以弃权</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void EnterRaise(int firstRaisePlayerId, bool canFold = true)
+        {
+            JackpotManager.Instance.ShowRaisePanel(curPlayerId == firstRaisePlayerId, canFold);//设置面板需要的参数在这里面
+            this.firstRaisePlayerId = firstRaisePlayerId;
+            curPlayerId = this.firstRaisePlayerId;
+            // Debug.Log($"firstRaisePlayerId:{this.firstRaisePlayerId},curPlayerId:{curPlayerId}");
+            StageManager.SetStage(GameStage.Raise);
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    StageManager.Instance.ShowBlankScreen();
+                    Debug.Log("????");
+                    break;
+                case GameMode.Online:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void Call() => JackpotManager.Instance.Call(curPlayerId);
+        public void Raise() => JackpotManager.Instance.Raise(curPlayerId);
+        public void Fold() => OverOneHand(isWinerWaiver: CurPlayerId != firstRaisePlayerId);
+        //下一个玩家加注
+        public void NextPlayerRaise()
+        {
+            if (GameMode == GameMode.Native)
+            {
+                if (firstRaisePlayerId == CurPlayerId)//没有下一个加注的玩家了
+                {
+                    GameUIPanel.Instance.HideRaisePanel();
+                    StageManager.Instance.NewStage();
+                }
+                else
+                {
+                    NextToPlayerId();
+                }
+                StageManager.Instance.ShowBlankScreen();
+            }
+            JackpotManager.Instance.SetRaiseButtons(StageManager.Stage == 0);
+
+        }
         #endregion
 
         #region 一hand的起始和结束
@@ -199,6 +246,7 @@ namespace GamePlay.Core
             int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
 
             JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
+            StageManager.SetStage(GameStage.Calculation);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
@@ -217,8 +265,11 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
 
-            StageManager.Instance.NewHand(); 
-            JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
+            StageManager.Instance.NewHand();
+            JackpotManager.Instance.NewHand(StageManager.Instance.Hand); //奖池清零（奖池结算在
+
+
+            EnterRaise(1 ^ StageManager.Instance.FirstPlayerId, false);
 
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
@@ -230,7 +281,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 
@@ -256,7 +307,7 @@ namespace GamePlay.Core
         private void Test1()
         {
             // AddTouzi(curPlayerId, t2, t3);
-            GameUIPanel.Instance.SetHint("你好0");
+            GameUIPanel.Instance.UpdataHint("你好0");
         }
 
         [ContextMenu("clear")]

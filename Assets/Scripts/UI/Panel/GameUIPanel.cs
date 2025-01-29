@@ -22,7 +22,7 @@ using UnityEngine.UI;
 namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
-    {
+    { 
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
 
@@ -166,7 +166,13 @@ namespace UI.Panel
             //     buttonPanel.gameObject.SetActive(isP1);
             // }
         }
-        //设置加注页面按钮
+        /// <summary>
+        /// 设置加注页面按钮
+        /// </summary>
+        /// <param name="isP1">是否是p1</param>
+        /// <param name="haveJackpot">拥有的筹码</param>
+        /// <param name="needFackpot">需要的筹码</param>
+        /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
         public void SetRaiseButtons(bool isP1, int haveJackpot, int needFackpot, bool canFold = true)
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
@@ -225,15 +231,15 @@ namespace UI.Panel
         private void CallButtonClick()
         {
             // HideRaiseButton();
-            JackpotManager.Instance.Call();
-            JackpotManager.Instance.NextPlayer();
+            GameManager.Instance.Call();
+            GameManager.Instance.NextPlayerRaise();
         }
 
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            JackpotManager.Instance.Raise();
-            JackpotManager.Instance.NextPlayer();
+            GameManager.Instance.Raise();
+            GameManager.Instance.NextPlayerRaise();
         }
 
         
@@ -242,10 +248,10 @@ namespace UI.Panel
         private void FoldButtonClick()
         {
             HideRaisePanel();
-            JackpotManager.Instance.Fold();
+            GameManager.Instance.Fold();
         }
 
-        public void SetHint(string str)
+        public void UpdataHint(string str)
         {
             GetControl<TextMeshProUGUI>("HintText").text = str;
             Debug.Log(GetControl<TextMeshProUGUI>("HintText"));
