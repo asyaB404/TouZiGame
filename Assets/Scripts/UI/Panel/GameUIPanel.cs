@@ -139,12 +139,18 @@ namespace UI.Panel
             waitPanel.gameObject.SetActive(flag);
         }
 
-        //设置底牌ui
-        public void SetAnte(int anteNub) =>
+        /// <summary>
+        /// 设置底牌大小UI
+        /// </summary>
+        /// <param name="anteNub"></param>
+        public void UpdateAnteUI(int anteNub) =>
             anteText.text = anteNub.ToString();
 
-        //设置奖池ui
-        public void SetJackpot(int sumJackpotNub) =>
+        /// <summary>
+        /// 更新奖池UI
+        /// </summary>
+        /// <param name="sumJackpotNub"></param>
+        public void UpdateJackpotUI(int sumJackpotNub) =>
             jackpotText.text = sumJackpotNub.ToString();
 
         
@@ -153,33 +159,28 @@ namespace UI.Panel
         [SerializeField]
         private TextMeshProUGUI callText;
         //打开加注页面
-        public void ShowRaisePanel(bool isP1, int haveJackpot, int needFackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
+        public void ShowRaisePanel(bool isP1, int haveJackpot, int needJackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
         {
             
             if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            SetRaiseButtons(isP1, haveJackpot, needFackpot, canFold);
-
+            SetRaiseButtons(isP1, haveJackpot, needJackpot, canFold);
             if (gameMode == GameMode.Native) buttonPanel.gameObject.SetActive(true);
-            // else if (gameMode == GameMode.Online)//我觉得应该这样写
-            // {
-            //     waitPanel.gameObject.SetActive(!isP1);
-            //     buttonPanel.gameObject.SetActive(isP1);
-            // }
+
         }
         /// <summary>
         /// 设置加注页面按钮
         /// </summary>
         /// <param name="isP1">是否是p1</param>
         /// <param name="haveJackpot">拥有的筹码</param>
-        /// <param name="needFackpot">需要的筹码</param>
+        /// <param name="needJackpot">需要的筹码</param>
         /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
-        public void SetRaiseButtons(bool isP1, int haveJackpot, int needFackpot, bool canFold = true)
+        public void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
             callButton.gameObject.SetActive(haveJackpot != 0);
-            raiseButton.gameObject.SetActive(haveJackpot > needFackpot);
-            callText.text = haveJackpot > needFackpot ? "跟注" : "AllIn!!!!";
+            raiseButton.gameObject.SetActive(haveJackpot > needJackpot);
+            callText.text = haveJackpot > needJackpot ? "跟注" : "AllIn!!!!";
 
             foldButton.gameObject.SetActive(canFold);
         }
@@ -195,12 +196,9 @@ namespace UI.Panel
             SetButtonHint(callButton, "CallButton");
             SetButtonHint(raiseButton, "RaiseButton");
             SetButtonHint(foldButton, "FoldButton");
-
             callButton.onClick.AddListener(CallButtonClick);
-            // callButton.mo
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
-
             GetControl<Button>("SwitchoverButton").onClick.AddListener(SwitchoverButtonChick);
         }
         // 为按钮添加事件触发器,用于显示鼠标进入的提示
@@ -230,16 +228,13 @@ namespace UI.Panel
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
-            // HideRaiseButton();
             GameManager.Instance.Call();
-            GameManager.Instance.NextPlayerRaise();
         }
 
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
             GameManager.Instance.Raise();
-            GameManager.Instance.NextPlayerRaise();
         }
 
         

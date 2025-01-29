@@ -11,7 +11,7 @@ namespace GamePlay.Core
         Idle,
         Raise, //加注阶段
         Place, //放牌阶段
-        BlankScreen, //黑屏切换游戏玩家，单机双人使用
+        BlankScreen, //黑屏切换游戏玩家，单机双人使用  
         Calculation, //结算阶段
     }
 
@@ -41,7 +41,6 @@ namespace GamePlay.Core
         public void NewGame()
         {
             FirstPlayerId = GameManager.CurPlayerId;
-
             UpdateUI();
         }
 
@@ -76,9 +75,6 @@ namespace GamePlay.Core
             {
                 ShowBlankScreen();
             }
-
-
-
             if (GameManager.CurPlayerId == FirstPlayerId) //一个来回之后才加
             {
                 Round++;
