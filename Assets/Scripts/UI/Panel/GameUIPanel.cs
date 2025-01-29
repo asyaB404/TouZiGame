@@ -96,7 +96,7 @@ namespace UI.Panel
 
 
         //设置回合数据的ui
-        public void SetStageNub(int handNub, int stageNub, int roundNub)
+        public void UpdateStageUI(int handNub, int stageNub, int roundNub)
         {
             handNubText.text = handNub.ToString();
             stageNubText.text = stageNub.ToString();

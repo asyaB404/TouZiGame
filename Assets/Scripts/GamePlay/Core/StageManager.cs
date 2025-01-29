@@ -27,7 +27,7 @@ namespace GamePlay.Core
 
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
-        public int firstPlayerId = -1; //这个hand内先手玩家的id
+        public int FirstPlayerId { get; private set; } = -1;
 
         public static GameStage CurGameStage { get; private set; }
 
@@ -45,19 +45,19 @@ namespace GamePlay.Core
 
         public void NewGame()
         {
-            firstPlayerId = GameManager.CurPlayerId;
-            JackpotManager.Instance.EnterRaise(1 ^ firstPlayerId, false);
-            SetText();
+            FirstPlayerId = GameManager.CurPlayerId;
+            JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
+            UpdateUI();
         }
 
         public void NewHand()
         {
-            firstPlayerId = (firstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
-            JackpotManager.Instance.EnterRaise(1 ^ firstPlayerId, false);
+            FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
+            JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
             HandNub++;
             Round = 0;
             Stage = 0;
-            SetText();
+            UpdateUI();
         }
 
         public void NewStage()
@@ -69,7 +69,7 @@ namespace GamePlay.Core
 
             SetStage(GameStage.Place);
             Round = 0;
-            SetText();
+            UpdateUI();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace GamePlay.Core
                 ShowBlankScreen();
             }
 
-            if (GameManager.CurPlayerId != firstPlayerId) return false;
+            if (GameManager.CurPlayerId != FirstPlayerId) return false;
             //一个来回之后才加
             Round++;
             if (Round == MyGlobal.A_STAGE_ROUND - 1)
@@ -97,7 +97,7 @@ namespace GamePlay.Core
                 return true;
             }
 
-            SetText();
+            UpdateUI();
             return false;
         }
 
@@ -133,9 +133,9 @@ namespace GamePlay.Core
             GameManager.Instance.HoleCardManagers[playerId].HideShader();
         }
 
-        private void SetText()
+        private void UpdateUI()
         {
-            GameUIPanel.Instance.SetStageNub(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
+            GameUIPanel.Instance.UpdateStageUI(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
         }
 
         public void Reset()
@@ -144,6 +144,7 @@ namespace GamePlay.Core
             Stage = 0;
             Round = 0;
             CurGameStage = GameStage.Idle;
+            UpdateUI();
         }
     }
 }
