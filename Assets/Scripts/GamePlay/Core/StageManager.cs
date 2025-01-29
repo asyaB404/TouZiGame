@@ -23,10 +23,10 @@ namespace GamePlay.Core
         }
 
         private static StageManager _instance;
-        public int HandNub { get; private set; } = -1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public int Hand { get; private set; } = -1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
-        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
+        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
         public int FirstPlayerId { get; private set; } = -1;
 
         public static GameStage CurGameStage { get; private set; }
@@ -46,7 +46,7 @@ namespace GamePlay.Core
         public void NewGame()
         {
             FirstPlayerId = GameManager.CurPlayerId;
-            JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
+            JackpotManager.Instance.EnterRaise(FirstPlayerId, false);
             UpdateUI();
         }
 
@@ -54,7 +54,7 @@ namespace GamePlay.Core
         {
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
             JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
-            HandNub++;
+            Hand++;
             Round = 0;
             Stage = 0;
             UpdateUI();
@@ -75,7 +75,7 @@ namespace GamePlay.Core
         /// <summary>
         /// 尝试进入下一回合
         /// </summary>
-        public bool NewRound()
+        public bool NextTurn()
         {
             if (GameManager.GameMode == GameMode.Native)
             {
@@ -109,7 +109,6 @@ namespace GamePlay.Core
             int playerId = isRaise ? JackpotManager.Instance.curPlayerId : GameManager.CurPlayerId;
             Debug.Log($"playerId:{playerId},blankId:{blankId}");
             if (blankId == playerId) return;
-
             blankId = playerId;
             string str;
             if (playerId == 0) str = "P1";
@@ -135,12 +134,12 @@ namespace GamePlay.Core
 
         private void UpdateUI()
         {
-            GameUIPanel.Instance.UpdateStageUI(handNub: HandNub + 1, roundNub: Round + 1, stageNub: Stage + 1);
+            GameUIPanel.Instance.UpdateStageUI(handNub: Hand + 1, roundNub: Round + 1, stageNub: Stage + 1);
         }
 
         public void Reset()
         {
-            HandNub = 0;
+            Hand = 0;
             Stage = 0;
             Round = 0;
             CurGameStage = GameStage.Idle;

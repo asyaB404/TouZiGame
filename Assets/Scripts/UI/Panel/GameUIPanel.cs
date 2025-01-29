@@ -73,7 +73,7 @@ namespace UI.Panel
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
             handOverPanel.SetActive(false);
-            GameManager.Instance.ResetChessboard();
+            GameManager.Instance.NewHand();
         });
 
         [FormerlySerializedAs("JackpotTexts")]

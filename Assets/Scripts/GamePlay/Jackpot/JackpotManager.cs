@@ -88,7 +88,7 @@ public class JackpotManager
 
     public void NewHand()
     {
-        AnteNub = StageManager.Instance.HandNub + 1;
+        AnteNub = StageManager.Instance.Hand + 1;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
