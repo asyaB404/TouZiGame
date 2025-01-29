@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using GamePlay.Core;
 using UI.Panel;
-using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// 奖池管理
@@ -37,15 +33,18 @@ public class JackpotManager
         }
     }
 
+    /// <summary>
+    /// 目前底注大小
+    /// </summary>
     public int AnteNub
     {
         set
         {
             _anteNub = value;
-            GameUIPanel.Instance.SetAnte(value);
+            GameUIPanel.Instance.UpdateAnteUI(value);
         }
         get => _anteNub;
-    } //底注大小
+    }
 
     private int _anteNub;
     private int _jackpotNub0; //当前奖池p1已经投入的筹码
@@ -55,24 +54,43 @@ public class JackpotManager
     public int SumJackpotNub => _jackpotNub0 + _jackpotNub1 + _extraJackpot;
     public static JackpotManager Instance => _instance ??= new JackpotManager();
     private static JackpotManager _instance;
+    private int _firstRaisePlayerId;
 
     public void NewGame()
     {
         AnteNub = 1;
         JackpotP1 = MyGlobal.INITIAL_CHIP;
         JackpotP2 = MyGlobal.INITIAL_CHIP;
-        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+        GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
     }
 
-    public void ShowRaisePanel(bool isFirstPlayer, bool canFold) => GameUIPanel.Instance.ShowRaisePanel(isFirstPlayer, isFirstPlayer ? JackpotP1 : JackpotP2, AnteNub,
-            canFold, gameMode: GameManager.GameMode);
+    public void EnterRaise(bool canFold = true, int firstRaisePlayerId = -1)
+    {
+        if (firstRaisePlayerId != -1)
+            this._firstRaisePlayerId = firstRaisePlayerId;
+        StageManager.SetStage(GameStage.Raise);
+        switch (GameManager.GameMode)
+        {
+            case GameMode.Native:
+                StageManager.Instance.ShowBlankScreen();
+                break;
+            case GameMode.Online:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
+            haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
+            needJackpot: AnteNub, canFold: canFold);
+    }
 
     public void NewHand(int nowhand)
     {
-        AnteNub =nowhand + 1;
+        AnteNub = nowhand + 1;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
-        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+        GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetHint1("FirstRaise");
     }
 
@@ -122,7 +140,8 @@ public class JackpotManager
             _jackpotNub1 += nub;
             JackpotP2 -= nub;
         }
-        GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
+
+        GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
     }
 
     public void Raise(int callPlayerId)
@@ -131,10 +150,6 @@ public class JackpotManager
         Call(callPlayerId);
     }
 
-    // public int GameManager.CurPlayerId; //哪个玩家进行的加注/跟注/弃牌
-
-
-
     /// <summary>
     /// 一名玩家加注后另一名玩家进行加注（两人都加过就不用加了
     /// </summary>
@@ -142,7 +157,6 @@ public class JackpotManager
     /// <returns></returns>
     public void SetRaiseButtons(bool isFirstRaise)
     {
-        // bool isFirstRaise = StageManager.Stage == 0;
         GameUIPanel.Instance.SetRaiseButtons(GameManager.CurPlayerId == 0,
             GameManager.CurPlayerId == 0 ? JackpotManager.Instance.JackpotP1 : JackpotManager.Instance.JackpotP2,
             JackpotManager.Instance.AnteNub, !isFirstRaise);
