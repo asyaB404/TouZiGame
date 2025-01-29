@@ -104,6 +104,11 @@ namespace GamePlay.Core
             NextToPlayerId();
             StageManager.Instance.NewRound();
         }
+        private void SetCurPlayerId(int id){
+            if(id!=curPlayerId){
+                NextTurn();
+            }
+        }
 
         /// <summary>
         /// 添加骰子,将骰子添加到场上
@@ -158,6 +163,9 @@ namespace GamePlay.Core
 
         #endregion
 
+        #region 阶段（stage，两次加注之间的整个阶段）
+
+        #endregion
 
         #region 一hand的起始和结束
 
@@ -198,6 +206,7 @@ namespace GamePlay.Core
         }
 
         #endregion
+
 
 
         #region Debug
