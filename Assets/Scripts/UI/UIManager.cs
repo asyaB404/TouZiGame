@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UI.Panel;
 using UnityEngine;
 
 namespace UI
@@ -11,7 +12,7 @@ namespace UI
 
         private void Start()
         {
-            //GameStartPanel.Instance.ShowMe();
+            GameStartPanel.Instance.ShowMe();
         }
 
         /// <summary>
