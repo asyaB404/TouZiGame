@@ -26,7 +26,7 @@ namespace GamePlay.Core
         public static GameManager Instance { get; private set; }
 
         /// <summary>
-        /// 当前玩家Id
+        /// 当前进行操作的玩家Id
         /// </summary>
         public static int CurPlayerId => Instance.curPlayerId;
 
@@ -98,11 +98,11 @@ namespace GamePlay.Core
         /// <summary>
         /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
         /// </summary>
-        public void NextTurn()
+        private void NextTurn()
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
-            StageManager.Instance.NewRound();
+            StageManager.Instance.NextTurn();
         }
         private void SetCurPlayerId(int id){
             if(id!=curPlayerId){
@@ -188,7 +188,7 @@ namespace GamePlay.Core
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
-        public void ResetChessboard()
+        public void NewHand()
         {
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
             {
@@ -198,7 +198,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
 
-            StageManager.Instance.NewHand(); //
+            StageManager.Instance.NewHand(); 
             JackpotManager.Instance.NewHand(); //奖池清零（奖池结算在
 
             holeCardManagers[0].ResetAllHoleCards();

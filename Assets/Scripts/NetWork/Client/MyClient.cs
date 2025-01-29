@@ -42,9 +42,9 @@ namespace NetWork.Client
             //由于服务端那边已经在请求中处理了，所以这里不用做处理
             if (IsServerStarted) return;
             GameManager.GameMode = GameMode.Online;
-            GameManager.Instance.StartGame(MyServer.Instance.Seed.Value);
-            //让客户端后手
             GameManager.Instance.NextToPlayerId();
+            //让客户端后手
+            GameManager.Instance.StartGame(MyServer.Instance.Seed.Value);
         }
 
         #endregion
