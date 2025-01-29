@@ -164,7 +164,26 @@ namespace GamePlay.Core
         #endregion
 
         #region 阶段（stage，两次加注之间的整个阶段）
-
+        //进入加注环节
+    public void EnterRaise(int firstPlayerId, bool canFold = true)
+    {
+        JackpotManager.Instance.SetRaisePanel(curPlayerId==firstPlayerId, canFold);
+        firstRaisePlayerId = firstPlayerId; //用来判断加注环节被双方都进行过了一遍
+        curPlayerId = firstRaisePlayerId;
+        Debug.Log($"firstRaisePlayerId:{firstRaisePlayerId},curPlayerId:{curPlayerId}");
+        StageManager.SetStage(GameStage.Raise);
+        switch (GameManager.GameMode)
+        {
+            case GameMode.Native:
+                StageManager.Instance.ShowBlankScreen();
+                Debug.Log("????");
+                break;
+            case GameMode.Online:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
         #endregion
 
         #region 一hand的起始和结束

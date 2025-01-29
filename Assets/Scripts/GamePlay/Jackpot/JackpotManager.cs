@@ -64,27 +64,8 @@ public class JackpotManager
         GameUIPanel.Instance.SetJackpot(sumJackpotNub: SumJackpotNub);
     }
 
-    //进入加注环节
-    public void EnterRaise(int firstPlayerId, bool canFold = true)
-    {
-        GameUIPanel.Instance.ShowRaisePanel(firstPlayerId == 0, firstPlayerId == 0 ? JackpotP1 : JackpotP2, AnteNub,
+    public void SetRaisePanel(bool isFirstPlayer, bool canFold)=>GameUIPanel.Instance.ShowRaisePanel(isFirstPlayer,isFirstPlayer? JackpotP1 : JackpotP2, AnteNub,
             canFold, gameMode: GameManager.GameMode);
-        firstRaisePlayerId = firstPlayerId; //用来判断加注环节被双方都进行过了一遍
-        curPlayerId = firstRaisePlayerId;
-        Debug.Log($"firstRaisePlayerId:{firstRaisePlayerId},curPlayerId:{curPlayerId}");
-        StageManager.SetStage(GameStage.Raise);
-        switch (GameManager.GameMode)
-        {
-            case GameMode.Native:
-                StageManager.Instance.ShowBlankScreen();
-                Debug.Log("????");
-                break;
-            case GameMode.Online:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
 
     public void NewHand()
     {
