@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panel
@@ -16,7 +17,14 @@ namespace UI.Panel
         public override void Init()
         {
             base.Init();
+            GetControl<Button>("btn1").onClick.AddListener(() => { NativeGamePanel.Instance.ShowMe(); });
             GetControl<Button>("btn2").onClick.AddListener(() => { MulGamePanel.Instance.ShowMe(); });
+            GetControl<Button>("btn3").onClick.AddListener(() => { Debug.Log("打开设置界面"); });
+        }
+
+        public override void OnPressedEsc()
+        {
+            Application.Quit();
         }
     }
 }
