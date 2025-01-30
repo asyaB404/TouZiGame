@@ -21,7 +21,7 @@ namespace GamePlay.Core
 
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
         public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
-        public int FirstPlayerId { get; private set; } = -1;//当前回合先手玩家
+        public static int FirstPlayerId { get; private set; } = -1;//当前回合先手玩家
 
         public static GameStage CurGameStage { get; private set; }
 
