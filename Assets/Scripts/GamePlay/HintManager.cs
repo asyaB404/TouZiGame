@@ -21,12 +21,9 @@ public class HintManager
 
     private void SetHint()
     {
-        Debug.Log($"hint0:{hint0} hint1:{hint1} hint2:{hint2}");
-        Debug.Log(hint0);
-        Debug.Log(HintText.HintText0Dic[hint0]);
-        if (hint2 != "") GameUIPanel.Instance.UpdataHint(HintText.HintText2Dic[hint2]);
-        else if (hint1 != "") GameUIPanel.Instance.UpdataHint(HintText.HintText1Dic[hint1]);
-        else if (hint0 != "") GameUIPanel.Instance.UpdataHint(HintText.HintText0Dic[hint0]);
+        if (hint2 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText2Dic[hint2]);
+        else if (hint1 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText1Dic[hint1]);
+        else if (hint0 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText0Dic[hint0]);
         
     }
     public void SetHint0(string str)

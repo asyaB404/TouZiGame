@@ -7,11 +7,8 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2024, Basya
 // // ********************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using DG.Tweening;
+
 using GamePlay.Core;
-using GamePlay.Node;
 using NetWork.Server;
 using TMPro;
 using UnityEngine;
@@ -22,7 +19,7 @@ using UnityEngine.UI;
 namespace UI.Panel
 {
     public class GameUIPanel : BasePanel<GameUIPanel>
-    { 
+    {
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
 
@@ -46,20 +43,12 @@ namespace UI.Panel
             }
         }
 
-        [FormerlySerializedAs("HandOverPanel")]
-        [SerializeField]
+        [FormerlySerializedAs("HandOverPanel")] [SerializeField]
         private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
 
-        [FormerlySerializedAs("HandOverTexts")]
-        [SerializeField]
+        [FormerlySerializedAs("HandOverTexts")] [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
-        /// <summary>
-        /// 打开分数确认页面
-        /// </summary>
-        /// <param name="score0">p1</param>
-        /// <param name="score1">p2</param>
-        /// <param name="score"></param>
         public void ShowOverPanel(string title, string score1, string score2)
         {
             handOverPanel.SetActive(true);
@@ -67,6 +56,7 @@ namespace UI.Panel
             handOverTexts[1].text = score1;
             handOverTexts[2].text = score2;
         }
+
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
 
         //设置分数确认页面的关闭按钮的监听
@@ -76,8 +66,7 @@ namespace UI.Panel
             GameManager.Instance.NewHand();
         });
 
-        [FormerlySerializedAs("JackpotTexts")]
-        [SerializeField]
+        [FormerlySerializedAs("JackpotTexts")] [SerializeField]
         private TextMeshProUGUI[] jackpotTexts; //双方的筹码的显示ui
 
         //设置筹码ui数值
@@ -110,20 +99,21 @@ namespace UI.Panel
             GetControl<TextMeshProUGUI>("SwitchText").text = title;
             GetControl<Button>("SwitchoverPanel").gameObject.SetActive(true);
         }
-        private void SwitchoverButtonChick()//确认切换了玩家后的按钮的点击事件
+
+        private void SwitchoverButtonChick() //确认切换了玩家后的按钮的点击事件
         {
             GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
             HintManager.Instance.SetHint1("");
-            StageManager.Instance.HideBlankScreen();
+            GameManager.Instance.HideBlankScreen();
         }
+
         #endregion
 
         #region 筹码底注和奖池
 
         [SerializeField] private RectTransform buttonPanel; //按钮页面
 
-        [FormerlySerializedAs("CallButton")]
-        [SerializeField]
+        [FormerlySerializedAs("CallButton")] [SerializeField]
         private Button callButton; //跟注按钮
 
         [SerializeField] private Button raiseButton; //加注按钮
@@ -132,10 +122,11 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI anteText; //底注
         [SerializeField] private TextMeshProUGUI jackpotText; //奖池
 
-        [FormerlySerializedAs("WaitPanel")]
-        [SerializeField]
+        [FormerlySerializedAs("WaitPanel")] [SerializeField]
         private RectTransform waitPanel; //等待对方加注（计划在线模式使用
-        public void SetWaitPanel(bool flag){
+
+        public void SetWaitPanel(bool flag)
+        {
             waitPanel.gameObject.SetActive(flag);
         }
 
@@ -153,20 +144,18 @@ namespace UI.Panel
         public void UpdateJackpotUI(int sumJackpotNub) =>
             jackpotText.text = sumJackpotNub.ToString();
 
-        
 
+        [SerializeField] private TextMeshProUGUI callText;
 
-        [SerializeField]
-        private TextMeshProUGUI callText;
         //打开加注页面
-        public void ShowRaisePanel(bool isP1, int haveJackpot, int needJackpot, bool canFold = true, GameMode gameMode = GameMode.Native)
+        public void ShowRaisePanel(bool isP1, int haveJackpot, int needJackpot, bool canFold = true,
+            GameMode gameMode = GameMode.Native)
         {
-            
             if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             SetRaiseButtons(isP1, haveJackpot, needJackpot, canFold);
             if (gameMode == GameMode.Native) buttonPanel.gameObject.SetActive(true);
-
         }
+
         /// <summary>
         /// 设置加注页面按钮
         /// </summary>
@@ -174,7 +163,7 @@ namespace UI.Panel
         /// <param name="haveJackpot">拥有的筹码</param>
         /// <param name="needJackpot">需要的筹码</param>
         /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
-        public void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
+        private void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
@@ -184,6 +173,7 @@ namespace UI.Panel
 
             foldButton.gameObject.SetActive(canFold);
         }
+
         //关闭加注页面
         public void HideRaisePanel()
         {
@@ -201,6 +191,7 @@ namespace UI.Panel
             foldButton.onClick.AddListener(FoldButtonClick);
             GetControl<Button>("SwitchoverButton").onClick.AddListener(SwitchoverButtonChick);
         }
+
         // 为按钮添加事件触发器,用于显示鼠标进入的提示
         private void SetButtonHint(Button button, string str)
         {
@@ -210,46 +201,39 @@ namespace UI.Panel
             {
                 eventID = EventTriggerType.PointerEnter,
             };
-            entryEnter.callback.AddListener((data) =>
-            {
-                HintManager.Instance.SetHint2(str);
-            });
+            entryEnter.callback.AddListener((data) => { HintManager.Instance.SetHint2(str); });
             EventTrigger.Entry entryExit = new EventTrigger.Entry
             {
                 eventID = EventTriggerType.PointerExit,
             };
-            entryExit.callback.AddListener((data) =>
-            {
-                HintManager.Instance.SetHint2("");
-            });
+            entryExit.callback.AddListener((data) => { HintManager.Instance.SetHint2(""); });
             trigger.triggers.Add(entryEnter);
             trigger.triggers.Add(entryExit);
         }
+
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
-            GameManager.Instance.Call();
+            GameManager.Instance.Call(false);
         }
 
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            GameManager.Instance.Raise();
+            GameManager.Instance.Call(true);
         }
 
-        
 
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
-            HideRaisePanel();
             GameManager.Instance.Fold();
+            HideRaisePanel();
         }
 
-        public void UpdataHint(string str)
+        public void UpdateHint(string str)
         {
             GetControl<TextMeshProUGUI>("HintText").text = str;
-            Debug.Log(GetControl<TextMeshProUGUI>("HintText"));
         }
 
         #endregion
@@ -257,7 +241,7 @@ namespace UI.Panel
 
         #region debug
 
-        [SerializeField][Range(0, 5)] private int testIndex;
+        [SerializeField] [Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()

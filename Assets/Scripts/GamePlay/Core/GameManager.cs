@@ -47,6 +47,8 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
         [SerializeField] private HoleCardManager[] holeCardManagers;
         public IReadOnlyList<HoleCardManager> HoleCardManagers => holeCardManagers;
+        private readonly JackpotManager _jackpotManager = new();
+        private readonly StageManager _stageManager = new();
 
         #endregion
 
@@ -62,6 +64,7 @@ namespace GamePlay.Core
             {
                 holeCardManagers[i].Init(i);
             }
+            gameObject.SetActive(false);
         }
 
 
@@ -73,7 +76,7 @@ namespace GamePlay.Core
                 nodeQueueManager.Reset();
             }
 
-            StageManager.Instance.Reset();
+            _stageManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
@@ -82,13 +85,18 @@ namespace GamePlay.Core
 
         public void StartGame(int seed)
         {
+            gameObject.SetActive(true);
+            GameUIPanel.Instance.ShowMe();
             Random.InitState(seed);
-            JackpotManager.Instance.NewGame();
-            StageManager.Instance.NewGame();
+            _jackpotManager.NewGame();
+            _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
 
+        /// <summary>
+        /// 更新玩家ID
+        /// </summary>
         public void NextToPlayerId()
         {
             curPlayerId++;
@@ -96,15 +104,15 @@ namespace GamePlay.Core
         }
 
         /// <summary>
-        /// 下一回合，更新玩家id，得到这次的骰子点数，播放动画
+        /// 用于放完骰子的下一回合，更新玩家id，得到这次的骰子点数，播放动画
         /// </summary>
         private void NextTurn()
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
-            if (StageManager.Instance.TryNextRound())
+            if (_stageManager.TryNextRound())
             {
-                EnterRaiseStage();
+                TryEnterRaiseStage(true);
             }
         }
 
@@ -120,7 +128,6 @@ namespace GamePlay.Core
             NodeQueueManager playerNodeQueueManager = nodeQueueManagers[playerId];
             if (!playerNodeQueueManager.AddTouzi(id, score)) return;
             GameUIPanel.Instance.UpdateScoreUI(curPlayerId);
-            //如果移除了对面的骰子同时更新对面的UI，不过老实说这点性能无所谓的，应该把对面的和我的分数UI合在一起的
             if (RemoveTouzi(NextPlayerId, id, score))
                 GameUIPanel.Instance.UpdateScoreUI(NextPlayerId);
             if (playerNodeQueueManager.CheckIsGameOver())
@@ -154,41 +161,59 @@ namespace GamePlay.Core
         /// 获得新的底牌骰子
         /// </summary>
         /// <param name="playerId"></param>
-        public void SetNewHoleCard(int playerId)
+        private void SetNewHoleCard(int playerId)
         {
             holeCardManagers[playerId].SetHoleCard();
         }
 
 
         #region 阶段（stage，两次加注之间的整个阶段）
-        
 
         /// <summary>
-        /// 进行跟注加注弃牌抉择阶段
+        /// 让当前玩家尝试进行跟注加注弃牌抉择阶段，如果加注数大于等于最大玩家数时返回false，不然返回true
         /// </summary>
         /// <param name="canFold">是否可以弃牌，第一回合不能弃牌</param>
-        private void EnterRaiseStage(bool canFold = true)
+        /// <returns></returns>
+        private bool TryEnterRaiseStage(bool canFold)
         {
-            JackpotManager.Instance.EnterRaise(canFold);
+            return _jackpotManager.TryEnterRaise(canFold);
         }
 
         /// <summary>
-        /// 玩家跟注
+        /// 跟注或加注
         /// </summary>
-        public void Call() => JackpotManager.Instance.Call(curPlayerId);
+        /// <param name="isRaise"></param>
+        public void Call(bool isRaise)
+        {
+            _jackpotManager.Call(curPlayerId, isRaise);
+            NextToPlayerId();
+            if (TryEnterRaiseStage(true)) return;
+            //如果所有玩家下注完毕
+            _stageManager.NewStage();
+            GameUIPanel.Instance.HideRaisePanel();
+        }
 
-        /// <summary>
-        /// 玩家加注
-        /// </summary>
-        public void Raise() => JackpotManager.Instance.Raise(curPlayerId);
 
         /// <summary>
         /// 玩家弃牌
         /// </summary>
         public void Fold()
         {
+            OverOneHand();
         }
-       
+
+        /// <summary>
+        /// 显示黑屏，本地多人游戏切换玩家专用
+        /// </summary>
+        public void ShowBlankScreen()
+        {
+            _stageManager.ShowBlankScreen();
+        }
+        
+        public void HideBlankScreen()
+        {
+            _stageManager.HideBlankScreen();
+        }
 
         #endregion
 
@@ -201,16 +226,15 @@ namespace GamePlay.Core
         /// <param name="isWinerWaiver">是否胜者弃权</param>
         public void OverOneHand(bool isSpecial = false, bool isWinerWaiver = false)
         {
-            int sumScore0 = GameManager.Instance.NodeQueueManagers[0].SumScore;
-            int sumScore1 = GameManager.Instance.NodeQueueManagers[1].SumScore;
+            int sumScore0 = NodeQueueManagers[0].SumScore;
+            int sumScore1 = NodeQueueManagers[1].SumScore;
 
-            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
+            _jackpotManager.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
             StageManager.SetStage(GameStage.Calculation);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
             }
-            // JackpotManager.Instance.NewHand();
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
@@ -220,13 +244,12 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
-
-            GameUIPanel.Instance.UpdateScoreUI(0);
-            GameUIPanel.Instance.UpdateScoreUI(1); //重新计算分数（清空分数
-            StageManager.Instance.NewHand();
-            JackpotManager.Instance.NewHand(StageManager.Instance.Hand); //奖池清零（奖池结算在
+            _stageManager.NewHand();
+            _jackpotManager.NewHand();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
+            GameUIPanel.Instance.UpdateScoreUI(0);
+            GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
         #endregion
@@ -260,7 +283,7 @@ namespace GamePlay.Core
         private void Test1()
         {
             // AddTouzi(curPlayerId, t2, t3);
-            GameUIPanel.Instance.UpdataHint("你好0");
+            GameUIPanel.Instance.UpdateHint("你好0");
         }
 
         [ContextMenu("clear")]

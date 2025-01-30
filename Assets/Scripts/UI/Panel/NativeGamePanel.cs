@@ -7,23 +7,26 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2025, Basya
 // // ********************************************************************************************
 
+using System;
+using GamePlay.Core;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI.Panel
 {
-    public class NativeGamePanel: BasePanel<NativeGamePanel>
+    public class NativeGamePanel : BasePanel<NativeGamePanel>
     {
         public override void Init()
         {
             base.Init();
             GetControl<Button>("btn1").onClick.AddListener(() =>
             {
-                Debug.Log("开始本地单人游戏");  //TODO：跳转游戏界面VS单人AI
+                Debug.Log("开始本地单人游戏"); //TODO：跳转游戏界面VS单人AI
             });
             GetControl<Button>("btn2").onClick.AddListener(() =>
             {
-                Debug.Log("开始本地多人游戏");  //TODO：跳转游戏界面本地多人的逻辑
+                GameManager.Instance.StartGame(Random.Range(int.MinValue, int.MaxValue));
             });
             GetControl<Button>("btn3").onClick.AddListener(HideMe);
         }
