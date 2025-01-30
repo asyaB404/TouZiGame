@@ -54,7 +54,7 @@ public class JackpotManager
     public int SumJackpotNub => _jackpotNub0 + _jackpotNub1 + _extraJackpot;
     public static JackpotManager Instance => _instance ??= new JackpotManager();
     private static JackpotManager _instance;
-    private int _firstRaisePlayerId;
+    private int _raiseCount; //记录当前加注次数,当加注数量大于等于玩家数时结束加注跟注阶段
 
     public void NewGame()
     {
@@ -64,10 +64,14 @@ public class JackpotManager
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
     }
 
-    public void EnterRaise(bool canFold = true, int firstRaisePlayerId = -1)
+    public bool TryEnterRaise(bool canFold)
     {
-        if (firstRaisePlayerId != -1)
-            this._firstRaisePlayerId = firstRaisePlayerId;
+        if (_raiseCount >= MyGlobal.MAX_PLAYER_COUNT)
+        {
+            _raiseCount = 0;
+            return false;
+        }
+
         StageManager.SetStage(GameStage.Raise);
         switch (GameManager.GameMode)
         {
@@ -83,11 +87,12 @@ public class JackpotManager
         GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
             haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
             needJackpot: AnteNub, canFold: canFold);
+        _raiseCount++;
+        return true;
     }
 
-    public void NewHand(int nowhand)
+    public void NewHand()
     {
-        AnteNub = nowhand + 1;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
@@ -121,12 +126,17 @@ public class JackpotManager
 
         var text1 = $"你一共获得了：{score0}分";
         var text2 = $"对手一共获得了：{score1}分";
-        // StageManager.SetStage(GameStage.Calculation);
         GameUIPanel.Instance.ShowOverPanel(title, text1, text2); //todo添加关于赢了多少筹码的描述
     }
 
-    public void Call(int callPlayerId)
+    /// <summary>
+    /// 加注或跟注
+    /// </summary>
+    /// <param name="callPlayerId"></param>
+    /// <param name="isRaise">是否加注</param>
+    public void Call(int callPlayerId, bool isRaise)
     {
+        if (isRaise) AnteNub += 1;
         int nub;
         if (callPlayerId == 0)
         {
@@ -140,25 +150,6 @@ public class JackpotManager
             _jackpotNub1 += nub;
             JackpotP2 -= nub;
         }
-
         GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
-    }
-
-    public void Raise(int callPlayerId)
-    {
-        AnteNub += 1;
-        Call(callPlayerId);
-    }
-
-    /// <summary>
-    /// 一名玩家加注后另一名玩家进行加注（两人都加过就不用加了
-    /// </summary>
-    /// <param name="isFirstRaise">是否是第一次加注（不能弃牌）</param>
-    /// <returns></returns>
-    public void SetRaiseButtons(bool isFirstRaise)
-    {
-        GameUIPanel.Instance.SetRaiseButtons(GameManager.CurPlayerId == 0,
-            GameManager.CurPlayerId == 0 ? JackpotManager.Instance.JackpotP1 : JackpotManager.Instance.JackpotP2,
-            JackpotManager.Instance.AnteNub, !isFirstRaise);
     }
 }
