@@ -47,6 +47,8 @@ namespace GamePlay.Core
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
         [SerializeField] private HoleCardManager[] holeCardManagers;
         public IReadOnlyList<HoleCardManager> HoleCardManagers => holeCardManagers;
+        private readonly JackpotManager _jackpotManager = new();
+        private readonly StageManager _stageManager = new();
 
         #endregion
 
@@ -74,7 +76,7 @@ namespace GamePlay.Core
                 nodeQueueManager.Reset();
             }
 
-            StageManager.Instance.Reset();
+            _stageManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
@@ -86,8 +88,8 @@ namespace GamePlay.Core
             gameObject.SetActive(true);
             GameUIPanel.Instance.ShowMe();
             Random.InitState(seed);
-            JackpotManager.Instance.NewGame();
-            StageManager.Instance.NewGame();
+            _jackpotManager.NewGame();
+            _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
         }
@@ -108,7 +110,7 @@ namespace GamePlay.Core
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
             NextToPlayerId();
-            if (StageManager.Instance.TryNextRound())
+            if (_stageManager.TryNextRound())
             {
                 TryEnterRaiseStage(true);
             }
@@ -168,13 +170,13 @@ namespace GamePlay.Core
         #region 阶段（stage，两次加注之间的整个阶段）
 
         /// <summary>
-        /// 尝试进行跟注加注弃牌抉择阶段，如果加注数大于等于最大玩家数时返回false，不然返回true
+        /// 让当前玩家尝试进行跟注加注弃牌抉择阶段，如果加注数大于等于最大玩家数时返回false，不然返回true
         /// </summary>
         /// <param name="canFold">是否可以弃牌，第一回合不能弃牌</param>
         /// <returns></returns>
         private bool TryEnterRaiseStage(bool canFold)
         {
-            return JackpotManager.Instance.TryEnterRaise(canFold);
+            return _jackpotManager.TryEnterRaise(canFold);
         }
 
         /// <summary>
@@ -183,9 +185,12 @@ namespace GamePlay.Core
         /// <param name="isRaise"></param>
         public void Call(bool isRaise)
         {
-            JackpotManager.Instance.Call(curPlayerId, isRaise);
+            _jackpotManager.Call(curPlayerId, isRaise);
             NextToPlayerId();
-            TryEnterRaiseStage(true);
+            if (TryEnterRaiseStage(true)) return;
+            //如果所有玩家下注完毕
+            _stageManager.NewStage();
+            GameUIPanel.Instance.HideRaisePanel();
         }
 
 
@@ -194,6 +199,20 @@ namespace GamePlay.Core
         /// </summary>
         public void Fold()
         {
+            OverOneHand();
+        }
+
+        /// <summary>
+        /// 显示黑屏，本地多人游戏切换玩家专用
+        /// </summary>
+        public void ShowBlankScreen()
+        {
+            _stageManager.ShowBlankScreen();
+        }
+        
+        public void HideBlankScreen()
+        {
+            _stageManager.HideBlankScreen();
         }
 
         #endregion
@@ -210,7 +229,7 @@ namespace GamePlay.Core
             int sumScore0 = NodeQueueManagers[0].SumScore;
             int sumScore1 = NodeQueueManagers[1].SumScore;
 
-            JackpotManager.Instance.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
+            _jackpotManager.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
             StageManager.SetStage(GameStage.Calculation);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
@@ -225,9 +244,8 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
-
-            StageManager.Instance.NewHand();
-            JackpotManager.Instance.NewHand();
+            _stageManager.NewHand();
+            _jackpotManager.NewHand();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
             GameUIPanel.Instance.UpdateScoreUI(0);

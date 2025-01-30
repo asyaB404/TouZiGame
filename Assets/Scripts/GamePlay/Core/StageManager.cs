@@ -17,12 +17,6 @@ namespace GamePlay.Core
 
     public class StageManager
     {
-        public static StageManager Instance
-        {
-            get { return _instance ??= new StageManager(); }
-        }
-
-        private static StageManager _instance;
         public int Hand { get; private set; } = -1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
@@ -46,22 +40,24 @@ namespace GamePlay.Core
 
         public void NewHand()
         {
+            SetStage(GameStage.Place);
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
-            // JackpotManager.Instance.EnterRaise(1 ^ FirstPlayerId, false);
             Hand++;
             Round = 0;
             Stage = 0;
             UpdateUI();
         }
 
+        /// <summary>
+        /// 所有玩家下注完毕，进行新的阶段
+        /// </summary>
         public void NewStage()
         {
+            SetStage(GameStage.Place);
             if (GameManager.GameMode == GameMode.Native)
             {
                 ShowBlankScreen();
             }
-
-            SetStage(GameStage.Place);
             Round = 0;
             UpdateUI();
         }

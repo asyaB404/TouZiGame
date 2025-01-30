@@ -104,7 +104,7 @@ namespace UI.Panel
         {
             GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
             HintManager.Instance.SetHint1("");
-            StageManager.Instance.HideBlankScreen();
+            GameManager.Instance.HideBlankScreen();
         }
 
         #endregion
@@ -163,7 +163,7 @@ namespace UI.Panel
         /// <param name="haveJackpot">拥有的筹码</param>
         /// <param name="needJackpot">需要的筹码</param>
         /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
-        public void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
+        private void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
         {
             raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
 
@@ -227,14 +227,13 @@ namespace UI.Panel
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
-            HideRaisePanel();
             GameManager.Instance.Fold();
+            HideRaisePanel();
         }
 
         public void UpdateHint(string str)
         {
             GetControl<TextMeshProUGUI>("HintText").text = str;
-            Debug.Log(GetControl<TextMeshProUGUI>("HintText"));
         }
 
         #endregion

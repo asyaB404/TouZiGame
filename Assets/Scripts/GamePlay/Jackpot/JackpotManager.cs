@@ -52,8 +52,6 @@ public class JackpotManager
     private int _extraJackpot; //上一局留下的筹码
 
     public int SumJackpotNub => _jackpotNub0 + _jackpotNub1 + _extraJackpot;
-    public static JackpotManager Instance => _instance ??= new JackpotManager();
-    private static JackpotManager _instance;
     private int _raiseCount; //记录当前加注次数,当加注数量大于等于玩家数时结束加注跟注阶段
 
     public void NewGame()
@@ -66,6 +64,7 @@ public class JackpotManager
 
     public bool TryEnterRaise(bool canFold)
     {
+        _raiseCount++;
         if (_raiseCount >= MyGlobal.MAX_PLAYER_COUNT)
         {
             _raiseCount = 0;
@@ -76,7 +75,7 @@ public class JackpotManager
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
-                StageManager.Instance.ShowBlankScreen();
+                GameManager.Instance.ShowBlankScreen();
                 break;
             case GameMode.Online:
                 break;
@@ -87,7 +86,6 @@ public class JackpotManager
         GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
             haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
             needJackpot: AnteNub, canFold: canFold);
-        _raiseCount++;
         return true;
     }
 
