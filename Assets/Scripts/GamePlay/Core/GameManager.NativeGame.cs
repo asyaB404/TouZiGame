@@ -23,7 +23,8 @@ namespace GamePlay.Core
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
-            TryEnterRaiseStage();
+            _jackpotManager.EnterRaise();
+            
         }
 
         /// <summary>

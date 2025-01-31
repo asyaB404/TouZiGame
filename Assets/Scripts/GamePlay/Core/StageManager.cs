@@ -17,7 +17,7 @@ namespace GamePlay.Core
 
     public class StageManager
     {
-        public int Hand { get; private set; } = 0; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public static int Hand { get; private set; } = 0; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Stage { get; private set; } = 1; //阶段数（决定是否加注的时候为一个阶段
         public static int Turn { get; private set; } = 1;

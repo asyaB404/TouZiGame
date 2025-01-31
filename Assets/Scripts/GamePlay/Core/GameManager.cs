@@ -39,8 +39,7 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")]
-        [SerializeField]
+        [FormerlySerializedAs("touzi")] [SerializeField]
         private Sprite[] touziSprites;
 
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
@@ -83,7 +82,6 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
-        
 
         /// <summary>
         /// 更新玩家ID
@@ -115,7 +113,11 @@ namespace GamePlay.Core
                     //TODO:虽然概率很小，两边分数相同。。？
                 }
 
-                TryEnterRaiseStage(); //让当前玩家进入加注阶段
+                //让当前玩家进入加注阶段
+                if (_jackpotManager.CheckIfCanRaise())
+                {
+                    _jackpotManager.EnterRaise();
+                }
             }
             else
             {
@@ -182,28 +184,24 @@ namespace GamePlay.Core
         #region 阶段（stage，两次加注之间的整个阶段）
 
         /// <summary>
-        /// 让当前玩家尝试进行跟注加注弃牌抉择阶段，如果加注数大于等于最大玩家数时返回false，不然返回true
-        /// </summary>
-        /// <returns></returns>
-        private bool TryEnterRaiseStage()
-        {
-            bool canFold=StageManager.Stage == 0;
-            return _jackpotManager.TryEnterRaise(canFold);
-        }
-
-        /// <summary>
         /// 跟注或加注
         /// </summary>
         /// <param name="isRaise"></param>
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
-            if (curPlayerId != StageManager.FirstPlayerId || StageManager.Turn == 1)
+            if (_jackpotManager.CheckIfCanRaise())
+            {
                 NextToPlayerId();
-            if (TryEnterRaiseStage()) return;
-            //如果所有玩家下注完毕
-            _stageManager.NewStage();
-            GameUIPanel.Instance.HideRaisePanel();
+                _jackpotManager.EnterRaise();
+            }
+            else
+            {
+                _stageManager.NewStage();
+                if (curPlayerId == StageManager.FirstPlayerId) return;
+                NextToPlayerId();
+                if (GameMode == GameMode.Native) ShowBlankScreen();
+            }
         }
 
 
@@ -258,7 +256,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)][SerializeField] private int t1 = 0;
+        [Space(10)] [SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 

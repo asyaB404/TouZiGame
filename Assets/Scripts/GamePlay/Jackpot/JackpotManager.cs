@@ -62,15 +62,20 @@ public class JackpotManager
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
     }
 
-    public bool TryEnterRaise(bool canFold)
+    public bool CheckIfCanRaise()
     {
-        _raiseCount++;
-        if (_raiseCount > MyGlobal.MAX_PLAYER_COUNT)
+        if (_raiseCount >= MyGlobal.MAX_PLAYER_COUNT)
         {
             _raiseCount = 0;
+            GameUIPanel.Instance.HideRaisePanel();
             return false;
         }
+        return true;
+    }
 
+    public void EnterRaise()
+    {
+        _raiseCount++;
         StageManager.SetStage(GameStage.Raise);
         switch (GameManager.GameMode)
         {
@@ -85,15 +90,14 @@ public class JackpotManager
 
         GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
             haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
-            needJackpot: AnteNub, canFold: canFold);
-        return true;
+            needJackpot: AnteNub, canFold: StageManager.Turn > 1);
     }
 
     public void NewHand()
     {
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
-        AnteNub += StageManager.Stage;
+        AnteNub += StageManager.Hand;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetHint1("FirstRaise");
     }
@@ -149,6 +153,7 @@ public class JackpotManager
             _jackpotNub1 += nub;
             JackpotP2 -= nub;
         }
+
         GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
     }
 }
