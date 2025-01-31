@@ -16,15 +16,15 @@ namespace GamePlay.Core
     {
         public void StartNativeGame(int seed)
         {
+            GameMode = GameMode.Native;
             gameObject.SetActive(true);
-            GameUIPanel.Instance.ShowMe();
             Random.InitState(seed);
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
             _jackpotManager.EnterRaise();
-            
+            GameUIPanel.Instance.ShowMe();
         }
 
         /// <summary>
