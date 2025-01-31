@@ -17,10 +17,10 @@ namespace GamePlay.Core
 
     public class StageManager
     {
-        public int Hand { get; private set; } = -1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public int Hand { get; private set; } = 0; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
-        public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
-        public static int Round { get; private set; } = 0; 
+        public static int Stage { get; private set; } = 1; //阶段数（决定是否加注的时候为一个阶段
+        public static int Turn { get; private set; } = 1;
         public static int FirstPlayerId { get; private set; } = -1; //当前回合先手玩家
 
         public static GameStage CurGameStage { get; private set; }
@@ -43,7 +43,7 @@ namespace GamePlay.Core
             SetStage(GameStage.Place);
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
             Hand++;
-            Round = 0;
+            Turn = 0;
             Stage = 0;
             UpdateUI();
         }
@@ -59,7 +59,7 @@ namespace GamePlay.Core
                 ShowBlankScreen();
             }
 
-            Round = 0;
+            Turn = 0;
             UpdateUI();
         }
 
@@ -68,21 +68,17 @@ namespace GamePlay.Core
         /// </summary>
         public bool TryNextRound()
         {
-            if (GameManager.CurPlayerId == FirstPlayerId) //一个来回之后才加
+            Turn++;
+            if (Turn >= MyGlobal.A_STAGE_ROUND - 2)
             {
-                Round++;
-                if (Round == MyGlobal.A_STAGE_ROUND)
-                {
-                    HintManager.Instance.SetHint1("EndPlace");
-                }
-
-                if (Round >= MyGlobal.A_STAGE_ROUND)
-                {
-                    Stage++;
-                    return true;
-                }
+                HintManager.Instance.SetHint1("EndPlace");
             }
 
+            if (Turn >= MyGlobal.A_STAGE_ROUND)
+            {
+                Stage++;
+                return true;
+            }
             UpdateUI();
             return false;
         }
@@ -104,7 +100,7 @@ namespace GamePlay.Core
             GameManager.Instance.HoleCardManagers[1].ShowShader();
             GameUIPanel.Instance.ShowSwitchoverButton(str, isRaise);
             HintManager.Instance.SetHint1("BlankScreen");
-            Debug.Log("打开黑幕");
+            // Debug.Log("打开黑幕");
         }
 
         public void HideBlankScreen()
@@ -119,14 +115,14 @@ namespace GamePlay.Core
 
         private void UpdateUI()
         {
-            GameUIPanel.Instance.UpdateStageUI(handNub: Hand + 1, roundNub: Round + 1, stageNub: Stage + 1);
+            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: Turn, stageNub: Stage);
         }
 
         public void Reset()
         {
             Hand = 0;
             Stage = 0;
-            Round = 0;
+            Turn = 0;
             CurGameStage = GameStage.Idle;
             UpdateUI();
         }
