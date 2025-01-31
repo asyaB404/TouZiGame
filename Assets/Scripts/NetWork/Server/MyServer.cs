@@ -39,7 +39,7 @@ namespace NetWork.Server
         public void StartGame()
         {
             GameManager.GameMode = GameMode.Online;
-            GameManager.Instance.StartNativeGame(Seed.Value);
+            GameManager.Instance.StartOnlineGame();
             MyClient.Instance.StartGameResponse();
         }
 
@@ -55,6 +55,7 @@ namespace NetWork.Server
             if (IsServerStarted)
             {
                 Seed.Value = Random.Range(int.MinValue, int.MaxValue);
+                GameManager.Instance.InitForOnline();
             }
             else
             {

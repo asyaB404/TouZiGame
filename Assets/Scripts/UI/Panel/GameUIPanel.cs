@@ -28,6 +28,19 @@ namespace UI.Panel
             GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
             SetButtonClick();
             SetConfirmButton();
+            GetControl<Button>("GetReady").onClick.AddListener(() =>
+            {
+                isReady = !isReady;
+                GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
+            });
+        }
+
+        [SerializeField] private bool isReady;
+
+        public override void ShowAnim()
+        {
+            base.ShowAnim();
+            GetControl<Button>("GetReady").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
         }
 
         public void UpdateScoreUI(int playerId)
