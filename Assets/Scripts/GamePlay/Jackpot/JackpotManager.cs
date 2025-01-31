@@ -1,6 +1,11 @@
 using System;
+using System.Diagnostics;
 using GamePlay.Core;
 using UI.Panel;
+
+
+using UnityEngine;
+
 
 /// <summary>
 /// 奖池管理
@@ -54,6 +59,13 @@ public class JackpotManager
     public int SumJackpotNub => _jackpotNub0 + _jackpotNub1 + _extraJackpot;
     private int _raiseCount; //记录当前加注次数,当加注数量大于等于玩家数时结束加注跟注阶段
 
+    /// <summary>
+    /// 是否为赢家弃权
+    /// </summary>
+    /// <returns></returns>
+    public bool IsloseRaise(){
+        return _raiseCount ==1;
+    }
     public void NewGame()
     {
         AnteNub = 1;
@@ -65,6 +77,7 @@ public class JackpotManager
     public bool TryEnterRaise(bool canFold)
     {
         _raiseCount++;
+        UnityEngine.Debug.Log($"加注次数：{_raiseCount}");
         if (_raiseCount > MyGlobal.MAX_PLAYER_COUNT)
         {
             _raiseCount = 0;
@@ -93,6 +106,7 @@ public class JackpotManager
     {
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
+        _raiseCount=0;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetHint1("FirstRaise");
     }

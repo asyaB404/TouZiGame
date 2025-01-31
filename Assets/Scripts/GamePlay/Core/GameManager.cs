@@ -198,7 +198,7 @@ namespace GamePlay.Core
         /// <returns></returns>
         private bool TryEnterRaiseStage()
         {
-            bool canFold=StageManager.Stage == 0;
+            bool canFold=StageManager.Stage != 1;
             return _jackpotManager.TryEnterRaise(canFold);
         }
 
@@ -247,9 +247,9 @@ namespace GamePlay.Core
         /// 结束一轮Hand，结算奖池
         /// </summary>
         /// <param name="isSpecial">是否特殊方式结束</param>
-        /// <param name="isWinerWaiver">是否胜者弃权</param>
-        public void OverOneHand(bool isSpecial = false, bool isWinerWaiver = false)
+        public void OverOneHand(bool isSpecial = false)
         {
+            bool isWinerWaiver=_jackpotManager.IsloseRaise();
             int sumScore0 = NodeQueueManagers[0].SumScore;
             int sumScore1 = NodeQueueManagers[1].SumScore;
 
@@ -275,6 +275,8 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            if(curPlayerId!=StageManager.FirstPlayerId)NextToPlayerId();
+            TryEnterRaiseStage();
         }
 
         #endregion

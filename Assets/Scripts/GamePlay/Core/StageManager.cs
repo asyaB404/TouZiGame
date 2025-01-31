@@ -43,8 +43,8 @@ namespace GamePlay.Core
             SetStage(GameStage.Place);
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
             Hand++;
-            Turn = 0;
-            Stage = 0;
+            Turn = 1;
+            Stage = 1;
             UpdateUI();
         }
 
@@ -59,7 +59,7 @@ namespace GamePlay.Core
                 ShowBlankScreen();
             }
 
-            Turn = 0;
+            Turn = 1;
             UpdateUI();
         }
 
@@ -74,7 +74,7 @@ namespace GamePlay.Core
                 HintManager.Instance.SetHint1("EndPlace");
             }
 
-            if (Turn >= MyGlobal.A_STAGE_ROUND)
+            if (Turn > MyGlobal.A_STAGE_ROUND)
             {
                 Stage++;
                 return true;
@@ -115,14 +115,14 @@ namespace GamePlay.Core
 
         private void UpdateUI()
         {
-            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: Turn, stageNub: Stage);
+            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: (int)(Turn+1)/2, stageNub: Stage);
         }
 
         public void Reset()
         {
-            Hand = 0;
-            Stage = 0;
-            Turn = 0;
+            Hand = 1;
+            Stage = 1;
+            Turn = 1;
             CurGameStage = GameStage.Idle;
             UpdateUI();
         }
