@@ -12,4 +12,8 @@ public class MenuPanel : BasePanel<MenuPanel>
             GetControl<Button>("exit").onClick.AddListener(() => {  });
             GetControl<Button>("return").onClick.AddListener(() => {HideMe();});
         }
+    public override void CallBackWhenHeadPush(IBasePanel oldPanel)
+    {
+       ShowAnim();
+    }
 }
