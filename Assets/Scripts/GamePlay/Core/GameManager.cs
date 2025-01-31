@@ -8,6 +8,7 @@
 // // ********************************************************************************************
 
 
+using System;
 using System.Collections.Generic;
 using GamePlay.Node;
 using UI.Panel;
@@ -17,7 +18,7 @@ using Random = UnityEngine.Random;
 
 namespace GamePlay.Core
 {
-    public partial class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         #region 字段以及属性
 
@@ -38,7 +39,8 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")] [SerializeField]
+        [FormerlySerializedAs("touzi")]
+        [SerializeField]
         private Sprite[] touziSprites;
 
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
@@ -81,7 +83,18 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
-        
+
+        public void StartNativeGame(int seed)
+        {
+            gameObject.SetActive(true);
+            GameUIPanel.Instance.ShowMe();
+            Random.InitState(seed);
+            _jackpotManager.NewGame();
+            _stageManager.NewGame();
+            holeCardManagers[0].ResetAllHoleCards();
+            holeCardManagers[1].ResetAllHoleCards();
+            TryEnterRaiseStage();
+        }
 
         /// <summary>
         /// 更新玩家ID
@@ -104,14 +117,16 @@ namespace GamePlay.Core
                 int nextPlayerSumScore = nodeQueueManagers[MyTool.GetNextPlayerId(curPlayerId)].SumScore;
                 if (curPlayerSumScore > nextPlayerSumScore)
                 {
+                    Debug.Log(curPlayerId);
                     NextToPlayerId(); //确保是分数较小的一方先加注
+                    Debug.Log(curPlayerId);
                 }
                 else if (curPlayerSumScore == nextPlayerSumScore)
                 {
                     //TODO:虽然概率很小，两边分数相同。。？
                 }
 
-                TryEnterRaiseStage(true); //让当前玩家进入加注阶段
+                TryEnterRaiseStage(); //让当前玩家进入加注阶段
             }
             else
             {
@@ -180,10 +195,10 @@ namespace GamePlay.Core
         /// <summary>
         /// 让当前玩家尝试进行跟注加注弃牌抉择阶段，如果加注数大于等于最大玩家数时返回false，不然返回true
         /// </summary>
-        /// <param name="canFold">是否可以弃牌，第一回合不能弃牌</param>
         /// <returns></returns>
-        private bool TryEnterRaiseStage(bool canFold)
+        private bool TryEnterRaiseStage()
         {
+            bool canFold=StageManager.Stage == 0;
             return _jackpotManager.TryEnterRaise(canFold);
         }
 
@@ -194,9 +209,9 @@ namespace GamePlay.Core
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
-            if (curPlayerId != StageManager.FirstPlayerId || StageManager.Round == 0)
+            if (curPlayerId != StageManager.FirstPlayerId || StageManager.Turn == 1)
                 NextToPlayerId();
-            if (TryEnterRaiseStage(true)) return;
+            if (TryEnterRaiseStage()) return;
             //如果所有玩家下注完毕
             _stageManager.NewStage();
             GameUIPanel.Instance.HideRaisePanel();
@@ -209,6 +224,19 @@ namespace GamePlay.Core
         public void Fold()
         {
             OverOneHand();
+        }
+
+        /// <summary>
+        /// 显示黑屏，本地多人游戏切换玩家专用
+        /// </summary>
+        public void ShowBlankScreen()
+        {
+            _stageManager.ShowBlankScreen();
+        }
+
+        public void HideBlankScreen()
+        {
+            _stageManager.HideBlankScreen();
         }
 
         #endregion
@@ -254,7 +282,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 
