@@ -45,7 +45,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
                 break;
             case GameMode.Online:
-                // if(playerId == 1) return;
+                if(playerId == 1) return;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
