@@ -93,6 +93,7 @@ public class JackpotManager
     {
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
+        AnteNub += StageManager.Stage;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetHint1("FirstRaise");
     }
