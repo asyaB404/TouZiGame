@@ -70,6 +70,7 @@ public class JackpotManager
             GameUIPanel.Instance.HideRaisePanel();
             return false;
         }
+
         return true;
     }
 
@@ -81,16 +82,15 @@ public class JackpotManager
         {
             case GameMode.Native:
                 GameManager.Instance.ShowBlankScreen();
+                GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
+                    haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
+                    needJackpot: AnteNub, canFold: StageManager.Turn > 1);
                 break;
             case GameMode.Online:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-        GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
-            haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
-            needJackpot: AnteNub, canFold: StageManager.Turn > 1);
     }
 
     public void NewHand()
