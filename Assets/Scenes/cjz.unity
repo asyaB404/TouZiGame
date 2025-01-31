@@ -2209,7 +2209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1596878883}
         m_TargetAssemblyTypeName: GamePlay.Core.GameManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: StartNativeGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

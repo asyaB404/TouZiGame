@@ -64,6 +64,7 @@ namespace GamePlay.Core
             {
                 holeCardManagers[i].Init(i);
             }
+
             gameObject.SetActive(false);
         }
 
@@ -81,9 +82,8 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
-        //开始游戏
 
-        public void StartGame(int seed)
+        public void StartNativeGame(int seed)
         {
             gameObject.SetActive(true);
             GameUIPanel.Instance.ShowMe();
@@ -92,6 +92,7 @@ namespace GamePlay.Core
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
+            TryEnterRaiseStage(false);
         }
 
         /// <summary>
@@ -109,10 +110,29 @@ namespace GamePlay.Core
         private void NextTurn()
         {
             SetNewHoleCard(CurPlayerId); //更新骰子，要在更新玩家id前调用
-            NextToPlayerId();
-            if (_stageManager.TryNextRound())
+            if (_stageManager.TryNextRound()) //看看有没有到5个回合
             {
-                TryEnterRaiseStage(true);
+                int curPlayerSumScore = nodeQueueManagers[curPlayerId].SumScore;
+                int nextPlayerSumScore = nodeQueueManagers[MyTool.GetNextPlayerId(curPlayerId)].SumScore;
+                if (curPlayerSumScore > nextPlayerSumScore)
+                {
+                    NextToPlayerId(); //确保是分数较小的一方先加注
+                }
+                else if (curPlayerSumScore == nextPlayerSumScore)
+                {
+                    //TODO:虽然概率很小，两边分数相同。。？
+                }
+
+                TryEnterRaiseStage(true); //让当前玩家进入加注阶段
+            }
+            else
+            {
+                NextToPlayerId();
+            }
+
+            if (GameMode == GameMode.Native)
+            {
+                ShowBlankScreen();
             }
         }
 
@@ -186,7 +206,8 @@ namespace GamePlay.Core
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
-            NextToPlayerId();
+            if (curPlayerId != StageManager.FirstPlayerId || StageManager.Round == 0)
+                NextToPlayerId();
             if (TryEnterRaiseStage(true)) return;
             //如果所有玩家下注完毕
             _stageManager.NewStage();
@@ -209,7 +230,7 @@ namespace GamePlay.Core
         {
             _stageManager.ShowBlankScreen();
         }
-        
+
         public void HideBlankScreen()
         {
             _stageManager.HideBlankScreen();
@@ -244,6 +265,7 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
+
             _stageManager.NewHand();
             _jackpotManager.NewHand();
             holeCardManagers[0].ResetAllHoleCards();
@@ -264,7 +286,7 @@ namespace GamePlay.Core
         [ContextMenu("startGame")]
         private void TestStartGame()
         {
-            StartGame(123);
+            StartNativeGame(123);
         }
 
         [ContextMenu("ReSetGame")]

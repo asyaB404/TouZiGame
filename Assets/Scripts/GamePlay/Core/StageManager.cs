@@ -20,8 +20,8 @@ namespace GamePlay.Core
         public int Hand { get; private set; } = -1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Stage { get; private set; } = 0; //阶段数（决定是否加注的时候为一个阶段
-        public static int Round { get; private set; } = 0; //回合数（敌方放一次我放一次为一个回合//?这个什么时候变成静态的了？
-        public int FirstPlayerId { get; private set; } = -1;//当前回合先手玩家
+        public static int Round { get; private set; } = 0; 
+        public static int FirstPlayerId { get; private set; } = -1; //当前回合先手玩家
 
         public static GameStage CurGameStage { get; private set; }
 
@@ -31,7 +31,7 @@ namespace GamePlay.Core
             HintManager.Instance.SetHint0(stage.ToString());
         }
 
-        
+
         public void NewGame()
         {
             FirstPlayerId = GameManager.CurPlayerId;
@@ -58,23 +58,20 @@ namespace GamePlay.Core
             {
                 ShowBlankScreen();
             }
+
             Round = 0;
             UpdateUI();
         }
 
         /// <summary>
-        /// 尝试进入下一回合，返回是否进入下一回合
+        /// 尝试进入下一Round，返回是否进入下一Round
         /// </summary>
         public bool TryNextRound()
         {
-            if (GameManager.GameMode == GameMode.Native)
-            {
-                ShowBlankScreen();
-            }
             if (GameManager.CurPlayerId == FirstPlayerId) //一个来回之后才加
             {
                 Round++;
-                if (Round == MyGlobal.A_STAGE_ROUND - 1)
+                if (Round == MyGlobal.A_STAGE_ROUND)
                 {
                     HintManager.Instance.SetHint1("EndPlace");
                 }
@@ -85,9 +82,9 @@ namespace GamePlay.Core
                     return true;
                 }
             }
+
             UpdateUI();
             return false;
-
         }
 
         int blankId = -1;
@@ -95,8 +92,7 @@ namespace GamePlay.Core
         public void ShowBlankScreen()
         {
             bool isRaise = CurGameStage == GameStage.Raise;
-            int playerId =  GameManager.CurPlayerId;
-            Debug.Log($"playerId:{playerId},blankId:{blankId}");
+            int playerId = GameManager.CurPlayerId;
             if (blankId == playerId) return;
             blankId = playerId;
             string str;

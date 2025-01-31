@@ -44,7 +44,7 @@ namespace NetWork.Client
             GameManager.GameMode = GameMode.Online;
             GameManager.Instance.NextToPlayerId();
             //让客户端后手
-            GameManager.Instance.StartGame(MyServer.Instance.Seed.Value);
+            GameManager.Instance.StartNativeGame(MyServer.Instance.Seed.Value);
         }
 
         #endregion

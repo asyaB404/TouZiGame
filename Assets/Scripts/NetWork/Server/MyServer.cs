@@ -39,7 +39,7 @@ namespace NetWork.Server
         public void StartGame()
         {
             GameManager.GameMode = GameMode.Online;
-            GameManager.Instance.StartGame(Seed.Value);
+            GameManager.Instance.StartNativeGame(Seed.Value);
             MyClient.Instance.StartGameResponse();
         }
 
