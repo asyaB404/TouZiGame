@@ -26,7 +26,7 @@ namespace UI.Panel
             });
             GetControl<Button>("btn2").onClick.AddListener(() =>
             {
-                GameManager.Instance.StartGame(Random.Range(int.MinValue, int.MaxValue));
+                GameManager.Instance.StartNativeGame(Random.Range(int.MinValue, int.MaxValue));
             });
             GetControl<Button>("btn3").onClick.AddListener(HideMe);
         }

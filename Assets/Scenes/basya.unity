@@ -1869,7 +1869,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1596878883}
         m_TargetAssemblyTypeName: GamePlay.Core.GameManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: StartNativeGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6660,7 +6660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &873980049
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6988,7 +6988,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5862499955322754865, guid: fc0696c669a3bbc41aa714f4284e0aa5, type: 3}
       propertyPath: m_text
-      value: "\u591A\u4EBA\u6E38\u620F"
+      value: "\u7F51\u7EDC\u6E38\u620F"
       objectReference: {fileID: 0}
     - target: {fileID: 5862499955322754865, guid: fc0696c669a3bbc41aa714f4284e0aa5, type: 3}
       propertyPath: m_fontSize
@@ -15492,6 +15492,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1991788532}
     m_Modifications:
+    - target: {fileID: 5862499955322754865, guid: fc0696c669a3bbc41aa714f4284e0aa5, type: 3}
+      propertyPath: m_text
+      value: "\u672C\u5730\u6E38\u620F"
+      objectReference: {fileID: 0}
     - target: {fileID: 7834866883417012880, guid: fc0696c669a3bbc41aa714f4284e0aa5, type: 3}
       propertyPath: m_Name
       value: btn1

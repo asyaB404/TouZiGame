@@ -65,7 +65,7 @@ public class JackpotManager
     public bool TryEnterRaise(bool canFold)
     {
         _raiseCount++;
-        if (_raiseCount >= MyGlobal.MAX_PLAYER_COUNT)
+        if (_raiseCount > MyGlobal.MAX_PLAYER_COUNT)
         {
             _raiseCount = 0;
             return false;

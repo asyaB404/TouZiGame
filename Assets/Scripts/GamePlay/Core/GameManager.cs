@@ -82,9 +82,8 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
 
-        //开始游戏
 
-        public void StartGame(int seed)
+        public void StartNativeGame(int seed)
         {
             gameObject.SetActive(true);
             GameUIPanel.Instance.ShowMe();
@@ -93,6 +92,7 @@ namespace GamePlay.Core
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
+            TryEnterRaiseStage(false);
         }
 
         /// <summary>
@@ -128,6 +128,11 @@ namespace GamePlay.Core
             else
             {
                 NextToPlayerId();
+            }
+
+            if (GameMode == GameMode.Native)
+            {
+                ShowBlankScreen();
             }
         }
 
@@ -201,7 +206,7 @@ namespace GamePlay.Core
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
-            if (curPlayerId != StageManager.FirstPlayerId)
+            if (curPlayerId != StageManager.FirstPlayerId || StageManager.Round == 0)
                 NextToPlayerId();
             if (TryEnterRaiseStage(true)) return;
             //如果所有玩家下注完毕
@@ -281,7 +286,7 @@ namespace GamePlay.Core
         [ContextMenu("startGame")]
         private void TestStartGame()
         {
-            StartGame(123);
+            StartNativeGame(123);
         }
 
         [ContextMenu("ReSetGame")]
