@@ -66,6 +66,12 @@ namespace NetWork.Server
             Seed.Value = Random.Range(int.MinValue, int.MaxValue);
             GameManager.Instance.InitForOnline();
             ServerManager.OnRemoteConnectionState += OnRemoteConnected;
+            _players.Add(LocalConnection);
+            LocalConnection.CustomData = new ConnData
+            {
+                name = LocalConnection.ClientId.ToString(),
+                isReady = false
+            };
         }
 
         public override void OnStopClient()
@@ -83,7 +89,7 @@ namespace NetWork.Server
                     {
                         Debug.LogError("players同步错误");
                     }
-
+                    OnClientLostConnForGetReady();
                     break;
                 case RemoteConnectionState.Started:
                     _players.Add(conn);

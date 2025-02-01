@@ -16,6 +16,7 @@ using FishNet.Object.Synchronizing;
 using GamePlay.Core;
 using NetWork.Client;
 using NetWork.Data;
+using UI.Panel;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -39,12 +40,18 @@ namespace NetWork.Server
             return true;
         }
 
+        private void OnClientLostConnForGetReady()
+        {
+            GameUIPanel.Instance.SetReadySign(1,false);
+        }
+
         [ServerRpc(RequireOwnership = false)]
         public void HandleGetReady(bool isReady, NetworkConnection conn = null)
         {
             if (conn == null) return;
             ConnData customData = (ConnData)ClientManager.Clients[conn.ClientId].CustomData;
             customData.isReady = isReady;
+            MyClient.Instance.GetReadyResponse(isReady,conn);
         }
 
         #region Debug
