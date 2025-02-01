@@ -210,7 +210,17 @@ namespace GamePlay.Core
                 _stageManager.NewStage();
                 if (curPlayerId == StageManager.FirstPlayerId) return;
                 NextToPlayerId();
-                if (GameMode == GameMode.Native) ShowBlankScreen();
+            }
+            switch (GameMode)
+            {
+                case GameMode.Native:
+                    ShowBlankScreen();
+                    break;
+                case GameMode.Online:
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
