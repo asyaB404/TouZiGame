@@ -82,6 +82,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
             gameObject.SetActive(false);
+            GameUIPanel.Instance.HideMe();
         }
 
 
