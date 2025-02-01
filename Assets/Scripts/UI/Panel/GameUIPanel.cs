@@ -8,6 +8,7 @@
 // // ********************************************************************************************
 
 
+using FishNet;
 using GamePlay.Core;
 using NetWork.Client;
 using NetWork.Server;
@@ -19,7 +20,7 @@ using UnityEngine.UI;
 
 namespace UI.Panel
 {
-    public class GameUIPanel : BasePanel<GameUIPanel>
+    public partial class GameUIPanel : BasePanel<GameUIPanel>
     {
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
@@ -29,22 +30,7 @@ namespace UI.Panel
             GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
             SetButtonClick();
             SetConfirmButton();
-
-            #region Online
-
-            GetControl<Button>("GetReady").onClick.AddListener(() =>
-            {
-                isReady = !isReady;
-                GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
-                MyClient.Instance.GetReadyRequest(isReady);
-            });
-            
-            GetControl<Button>("StartOnlineGame").onClick.AddListener(() =>
-            {
-                MyServer.Instance.StartGame();
-            });
-
-            #endregion
+            AwakeForOnline();
         }
 
         [SerializeField] private bool isReady;
@@ -52,15 +38,7 @@ namespace UI.Panel
         public override void ShowAnim()
         {
             base.ShowAnim();
-
-            #region Online
-            
-            GetControl<Button>("StartOnlineGame").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
-            GetControl<Button>("GetReady").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
-            isReady = false;
-            GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
-
-            #endregion
+            ShowForOnline();
         }
 
         public void UpdateScoreUI(int playerId)
