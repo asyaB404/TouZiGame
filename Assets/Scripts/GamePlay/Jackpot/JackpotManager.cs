@@ -74,6 +74,10 @@ public class JackpotManager
         return true;
     }
 
+    /// <summary>
+    /// 让当前玩家进入下注阶段，经过两次Call后，调用NewStage进入Place阶段
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void EnterRaise()
     {
         _raiseCount++;
@@ -102,6 +106,7 @@ public class JackpotManager
 
     public void NewHand()
     {
+        _raiseCount = 0;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
         AnteNub += StageManager.Hand;

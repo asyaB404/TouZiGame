@@ -211,6 +211,7 @@ namespace GamePlay.Core
                 if (curPlayerId == StageManager.FirstPlayerId) return;
                 NextToPlayerId();
             }
+
             switch (GameMode)
             {
                 case GameMode.Native:
@@ -269,6 +270,7 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            _jackpotManager.EnterRaise();
         }
 
         #endregion

@@ -40,7 +40,6 @@ namespace GamePlay.Core
 
         public void NewHand()
         {
-            SetStage(GameStage.Place);
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
             Hand++;
             Turn = 0;
