@@ -41,10 +41,12 @@ namespace UI.Panel
             base.ShowAnim();
             ShowForOnline();
         }
+
         public override void OnPressedEsc()
         {
             MenuPanel.Instance.ShowMe();
         }
+
         public void UpdateScoreUI(int playerId)
         {
             var texts = playerId == 0 ? p1ScoreTexts : p2ScoreTexts;
@@ -56,6 +58,12 @@ namespace UI.Panel
                 texts[i].text = nodeQueue.SumScore.ToString();
                 i++;
             }
+        }
+
+        public override void CallBackWhenHeadPop(IBasePanel popPanel)
+        {
+            popPanel?.HideAnim();
+            if (popPanel is not MenuPanel) ShowAnim();
         }
 
         [FormerlySerializedAs("HandOverPanel")] [SerializeField]
@@ -251,7 +259,6 @@ namespace UI.Panel
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            
             switch (GameManager.GameMode)
             {
                 case GameMode.Native:
@@ -280,6 +287,7 @@ namespace UI.Panel
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             HideRaisePanel();
         }
 
@@ -289,7 +297,6 @@ namespace UI.Panel
         }
 
         #endregion
-
 
         #region debug
 
