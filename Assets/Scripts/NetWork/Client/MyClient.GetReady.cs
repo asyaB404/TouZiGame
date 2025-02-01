@@ -13,9 +13,9 @@ namespace NetWork.Client
 {
     public partial class MyClient
     {
-        public void GetReadyRequest()
+        public void GetReadyRequest(bool isReady)
         {
-            MyServer.Instance.HandleGetReady();
+            MyServer.Instance.HandleGetReady(isReady);
         }
 
         [ObserversRpc]

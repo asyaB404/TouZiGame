@@ -41,6 +41,8 @@ namespace UI.Panel
         {
             base.ShowAnim();
             GetControl<Button>("GetReady").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
+            isReady = false;
+            GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
         }
 
         public void UpdateScoreUI(int playerId)

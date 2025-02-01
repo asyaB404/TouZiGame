@@ -15,6 +15,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using GamePlay.Core;
 using NetWork.Client;
+using NetWork.Data;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -25,17 +26,39 @@ namespace NetWork.Server
     /// </summary>
     public partial class MyServer
     {
-        [AllowMutableSyncType] public SyncList<bool> isReady = new(new List<bool>(MyGlobal.MAX_PLAYER_COUNT));
-
-        [ServerRpc(RequireOwnership = false)]
-        public void HandleGetReady(NetworkConnection conn = null)
+        [Server]
+        public bool CheckIsAllReady()
         {
+            foreach (var kv in ClientManager.Clients)
+            {
+                var connection = kv.Value;
+                ConnData data = connection.CustomData as ConnData;
+                if (data == null || !data.isReady) return false;
+            }
+
+            return true;
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void SyncReadyStatus()
+        public void HandleGetReady(bool isReady, NetworkConnection conn = null)
         {
-            isReady.DirtyAll();
+            if (conn == null) return;
+            ConnData customData = (ConnData)ClientManager.Clients[conn.ClientId].CustomData;
+            customData.isReady = isReady;
         }
+
+        #region Debug
+    
+        [ContextMenu("readyTest")]
+        public void ReadyTest()
+        {
+            foreach (var kv in ClientManager.Clients)
+            {
+                var connection = kv.Value;
+                ConnData data = connection.CustomData as ConnData;
+                Debug.Log(data.ToString());
+            }
+        }
+        #endregion
     }
 }
