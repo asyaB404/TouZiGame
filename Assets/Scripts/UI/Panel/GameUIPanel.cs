@@ -39,7 +39,10 @@ namespace UI.Panel
             base.ShowAnim();
             ShowForOnline();
         }
-
+        public override void OnPressedEsc()
+        {
+            MenuPanel.Instance.ShowMe();
+        }
         public void UpdateScoreUI(int playerId)
         {
             var texts = playerId == 0 ? p1ScoreTexts : p2ScoreTexts;
