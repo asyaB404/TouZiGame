@@ -67,6 +67,12 @@ namespace NetWork
             var flag = InstanceFinder.ClientManager.StartConnection(address, port);
             return flag;
         }
+        
+        public static bool JoinServer()
+        {
+            var flag = InstanceFinder.ClientManager.StartConnection();
+            return flag;
+        }
 
         public static bool CreateServer(string roomName, ushort port)
         {

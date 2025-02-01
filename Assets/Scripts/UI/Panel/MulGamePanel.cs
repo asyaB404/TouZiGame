@@ -33,6 +33,7 @@ namespace UI.Panel
             string portText = port.text;
             if (string.IsNullOrEmpty(portText)) return;
             NetWorkMgr.CreateServer("test", ushort.Parse(portText));
+            NetWorkMgr.JoinServer();
         }
 
         public void JoinRoomBtn()
