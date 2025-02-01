@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using ChatUI;
 using FishNet.CodeGenerating;
 using FishNet.Connection;
 using FishNet.Object;
@@ -42,7 +43,11 @@ namespace NetWork.Server
         [Server]
         public void StartGame()
         {
-            if (!CheckIsAllReady()) return;
+            if (!CheckIsAllReady())
+            {
+                ServerManager.Broadcast(new ChatMessage("系统", "双方玩家未准备完毕"));
+            }
+
             GameManager.GameMode = GameMode.Online;
             GameManager.Instance.StartOnlineGame();
             MyClient.Instance.StartGameResponse();
@@ -64,7 +69,6 @@ namespace NetWork.Server
             }
 
             Seed.Value = Random.Range(int.MinValue, int.MaxValue);
-            GameManager.Instance.InitForOnline();
             ServerManager.OnRemoteConnectionState += OnRemoteConnected;
             _players.Add(LocalConnection);
             LocalConnection.CustomData = new ConnData

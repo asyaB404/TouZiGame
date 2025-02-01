@@ -30,13 +30,13 @@ namespace NetWork.Server
         [Server]
         public bool CheckIsAllReady()
         {
-            foreach (var kv in ClientManager.Clients)
+            if (_players.Count < 2) return false;
+            foreach (var connection in _players)
             {
-                var connection = kv.Value;
                 ConnData data = connection.CustomData as ConnData;
                 if (data == null || !data.isReady) return false;
             }
-
+            
             return true;
         }
 
@@ -49,7 +49,8 @@ namespace NetWork.Server
         public void HandleGetReady(bool isReady, NetworkConnection conn = null)
         {
             if (conn == null) return;
-            ConnData customData = (ConnData)ClientManager.Clients[conn.ClientId].CustomData;
+            int index = _players.IndexOf(conn);
+            ConnData customData = _players[index].CustomData as ConnData;
             customData.isReady = isReady;
             MyClient.Instance.GetReadyResponse(isReady,conn);
         }
@@ -59,9 +60,8 @@ namespace NetWork.Server
         [ContextMenu("readyTest")]
         public void ReadyTest()
         {
-            foreach (var kv in ClientManager.Clients)
+            foreach (var connection in _players)
             {
-                var connection = kv.Value;
                 ConnData data = connection.CustomData as ConnData;
                 Debug.Log(data.ToString());
             }

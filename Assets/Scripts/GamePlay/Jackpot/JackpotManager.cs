@@ -87,6 +87,13 @@ public class JackpotManager
                     needJackpot: AnteNub, canFold: StageManager.Turn > 1);
                 break;
             case GameMode.Online:
+                if (GameManager.CurPlayerId == 0)
+                {
+                    GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
+                        haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
+                        needJackpot: AnteNub, canFold: StageManager.Turn > 1);
+                }
+                GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

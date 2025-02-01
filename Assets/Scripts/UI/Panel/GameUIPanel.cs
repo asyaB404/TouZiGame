@@ -8,7 +8,9 @@
 // // ********************************************************************************************
 
 
+using System;
 using GamePlay.Core;
+using NetWork.Client;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -227,13 +229,34 @@ namespace UI.Panel
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
-            GameManager.Instance.Call(false);
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Call(false);
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.CallRequest(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            GameManager.Instance.Call(true);
+            
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Call(true);
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.CallRequest(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
 

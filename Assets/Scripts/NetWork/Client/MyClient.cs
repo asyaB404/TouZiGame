@@ -27,6 +27,7 @@ namespace NetWork.Client
             if (IsOwner)
             {
                 Instance = this;
+                GameManager.Instance.InitForOnline();
             }
             else
             {
@@ -44,7 +45,7 @@ namespace NetWork.Client
             GameManager.GameMode = GameMode.Online;
             GameManager.Instance.NextToPlayerId();
             //让客户端后手
-            GameManager.Instance.StartNativeGame(MyServer.Instance.Seed.Value);
+            GameManager.Instance.StartOnlineGame();
         }
 
         #endregion
