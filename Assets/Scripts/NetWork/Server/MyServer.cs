@@ -42,6 +42,7 @@ namespace NetWork.Server
         [Server]
         public void StartGame()
         {
+            if (!CheckIsAllReady()) return;
             GameManager.GameMode = GameMode.Online;
             GameManager.Instance.StartOnlineGame();
             MyClient.Instance.StartGameResponse();
