@@ -64,12 +64,18 @@ namespace UI.Panel
         [FormerlySerializedAs("HandOverTexts")] [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
-        public void ShowOverPanel(string title, string score1, string score2)
+        public void ShowHandOverPanel(string title, string score1, string score2)
         {
             handOverPanel.SetActive(true);
             handOverTexts[0].text = title;
             handOverTexts[1].text = score1;
             handOverTexts[2].text = score2;
+            confirmButton.gameObject.SetActive(GameManager.GameMode != GameMode.Online);
+        }
+
+        public void HideHandOverPanel()
+        {
+            handOverPanel.SetActive(false);
         }
 
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
@@ -77,7 +83,7 @@ namespace UI.Panel
         //设置分数确认页面的关闭按钮的监听
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
-            handOverPanel.SetActive(false);
+            HideHandOverPanel();
             GameManager.Instance.NewHand();
         });
 

@@ -136,7 +136,7 @@ public class JackpotManager
 
         var text1 = $"你一共获得了：{score0}分";
         var text2 = $"对手一共获得了：{score1}分";
-        GameUIPanel.Instance.ShowOverPanel(title, text1, text2); //todo添加关于赢了多少筹码的描述
+        GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2); 
     }
 
     /// <summary>
