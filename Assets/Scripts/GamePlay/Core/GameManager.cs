@@ -127,9 +127,16 @@ namespace GamePlay.Core
                 NextToPlayerId();
             }
 
-            if (GameMode == GameMode.Native)
+            switch (GameMode)
             {
-                ShowBlankScreen();
+                case GameMode.Native:
+                    ShowBlankScreen();
+                    break;
+                case GameMode.Online:
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

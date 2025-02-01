@@ -46,6 +46,7 @@ namespace NetWork.Server
             if (!CheckIsAllReady())
             {
                 ServerManager.Broadcast(new ChatMessage("系统", "双方玩家未准备完毕"));
+                return;
             }
 
             GameManager.GameMode = GameMode.Online;

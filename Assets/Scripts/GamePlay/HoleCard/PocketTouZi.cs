@@ -82,6 +82,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 break;
             case GameMode.Online:
                 if (playerId == 1) return;
+                GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
