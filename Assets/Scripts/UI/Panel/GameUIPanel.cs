@@ -27,7 +27,6 @@ namespace UI.Panel
 
         private void Awake()
         {
-            GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
             SetButtonClick();
             SetConfirmButton();
             AwakeForOnline();
