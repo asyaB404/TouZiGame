@@ -8,10 +8,7 @@
 // // ********************************************************************************************
 
 
-using FishNet;
 using GamePlay.Core;
-using NetWork.Client;
-using NetWork.Server;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,11 +22,16 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
 
+        public override void Init()
+        {
+            base.Init();
+            InitForOnline();
+        }
+
         private void Awake()
         {
             SetButtonClick();
             SetConfirmButton();
-            AwakeForOnline();
         }
 
         public override void ShowAnim()

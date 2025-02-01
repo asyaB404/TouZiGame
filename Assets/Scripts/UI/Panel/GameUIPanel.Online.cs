@@ -21,7 +21,7 @@ namespace UI.Panel
     {
         [SerializeField] private GameObject[] readySigns;
 
-        private void AwakeForOnline()
+        private void InitForOnline()
         {
             GetControl<Button>("GetReady").onClick.AddListener(() =>
             {
