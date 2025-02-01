@@ -69,7 +69,7 @@ namespace GamePlay.Core
         }
 
 
-        private void Reset()
+        public void Exit()
         {
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
@@ -78,8 +78,10 @@ namespace GamePlay.Core
             }
 
             _stageManager.Reset();
+            _jackpotManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            gameObject.SetActive(false);
         }
 
 
@@ -250,6 +252,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
         }
+
         #endregion
 
 
@@ -268,7 +271,7 @@ namespace GamePlay.Core
         [ContextMenu("ReSetGame")]
         private void TestResetGame()
         {
-            Reset();
+            Exit();
         }
 
         [ContextMenu("add")]
@@ -287,7 +290,7 @@ namespace GamePlay.Core
         [ContextMenu("clear")]
         private void Test2()
         {
-            Reset();
+            Exit();
         }
 
         #endregion

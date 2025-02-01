@@ -156,4 +156,10 @@ public class JackpotManager
 
         GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
     }
+
+    public void Reset()
+    {
+        _raiseCount = 0;
+        _extraJackpot = 0;
+    }
 }

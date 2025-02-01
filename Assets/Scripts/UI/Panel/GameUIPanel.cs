@@ -32,8 +32,6 @@ namespace UI.Panel
             AwakeForOnline();
         }
 
-        [SerializeField] private bool isReady;
-
         public override void ShowAnim()
         {
             base.ShowAnim();
