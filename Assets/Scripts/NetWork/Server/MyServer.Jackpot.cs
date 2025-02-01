@@ -1,5 +1,5 @@
 // // ********************************************************************************************
-// //     /\_/\                           @file       MyServer.Call.cs
+// //     /\_/\                           @file       MyServer.Jackpot.cs
 // //    ( o.o )                          @brief     Game07
 // //     > ^ <                           @author     Basya
 // //    /     \
@@ -9,7 +9,6 @@
 
 using FishNet.Connection;
 using FishNet.Object;
-using GamePlay.Core;
 using NetWork.Client;
 
 namespace NetWork.Server
@@ -20,6 +19,12 @@ namespace NetWork.Server
         public void HandleCallRequest(bool isRaise, NetworkConnection conn = null)
         {
             MyClient.Instance.CallResponse(isRaise, conn);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void HandleFoldRequest(NetworkConnection conn = null)
+        {
+            MyClient.Instance.FoldResponse(conn);
         }
     }
 }

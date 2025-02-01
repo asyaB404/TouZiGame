@@ -263,7 +263,17 @@ namespace UI.Panel
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
-            GameManager.Instance.Fold();
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Fold();
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.FoldRequest();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             HideRaisePanel();
         }
 

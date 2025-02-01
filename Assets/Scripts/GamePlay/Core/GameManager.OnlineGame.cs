@@ -26,7 +26,7 @@ namespace GamePlay.Core
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
-            holeCardManagers[1].ResetAllHoleCards();
+            holeCardManagers[1].gameObject.SetActive(false);
             _jackpotManager.EnterRaise();
             GameUIPanel.Instance.UpdateOnlineUI();
         }

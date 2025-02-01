@@ -1,5 +1,5 @@
 // // ********************************************************************************************
-// //     /\_/\                           @file       MyClient.Call.cs
+// //     /\_/\                           @file       MyClient.Jackpot.cs
 // //    ( o.o )                          @brief     Game07
 // //     > ^ <                           @author     Basya
 // //    /     \
@@ -25,6 +25,16 @@ namespace NetWork.Client
         public void CallResponse(bool isRaise, NetworkConnection conn = null)
         {
             GameManager.Instance.Call(isRaise);
+        }
+
+        public void FoldRequest()
+        {
+            MyServer.Instance.HandleFoldRequest();
+        }
+
+        public void FoldResponse(NetworkConnection conn)
+        {
+            GameManager.Instance.Fold();
         }
     }
 }

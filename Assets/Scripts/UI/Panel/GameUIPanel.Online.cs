@@ -52,6 +52,14 @@ namespace UI.Panel
         /// </summary>
         public void UpdateOnlineUI()
         {
+            if (StageManager.CurGameStage != GameStage.Idle)
+            {
+                foreach (var sign in readySigns)
+                {
+                    sign.SetActive(false);
+                }
+            }
+
             bool isReady = readySigns[0].activeSelf;
             GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
             GetControl<Button>("StartOnlineGame").gameObject.SetActive(GameManager.GameMode == GameMode.Online &&
