@@ -69,7 +69,7 @@ namespace GamePlay.Core
         }
 
 
-        private void Reset()
+        public void Exit()
         {
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
@@ -78,8 +78,11 @@ namespace GamePlay.Core
             }
 
             _stageManager.Reset();
+            _jackpotManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            gameObject.SetActive(false);
+            GameUIPanel.Instance.HideMe();
         }
 
 
@@ -124,9 +127,16 @@ namespace GamePlay.Core
                 NextToPlayerId();
             }
 
-            if (GameMode == GameMode.Native)
+            switch (GameMode)
             {
-                ShowBlankScreen();
+                case GameMode.Native:
+                    ShowBlankScreen();
+                    break;
+                case GameMode.Online:
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -200,7 +210,18 @@ namespace GamePlay.Core
                 _stageManager.NewStage();
                 if (curPlayerId == StageManager.FirstPlayerId) return;
                 NextToPlayerId();
-                if (GameMode == GameMode.Native) ShowBlankScreen();
+            }
+
+            switch (GameMode)
+            {
+                case GameMode.Native:
+                    ShowBlankScreen();
+                    break;
+                case GameMode.Online:
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -249,7 +270,9 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            _jackpotManager.EnterRaise();
         }
+
         #endregion
 
 
@@ -268,7 +291,7 @@ namespace GamePlay.Core
         [ContextMenu("ReSetGame")]
         private void TestResetGame()
         {
-            Reset();
+            Exit();
         }
 
         [ContextMenu("add")]
@@ -287,7 +310,7 @@ namespace GamePlay.Core
         [ContextMenu("clear")]
         private void Test2()
         {
-            Reset();
+            Exit();
         }
 
         #endregion

@@ -74,6 +74,10 @@ public class JackpotManager
         return true;
     }
 
+    /// <summary>
+    /// 让当前玩家进入下注阶段，经过两次Call后，调用NewStage进入Place阶段
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void EnterRaise()
     {
         _raiseCount++;
@@ -87,6 +91,13 @@ public class JackpotManager
                     needJackpot: AnteNub, canFold: StageManager.Turn > 1);
                 break;
             case GameMode.Online:
+                if (GameManager.CurPlayerId == 0)
+                {
+                    GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
+                        haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
+                        needJackpot: AnteNub, canFold: StageManager.Turn > 1);
+                }
+                GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -95,6 +106,7 @@ public class JackpotManager
 
     public void NewHand()
     {
+        _raiseCount = 0;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
         AnteNub += StageManager.Hand;
@@ -129,7 +141,7 @@ public class JackpotManager
 
         var text1 = $"你一共获得了：{score0}分";
         var text2 = $"对手一共获得了：{score1}分";
-        GameUIPanel.Instance.ShowOverPanel(title, text1, text2); //todo添加关于赢了多少筹码的描述
+        GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2); 
     }
 
     /// <summary>
@@ -154,6 +166,15 @@ public class JackpotManager
             JackpotP2 -= nub;
         }
 
+        GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
+    }
+
+    public void Reset()
+    {
+        _raiseCount = 0;
+        _extraJackpot = 0;
+        _jackpotNub0 = 0;
+        _jackpotNub1 = 0;
         GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
     }
 }

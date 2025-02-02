@@ -53,12 +53,17 @@ namespace NetWork
             //其实场景加载成功会激活两次，一次由server调用，一次由client调用
             InstanceFinder.SceneManager.OnClientLoadedStartScenes += (connection, isSever) =>
             {
-                if (!isSever) return;
-                if (connection.IsHost)
+                if (isSever)
                 {
-                    InstanceFinder.ServerManager.Spawn(MyServer.CreateInstance().gameObject, connection);
+                    if (connection.IsHost)
+                    {
+                        InstanceFinder.ServerManager.Spawn(MyServer.CreateInstance().gameObject, connection);
+                    }
                 }
-                // InstanceFinder.ServerManager.Spawn(MyClient.CreateInstance().gameObject, connection);
+                else
+                {
+
+                }
             };
         }
 
@@ -67,7 +72,7 @@ namespace NetWork
             var flag = InstanceFinder.ClientManager.StartConnection(address, port);
             return flag;
         }
-        
+
         public static bool JoinServer()
         {
             var flag = InstanceFinder.ClientManager.StartConnection();

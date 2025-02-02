@@ -16,6 +16,7 @@ using FishNet.Object.Synchronizing;
 using GamePlay.Core;
 using NetWork.Client;
 using NetWork.Data;
+using UI.Panel;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -29,22 +30,29 @@ namespace NetWork.Server
         [Server]
         public bool CheckIsAllReady()
         {
-            foreach (var kv in ClientManager.Clients)
+            if (_players.Count < 2) return false;
+            foreach (var connection in _players)
             {
-                var connection = kv.Value;
                 ConnData data = connection.CustomData as ConnData;
                 if (data == null || !data.isReady) return false;
             }
-
+            
             return true;
+        }
+
+        private void OnClientLostConnForGetReady()
+        {
+            GameUIPanel.Instance.SetReadySign(1,false);
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void HandleGetReady(bool isReady, NetworkConnection conn = null)
         {
             if (conn == null) return;
-            ConnData customData = (ConnData)ClientManager.Clients[conn.ClientId].CustomData;
+            int index = _players.IndexOf(conn);
+            ConnData customData = _players[index].CustomData as ConnData;
             customData.isReady = isReady;
+            MyClient.Instance.GetReadyResponse(isReady,conn);
         }
 
         #region Debug
@@ -52,9 +60,8 @@ namespace NetWork.Server
         [ContextMenu("readyTest")]
         public void ReadyTest()
         {
-            foreach (var kv in ClientManager.Clients)
+            foreach (var connection in _players)
             {
-                var connection = kv.Value;
                 ConnData data = connection.CustomData as ConnData;
                 Debug.Log(data.ToString());
             }

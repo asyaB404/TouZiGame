@@ -8,9 +8,9 @@
 // // ********************************************************************************************
 
 
+using System;
 using GamePlay.Core;
 using NetWork.Client;
-using NetWork.Server;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,53 +19,34 @@ using UnityEngine.UI;
 
 namespace UI.Panel
 {
-    public class GameUIPanel : BasePanel<GameUIPanel>
+    public partial class GameUIPanel : BasePanel<GameUIPanel>
     {
         [SerializeField] private TextMeshProUGUI[] p1ScoreTexts;
         [SerializeField] private TextMeshProUGUI[] p2ScoreTexts;
 
-        private void Awake()
+        public override void Init()
         {
-            GetControl<Button>("testBtn").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
-            SetButtonClick();
-            SetConfirmButton();
-
-            #region Online
-
-            GetControl<Button>("GetReady").onClick.AddListener(() =>
-            {
-                isReady = !isReady;
-                GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
-                MyClient.Instance.GetReadyRequest(isReady);
-            });
-            
-            GetControl<Button>("StartOnlineGame").onClick.AddListener(() =>
-            {
-                MyServer.Instance.StartGame();
-            });
-
-            #endregion
+            base.Init();
+            InitForOnline();
         }
 
-        [SerializeField] private bool isReady;
+        private void Awake()
+        {
+            SetButtonClick();
+            SetConfirmButton();
+        }
 
         public override void ShowAnim()
         {
             base.ShowAnim();
-
-            #region Online
-            
-            GetControl<Button>("StartOnlineGame").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
-            GetControl<Button>("GetReady").gameObject.SetActive(GameManager.GameMode == GameMode.Online);
-            isReady = false;
-            GetControl<TextMeshProUGUI>("GetReady_Text").text = isReady ? "已准备" : "未准备";
-
-            #endregion
+            ShowForOnline();
         }
+
         public override void OnPressedEsc()
         {
             MenuPanel.Instance.ShowMe();
         }
+
         public void UpdateScoreUI(int playerId)
         {
             var texts = playerId == 0 ? p1ScoreTexts : p2ScoreTexts;
@@ -79,18 +60,30 @@ namespace UI.Panel
             }
         }
 
+        public override void CallBackWhenHeadPop(IBasePanel popPanel)
+        {
+            popPanel?.HideAnim();
+            if (popPanel is not MenuPanel) ShowAnim();
+        }
+
         [FormerlySerializedAs("HandOverPanel")] [SerializeField]
         private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
 
         [FormerlySerializedAs("HandOverTexts")] [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
-        public void ShowOverPanel(string title, string score1, string score2)
+        public void ShowHandOverPanel(string title, string score1, string score2)
         {
             handOverPanel.SetActive(true);
             handOverTexts[0].text = title;
             handOverTexts[1].text = score1;
             handOverTexts[2].text = score2;
+            confirmButton.gameObject.SetActive(GameManager.GameMode != GameMode.Online);
+        }
+
+        public void HideHandOverPanel()
+        {
+            handOverPanel.SetActive(false);
         }
 
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
@@ -98,7 +91,7 @@ namespace UI.Panel
         //设置分数确认页面的关闭按钮的监听
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
-            handOverPanel.SetActive(false);
+            HideHandOverPanel();
             GameManager.Instance.NewHand();
         });
 
@@ -250,20 +243,51 @@ namespace UI.Panel
         // 跟注按钮的点击事件。
         private void CallButtonClick()
         {
-            GameManager.Instance.Call(false);
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Call(false);
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.CallRequest(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         // 加注按钮的点击事件。
         private void RaiseButtonClick()
         {
-            GameManager.Instance.Call(true);
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Call(true);
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.CallRequest(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
 
         // 弃牌按钮的点击事件。
         private void FoldButtonClick()
         {
-            GameManager.Instance.Fold();
+            switch (GameManager.GameMode)
+            {
+                case GameMode.Native:
+                    GameManager.Instance.Fold();
+                    break;
+                case GameMode.Online:
+                    MyClient.Instance.FoldRequest();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             HideRaisePanel();
         }
 
@@ -273,7 +297,6 @@ namespace UI.Panel
         }
 
         #endregion
-
 
         #region debug
 

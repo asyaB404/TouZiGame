@@ -14,6 +14,9 @@ namespace GamePlay.Core
 {
     public partial class GameManager
     {
+        /// <summary>
+        /// 进入房间时或创建房间时调用
+        /// </summary>
         public void InitForOnline()
         {
             GameMode = GameMode.Online;
@@ -21,13 +24,17 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
         }
 
+        /// <summary>
+        /// 房主开始游戏时所有客户端调用
+        /// </summary>
         public void StartOnlineGame()
         {
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
-            holeCardManagers[1].ResetAllHoleCards();
+            holeCardManagers[1].gameObject.SetActive(false);
             _jackpotManager.EnterRaise();
+            GameUIPanel.Instance.UpdateOnlineUI();
         }
     }
 }

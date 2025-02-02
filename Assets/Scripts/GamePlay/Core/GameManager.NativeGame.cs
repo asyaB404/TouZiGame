@@ -14,6 +14,10 @@ namespace GamePlay.Core
 {
     public partial class GameManager
     {
+        /// <summary>
+        /// 开始本地游戏
+        /// </summary>
+        /// <param name="seed"></param>
         public void StartNativeGame(int seed)
         {
             GameMode = GameMode.Native;
