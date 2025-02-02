@@ -29,6 +29,8 @@ namespace UI.Panel
             base.Init();
             InitForOnline();
         }
+        
+     
 
         private void Awake()
         {
@@ -40,6 +42,13 @@ namespace UI.Panel
         {
             base.ShowAnim();
             ShowForOnline();
+        }
+
+        public override void HideAnim()
+        {
+            base.HideAnim();
+            HideRaisePanel();
+            HideHandOverPanel();
         }
 
         public override void OnPressedEsc()

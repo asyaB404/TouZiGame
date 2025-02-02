@@ -125,7 +125,7 @@ public class JackpotManager
     /// <param name="winerWaiver">赢家是否不跟注</param>
     public void JackpotCalculation(int score0, int score1, bool winerWaiver = false) //暂未处理赢家不跟注的情况
     {
-        var title = $"你{(score0 > score1 ? "赢" : "输")}了{SumJackpotNub}个筹码";
+        var title = $"你{(score0 > score1 ? "赢" : "输")}了{(score0 > score1 ? _jackpotNub1 : _jackpotNub0)}个筹码";
         if (score0 == score1 || winerWaiver) //（不跟注时与平局同样处理方式）
         {
             JackpotP1 += (int)SumJackpotNub / 2;
