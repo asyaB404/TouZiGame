@@ -38,12 +38,6 @@ namespace NetWork.Client
         public void FoldResponse(NetworkConnection conn)
         {
             GameManager.Instance.Fold();
-            UniTask.Create(async () =>
-            {
-                await UniTask.Delay(3000);
-                GameUIPanel.Instance.HideHandOverPanel();
-                GameManager.Instance.NewHand();
-            }).Forget();
         }
     }
 }

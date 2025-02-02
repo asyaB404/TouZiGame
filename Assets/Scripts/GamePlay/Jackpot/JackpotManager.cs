@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using GamePlay.Core;
 using UI.Panel;
 
@@ -97,6 +98,7 @@ public class JackpotManager
                         haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
                         needJackpot: AnteNub, canFold: StageManager.Turn > 1);
                 }
+
                 GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
                 break;
             default:
@@ -107,8 +109,6 @@ public class JackpotManager
     public void NewHand()
     {
         AnteNub = 1;
-        JackpotP1 = MyGlobal.INITIAL_CHIP;
-        JackpotP2 = MyGlobal.INITIAL_CHIP;
         _raiseCount = 0;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
@@ -144,7 +144,15 @@ public class JackpotManager
 
         var text1 = $"你一共获得了：{score0}分";
         var text2 = $"对手一共获得了：{score1}分";
-        GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2); 
+        GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2);
+        //网络对战自动关闭面板
+        if (GameManager.GameMode != GameMode.Online) return;
+        UniTask.Create(async () =>
+        {
+            await UniTask.Delay(3000);
+            GameUIPanel.Instance.HideHandOverPanel();
+            GameManager.Instance.NewHand();
+        }).Forget();
     }
 
     /// <summary>
