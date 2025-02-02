@@ -20,6 +20,7 @@ namespace NetWork.Client
     {
         public void CallRequest(bool isRaise)
         {
+            if (!CheckRpcCoolDown()) return;
             MyServer.Instance.HandleCallRequest(isRaise);
         }
 
@@ -31,6 +32,7 @@ namespace NetWork.Client
 
         public void FoldRequest()
         {
+            if (!CheckRpcCoolDown()) return;
             MyServer.Instance.HandleFoldRequest();
         }
 
