@@ -4,6 +4,7 @@
     Description:	客户端脚本实例
 *********************************************************************/
 
+using System;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
@@ -13,6 +14,7 @@ namespace NetWork.Client
 {
     public partial class MyClient : NetworkBehaviour
     {
+        private DateTime _lastRequestTime = DateTime.MinValue;
         public static MyClient Instance { get; private set; }
 
         public static GameObject CreateInstance()
@@ -20,7 +22,7 @@ namespace NetWork.Client
             GameObject prefabRes = Resources.Load<GameObject>(MyGlobal.CLIENT_PREFABS_PATH);
             return Instantiate(prefabRes);
         }
-
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -35,8 +37,6 @@ namespace NetWork.Client
             }
         }
 
-        #region GameStart
-
         [ObserversRpc]
         public void StartGameResponse()
         {
@@ -48,6 +48,20 @@ namespace NetWork.Client
             GameManager.Instance.StartOnlineGame();
         }
 
-        #endregion
+        /// <summary>
+        /// 检查RPC冷却时间，true 为可以发送RPC，false 为冷却中
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckRpcCoolDown()
+        {
+            if (DateTime.Now - _lastRequestTime < TimeSpan.FromSeconds(1))
+            {
+                Debug.Log("请求太频繁，请稍等一秒");
+                return false;
+            }
+
+            _lastRequestTime = DateTime.Now;
+            return true;
+        }
     }
 }

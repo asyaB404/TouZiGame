@@ -5,29 +5,23 @@
 *********************************************************************/
 
 using System;
+using FishNet.Connection;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
-using UnityEngine;
 
 namespace NetWork.Client
 {
     public partial class MyClient
     {
-        private DateTime _lastRequestTime = DateTime.MinValue;
         public void AddTouziRequest(int playerId, int id, int score)
         {
-            if (DateTime.Now - _lastRequestTime < TimeSpan.FromSeconds(1))
-            {
-                Debug.Log("请求太频繁，请稍等一秒");
-                return; 
-            }
-            _lastRequestTime = DateTime.Now;
+            if (!CheckRpcCoolDown()) return;
             MyServer.Instance.HandleAddTouziRequest(playerId, id, score);
         }
 
         [ObserversRpc]
-        public void AddTouziResponse(int playerId, int id, int score)
+        public void AddTouziResponse(int playerId, int id, int score, NetworkConnection conn = null)
         {
             if (IsServerStarted)
             {

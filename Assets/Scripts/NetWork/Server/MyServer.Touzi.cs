@@ -22,7 +22,7 @@ namespace NetWork.Server
     /// <summary>
     /// 服务端实例
     /// </summary>
-    public partial class MyServer 
+    public partial class MyServer
     {
         [ServerRpc(RequireOwnership = false)]
         public void HandleAddTouziRequest(int playerId, int id, int score, NetworkConnection conn = null)
@@ -39,7 +39,7 @@ namespace NetWork.Server
                 GameManager.Instance.AddTouzi(MyTool.GetNextPlayerId(playerId), id, score);
             }
 
-            MyClient.Instance.AddTouziResponse(playerId, id, score);
+            MyClient.Instance.AddTouziResponse(playerId, id, score, conn);
         }
     }
 }
