@@ -19,7 +19,7 @@ namespace UI.Panel
             base.Init();
             GetControl<Button>("btn1").onClick.AddListener(() => { NativeGamePanel.Instance.ShowMe(); });
             GetControl<Button>("btn2").onClick.AddListener(() => { MulGamePanel.Instance.ShowMe(); });
-            GetControl<Button>("btn3").onClick.AddListener(() => { Debug.Log("打开设置界面"); });
+            GetControl<Button>("btn3").onClick.AddListener(() => { SettingsPanel.Instance.ShowMe(); });
         }
 
         public override void OnPressedEsc()

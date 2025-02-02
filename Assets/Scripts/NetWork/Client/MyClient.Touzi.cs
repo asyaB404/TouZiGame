@@ -4,6 +4,7 @@
     Description:	客户端脚本实例
 *********************************************************************/
 
+using System;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
@@ -13,8 +14,15 @@ namespace NetWork.Client
 {
     public partial class MyClient
     {
+        private DateTime _lastRequestTime = DateTime.MinValue;
         public void AddTouziRequest(int playerId, int id, int score)
         {
+            if (DateTime.Now - _lastRequestTime < TimeSpan.FromSeconds(1))
+            {
+                Debug.Log("请求太频繁，请稍等一秒");
+                return; 
+            }
+            _lastRequestTime = DateTime.Now;
             MyServer.Instance.HandleAddTouziRequest(playerId, id, score);
         }
 

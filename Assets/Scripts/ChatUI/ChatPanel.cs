@@ -39,6 +39,7 @@ namespace ChatUI
         [SerializeField] private GameObject messagePrefab;
         [SerializeField] private int lineHeight = 40;
         [SerializeField] private Button[] buttons;
+        [SerializeField] private GameObject redPoint;
         private int _totalLineCount;
 
         #region Private
@@ -56,22 +57,18 @@ namespace ChatUI
             messageInput.onValidateInput += ValidateInput;
             InstanceFinder.ClientManager.RegisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
             InstanceFinder.ServerManager.RegisterBroadcast<ChatMessage>(OnServerChatMessageReceived);
-            // InstanceFinder.ServerManager.OnRemoteConnectionState += OnRemoteConnection;
-            // InstanceFinder.ServerManager.OnAuthenticationResult += OnAuthentication;
         }
 
         private void OnDisable()
         {
             Clear();
+            redPoint.gameObject.SetActive(false);
             buttons[0].onClick.RemoveListener(SendInputField);
             buttons[1].onClick.RemoveListener(OnSwitchBtnClick);
             messageInput.onSubmit.RemoveListener(OnInputSubmit);
             messageInput.onValidateInput -= ValidateInput;
             InstanceFinder.ClientManager.UnregisterBroadcast<ChatMessage>(OnClientChatMessageReceived);
             InstanceFinder.ServerManager.UnregisterBroadcast<ChatMessage>(OnServerChatMessageReceived);
-            if (InstanceFinder.ServerManager == null) return;
-            // InstanceFinder.ServerManager.OnRemoteConnectionState -= OnRemoteConnection;
-            // InstanceFinder.ServerManager.OnAuthenticationResult -= OnAuthentication;
         }
 
         private void OnSwitchBtnClick()
@@ -86,6 +83,7 @@ namespace ChatUI
             {
                 rectTransform.DOAnchorPosX(0, 0.1f);
             }
+            redPoint.gameObject.SetActive(false);
         }
 
         private char ValidateInput(string text, int charIndex, char addedChar)
@@ -120,6 +118,7 @@ namespace ChatUI
         private void SpawnMsg(ChatMessage chatMessage)
         {
             if (string.IsNullOrEmpty(chatMessage.Message)) return;
+            redPoint.gameObject.SetActive(true);
             var newMessage = Instantiate(messagePrefab, content, false);
             Vector2 pos = newMessage.transform.localPosition;
             pos.y = -_totalLineCount * lineHeight;
