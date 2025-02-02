@@ -117,9 +117,9 @@ namespace GamePlay.Core
                 int nextPlayerSumScore = nodeQueueManagers[MyTool.GetNextPlayerId(curPlayerId)].SumScore;
                 if (curPlayerSumScore > nextPlayerSumScore)
                 {
-                    Debug.Log(curPlayerId);
+                    // Debug.Log(curPlayerId);
                     NextToPlayerId(); //确保是分数较小的一方先加注
-                    Debug.Log(curPlayerId);
+                    // Debug.Log(curPlayerId);
                 }
                 else if (curPlayerSumScore == nextPlayerSumScore)
                 {

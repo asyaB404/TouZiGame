@@ -17,7 +17,7 @@ namespace GamePlay.Core
 
     public class StageManager
     {
-        public static int Hand { get; private set; } = 0; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
+        public static int Hand { get; private set; } = 1; // 游戏中完成一次一方获胜而筹码增加的过程；此处代表经过了几次“hand”
 
         public static int Stage { get; private set; } = 1; //阶段数（决定是否加注的时候为一个阶段
         public static int Turn { get; private set; } = 1;
@@ -36,14 +36,18 @@ namespace GamePlay.Core
         {
             FirstPlayerId = GameManager.CurPlayerId;
             UpdateUI();
+            blankId = -1;
+            Hand=1;
+            Stage=1;
+            Turn=1;
         }
 
         public void NewHand()
         {
             FirstPlayerId = (FirstPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
             Hand++;
-            Turn = 0;
-            Stage = 0;
+            Turn = 1;
+            Stage = 1;
             UpdateUI();
         }
 
@@ -58,7 +62,7 @@ namespace GamePlay.Core
                 ShowBlankScreen();
             }
 
-            Turn = 0;
+            Turn = 1;
             UpdateUI();
         }
 
@@ -73,7 +77,7 @@ namespace GamePlay.Core
                 HintManager.Instance.SetHint1("EndPlace");
             }
 
-            if (Turn >= MyGlobal.A_STAGE_ROUND)
+            if (Turn > MyGlobal.A_STAGE_ROUND)
             {
                 Stage++;
                 return true;
@@ -97,7 +101,8 @@ namespace GamePlay.Core
             else str += "回合";
             GameManager.Instance.HoleCardManagers[0].ShowShader();
             GameManager.Instance.HoleCardManagers[1].ShowShader();
-            GameUIPanel.Instance.ShowSwitchoverButton(str, isRaise);
+            Debug.Log("ShowScreen");
+            SwitchoverPanel.Instance.ShowSwitchoverButton(str, isRaise);
             HintManager.Instance.SetHint1("BlankScreen");
             // Debug.Log("打开黑幕");
         }
@@ -114,14 +119,14 @@ namespace GamePlay.Core
 
         private void UpdateUI()
         {
-            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: Turn, stageNub: Stage);
+            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: (int)((Turn+1)/2), stageNub: Stage);
         }
 
         public void Reset()
         {
-            Hand = 0;
-            Stage = 0;
-            Turn = 0;
+            Hand = 1;
+            Stage = 1;
+            Turn = 1;
             CurGameStage = GameStage.Idle;
             UpdateUI();
         }

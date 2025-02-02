@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using System.Diagnostics;
 using GamePlay.Core;
 using UI.Panel;
 
@@ -87,6 +88,7 @@ public class JackpotManager
         {
             case GameMode.Native:
                 GameManager.Instance.ShowBlankScreen();
+                // Debug.Log("");
                 GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
                     haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
                     needJackpot: AnteNub, canFold: StageManager.Turn > 1);
