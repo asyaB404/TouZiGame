@@ -127,11 +127,11 @@ namespace UI.Panel
 
 
         //设置回合数据的ui
-        public void UpdateStageUI(int handNub, int stageNub, int roundNub)
+        public void UpdateStageUI(int handNub, int stageNub, int turnNub)
         {
-            handNubText.text = handNub.ToString();
-            stageNubText.text = stageNub.ToString();
-            roundNubText.text = roundNub.ToString();
+            handNubText.text = $"第{handNub.ToString()}轮";
+            stageNubText.text = $"第{stageNub.ToString()}次下注";
+            roundNubText.text =$"第{turnNub}次落子";
         }
 
 

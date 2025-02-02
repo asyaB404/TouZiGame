@@ -119,7 +119,7 @@ namespace GamePlay.Core
 
         private void UpdateUI()
         {
-            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, roundNub: (int)((Turn+1)/2), stageNub: Stage);
+            GameUIPanel.Instance.UpdateStageUI(handNub: Hand, turnNub: Turn, stageNub: Stage);
         }
 
         public void Reset()
