@@ -82,6 +82,7 @@ namespace NetWork.Server
         public override void OnStopClient()
         {
             base.OnStopClient();
+            if (StageManager.CurGameStage != GameStage.Idle) GameManager.Instance.Exit();
         }
 
         private void OnRemoteConnected(NetworkConnection conn, RemoteConnectionStateArgs args)
@@ -94,7 +95,13 @@ namespace NetWork.Server
                     {
                         Debug.LogError("players同步错误");
                     }
+
                     OnClientLostConnForGetReady();
+                    if (_players.Count < MyGlobal.MAX_PLAYER_COUNT)
+                    {
+                        GameManager.Instance.Reset();
+                    }
+
                     break;
                 case RemoteConnectionState.Started:
                     _players.Add(conn);
