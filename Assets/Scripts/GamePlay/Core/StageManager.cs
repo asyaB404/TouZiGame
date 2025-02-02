@@ -36,6 +36,7 @@ namespace GamePlay.Core
         {
             FirstPlayerId = GameManager.CurPlayerId;
             UpdateUI();
+            blankId = -1;
         }
 
         public void NewHand()
@@ -97,7 +98,8 @@ namespace GamePlay.Core
             else str += "回合";
             GameManager.Instance.HoleCardManagers[0].ShowShader();
             GameManager.Instance.HoleCardManagers[1].ShowShader();
-            GameUIPanel.Instance.ShowSwitchoverButton(str, isRaise);
+            Debug.Log("ShowScreen");
+            SwitchoverPanel.Instance.ShowSwitchoverButton(str, isRaise);
             HintManager.Instance.SetHint1("BlankScreen");
             // Debug.Log("打开黑幕");
         }

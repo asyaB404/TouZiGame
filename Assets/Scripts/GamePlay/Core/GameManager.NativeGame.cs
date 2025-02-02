@@ -27,8 +27,11 @@ namespace GamePlay.Core
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
-            _jackpotManager.EnterRaise();
+            
             GameUIPanel.Instance.ShowMe();
+
+            _jackpotManager.EnterRaise();
+            Debug.Log("start");
         }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace GamePlay.Core
         /// </summary>
         public void ShowBlankScreen()
         {
+            Debug.Log("show");
             _stageManager.ShowBlankScreen();
         }
 

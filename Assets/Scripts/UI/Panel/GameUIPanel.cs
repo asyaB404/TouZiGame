@@ -63,13 +63,16 @@ namespace UI.Panel
         public override void CallBackWhenHeadPop(IBasePanel popPanel)
         {
             popPanel?.HideAnim();
-            if (popPanel is not MenuPanel) ShowAnim();
+            if (popPanel is not MenuPanel &&
+                popPanel is not SwitchoverPanel) ShowAnim();
         }
 
-        [FormerlySerializedAs("HandOverPanel")] [SerializeField]
+        [FormerlySerializedAs("HandOverPanel")]
+        [SerializeField]
         private GameObject handOverPanel; //结束一次发牌到收牌后的页面，用于确认双方玩家分数以确认赢家
 
-        [FormerlySerializedAs("HandOverTexts")] [SerializeField]
+        [FormerlySerializedAs("HandOverTexts")]
+        [SerializeField]
         private TextMeshProUGUI[] handOverTexts; //显示玩家分数
 
         public void ShowHandOverPanel(string title, string score1, string score2)
@@ -95,7 +98,8 @@ namespace UI.Panel
             GameManager.Instance.NewHand();
         });
 
-        [FormerlySerializedAs("JackpotTexts")] [SerializeField]
+        [FormerlySerializedAs("JackpotTexts")]
+        [SerializeField]
         private TextMeshProUGUI[] jackpotTexts; //双方的筹码的显示ui
 
         //设置筹码ui数值
@@ -122,19 +126,7 @@ namespace UI.Panel
         }
 
 
-        //单机多人模式使用的按钮，用于切换玩家使遮挡屏幕
-        public void ShowSwitchoverButton(string title, bool isRaise = false)
-        {
-            GetControl<TextMeshProUGUI>("SwitchText").text = title;
-            GetControl<Button>("SwitchoverPanel").gameObject.SetActive(true);
-        }
 
-        private void SwitchoverButtonChick() //确认切换了玩家后的按钮的点击事件
-        {
-            GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
-            HintManager.Instance.SetHint1("");
-            GameManager.Instance.HideBlankScreen();
-        }
 
         #endregion
 
@@ -142,7 +134,8 @@ namespace UI.Panel
 
         [SerializeField] private RectTransform buttonPanel; //按钮页面
 
-        [FormerlySerializedAs("CallButton")] [SerializeField]
+        [FormerlySerializedAs("CallButton")]
+        [SerializeField]
         private Button callButton; //跟注按钮
 
         [SerializeField] private Button raiseButton; //加注按钮
@@ -151,7 +144,8 @@ namespace UI.Panel
         [SerializeField] private TextMeshProUGUI anteText; //底注
         [SerializeField] private TextMeshProUGUI jackpotText; //奖池
 
-        [FormerlySerializedAs("WaitPanel")] [SerializeField]
+        [FormerlySerializedAs("WaitPanel")]
+        [SerializeField]
         private RectTransform waitPanel; //等待对方加注（计划在线模式使用
 
         public void SetWaitPanel(bool flag)
@@ -218,7 +212,7 @@ namespace UI.Panel
             callButton.onClick.AddListener(CallButtonClick);
             raiseButton.onClick.AddListener(RaiseButtonClick);
             foldButton.onClick.AddListener(FoldButtonClick);
-            GetControl<Button>("SwitchoverButton").onClick.AddListener(SwitchoverButtonChick);
+
         }
 
         // 为按钮添加事件触发器,用于显示鼠标进入的提示
@@ -300,7 +294,7 @@ namespace UI.Panel
 
         #region debug
 
-        [SerializeField] [Range(0, 5)] private int testIndex;
+        [SerializeField][Range(0, 5)] private int testIndex;
 
         [ContextMenu("test")]
         public void Test()
