@@ -78,6 +78,8 @@ namespace GamePlay.Core
             if (GameMode != GameMode.Online) return;
             NetWorkMgr.CloseConnection();
             NetWorkMgr.CloseServer();
+            holeCardManagers[0].HideShader();
+            holeCardManagers[1].HideShader();
         }
 
         public void Reset()
