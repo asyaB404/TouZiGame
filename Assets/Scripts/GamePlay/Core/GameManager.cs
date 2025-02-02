@@ -253,12 +253,13 @@ namespace GamePlay.Core
         /// </summary>
         /// <param name="isSpecial">是否特殊方式结束</param>
         /// <param name="isWinerWaiver">是否胜者弃权</param>
-        public void OverOneHand(bool isSpecial = false, bool isWinerWaiver = false)
+        public void OverOneHand(bool isSpecial = false)
         {
+            // bool isWinerWaiver=
             int sumScore0 = NodeQueueManagers[0].SumScore;
             int sumScore1 = NodeQueueManagers[1].SumScore;
 
-            _jackpotManager.JackpotCalculation(sumScore0, sumScore1, isWinerWaiver);
+            _jackpotManager.JackpotCalculation(sumScore0, sumScore1);
             StageManager.SetStage(GameStage.Calculation);
             if (sumScore0 == 0 || sumScore1 == 0)
             {
