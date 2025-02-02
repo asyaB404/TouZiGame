@@ -106,6 +106,9 @@ public class JackpotManager
 
     public void NewHand()
     {
+        AnteNub = 1;
+        JackpotP1 = MyGlobal.INITIAL_CHIP;
+        JackpotP2 = MyGlobal.INITIAL_CHIP;
         _raiseCount = 0;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;

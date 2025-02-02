@@ -10,7 +10,9 @@
 
 using System;
 using System.Collections.Generic;
+using FishNet;
 using GamePlay.Node;
+using NetWork;
 using UI.Panel;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -68,8 +70,17 @@ namespace GamePlay.Core
             gameObject.SetActive(false);
         }
 
-
         public void Exit()
+        {
+            Reset();
+            gameObject.SetActive(false);
+            GameUIPanel.Instance.HideMe();
+            if (GameMode != GameMode.Online) return;
+            NetWorkMgr.CloseConnection();
+            NetWorkMgr.CloseServer();
+        }
+
+        public void Reset()
         {
             curPlayerId = 0;
             foreach (var nodeQueueManager in nodeQueueManagers)
@@ -81,10 +92,9 @@ namespace GamePlay.Core
             _jackpotManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
-            gameObject.SetActive(false);
-            GameUIPanel.Instance.HideMe();
+            GameUIPanel.Instance.UpdateOnlineUI();
+            StageManager.SetStage(GameStage.Idle);
         }
-
 
         /// <summary>
         /// 更新玩家ID

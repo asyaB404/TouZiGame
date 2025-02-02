@@ -62,7 +62,6 @@ namespace NetWork
                 }
                 else
                 {
-
                 }
             };
         }
@@ -79,6 +78,12 @@ namespace NetWork
             return flag;
         }
 
+        public static bool CloseConnection()
+        {
+            bool flag = InstanceFinder.ClientManager.StopConnection();
+            return flag;
+        }
+
         public static bool CreateServer(string roomName, ushort port)
         {
             var flag = InstanceFinder.ServerManager.StartConnection(port);
@@ -87,6 +92,7 @@ namespace NetWork
 
         public static bool CloseServer()
         {
+            if (!InstanceFinder.NetworkManager.IsServerStarted) return false;
             var flag = InstanceFinder.ServerManager.StopConnection(true);
             return flag;
         }

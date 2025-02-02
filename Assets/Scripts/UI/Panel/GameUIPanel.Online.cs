@@ -52,6 +52,7 @@ namespace UI.Panel
         /// </summary>
         public void UpdateOnlineUI()
         {
+            //游戏开始时关闭所有准备标志
             if (StageManager.CurGameStage != GameStage.Idle)
             {
                 foreach (var sign in readySigns)

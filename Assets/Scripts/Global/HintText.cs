@@ -11,11 +11,9 @@ public static class HintText
     public static readonly Dictionary<string, string> HintText0Dic = new Dictionary<string, string>()//阶段性提示\
     {
         {"",""},
+        {"Idle","闲置阶段：等待双方玩家加入并准备后，由房主开始游戏"},
         {"Raise","下注阶段：依据对自己胜利的信心进行下注"},
         {"Place","放置阶段：选择最有利的底牌放入棋盘中，也许将重要的牌在关键时候放置能逆转局势"},
-
-
-
         {"Calculation","结算阶段：依照双方的分数进行结算瓜分奖池"},
         // {"Raise",""},
     };
