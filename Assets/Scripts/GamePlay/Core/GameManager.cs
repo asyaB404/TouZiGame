@@ -332,6 +332,7 @@ namespace GamePlay.Core
     public enum GameMode
     {
         Native = 0,
-        Online = 1
+        Online = 1,
+        SoloWithAi,
     }
 }

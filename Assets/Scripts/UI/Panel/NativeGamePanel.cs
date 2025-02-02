@@ -23,6 +23,7 @@ namespace UI.Panel
             GetControl<Button>("btn1").onClick.AddListener(() =>
             {
                 Debug.Log("开始本地单人游戏"); //TODO：跳转游戏界面VS单人AI
+                
             });
             GetControl<Button>("btn2").onClick.AddListener(() =>
             {
