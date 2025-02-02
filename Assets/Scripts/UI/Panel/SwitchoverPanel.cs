@@ -20,7 +20,7 @@ namespace UI.Panel
             // GetControl<Button>("SwitchoverPanel").gameObject.SetActive(true);
             ShowMe();
             Debug.Log("show");
-        }
+        } 
 
         private void SwitchoverButtonChick() //确认切换了玩家后的按钮的点击事件
         {
