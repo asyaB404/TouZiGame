@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using FishNet;
 using GamePlay.Node;
 using NetWork;
@@ -41,7 +42,8 @@ namespace GamePlay.Core
         [SerializeField] private int curPlayerId = 0;
         private int NextPlayerId => MyTool.GetNextPlayerId(curPlayerId);
 
-        [FormerlySerializedAs("touzi")] [SerializeField]
+        [FormerlySerializedAs("touzi")]
+        [SerializeField]
         private Sprite[] touziSprites;
 
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
@@ -147,6 +149,10 @@ namespace GamePlay.Core
                 case GameMode.Online:
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
                     break;
+                case GameMode.SoloWithAi:
+                    if(curPlayerId==1&&StageManager.CurGameStage==GameStage.Place)AiAddTouZi();
+                    // AiCall();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -232,6 +238,9 @@ namespace GamePlay.Core
                 case GameMode.Online:
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
                     break;
+                case GameMode.SoloWithAi:
+                    AiCall();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -291,7 +300,7 @@ namespace GamePlay.Core
 
         #region Debug
 
-        [Space(10)] [SerializeField] private int t1 = 0;
+        [Space(10)][SerializeField] private int t1 = 0;
         [SerializeField] private int t2 = 0;
         [SerializeField] private int t3 = 0;
 

@@ -14,4 +14,6 @@ public static class MyGlobal
     
     public const float HOVER_SCALE_FACTOR = 1.2f; // 鼠标悬停时放大的缩放因子
     public const float INITIAL_SCALE = 1; // 初始缩放大小
+    public const float MAX_AI_PONDER_Time=3;
+    public const float MIN_AI_PONDER_Time=0.5f;
 }
