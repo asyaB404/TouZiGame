@@ -254,6 +254,9 @@ namespace UI.Panel
                 case GameMode.Online:
                     MyClient.Instance.CallRequest(false);
                     break;
+                case GameMode.SoloWithAi:
+                    GameManager.Instance.Call(false);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -269,6 +272,9 @@ namespace UI.Panel
                     break;
                 case GameMode.Online:
                     MyClient.Instance.CallRequest(true);
+                    break;
+                case GameMode.SoloWithAi:
+                    GameManager.Instance.Call(true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -286,6 +292,9 @@ namespace UI.Panel
                     break;
                 case GameMode.Online:
                     MyClient.Instance.FoldRequest();
+                    break;
+                case GameMode.SoloWithAi:
+                    GameManager.Instance.Fold();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

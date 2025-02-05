@@ -29,7 +29,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         halo.gameObject.SetActive(isActive);
     }
 
-    private void Awake()
+    public void init()
     {
         _initialPos = transform.position;
         halo = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -42,9 +42,12 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
-                if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
+                // if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
                 break;
             case GameMode.Online:
+                if(playerId == 1) return;
+                break;
+            case GameMode.SoloWithAi:
                 if(playerId == 1) return;
                 break;
             default:
@@ -70,8 +73,8 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     public void OnPointerUp(PointerEventData data)
     {
         if (data.pointerCurrentRaycast.gameObject != gameObject //不是这个节点
-            || playerId != GameManager.CurPlayerId //不是当前玩家
-            || StageManager.CurGameStage != GameStage.Place //游戏状态不是Idle
+            // || playerId != GameManager.CurPlayerId //不是当前玩家
+            // || StageManager.CurGameStage != GameStage.Place //游戏状态不是Idle
             || !canClick //不能点击
            )
             return;
@@ -82,6 +85,10 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 break;
             case GameMode.Online:
                 if (playerId == 1) return;
+                GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
+                break;
+            case GameMode.SoloWithAi:
+                if(playerId == 1) return;
                 GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
                 break;
             default:

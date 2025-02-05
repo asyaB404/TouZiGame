@@ -62,6 +62,9 @@ namespace GamePlay.Node
                 case GameMode.Online:
                     // if(playerId == 1) return;
                     break;
+                case GameMode.SoloWithAi:
+                    if(playerId == 1) return;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -101,6 +104,9 @@ namespace GamePlay.Node
                     if (playerId == 1) return;
                     MyClient.Instance.AddTouziRequest(GameManager.CurPlayerId, id,
                         GameManager.Instance.CurScore);
+                    break;
+                case GameMode.SoloWithAi:
+                    GameManager.Instance.AddTouzi(id);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常

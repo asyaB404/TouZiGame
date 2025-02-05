@@ -62,8 +62,8 @@ public class JackpotManager
         AnteNub = 1;
         JackpotP1 = MyGlobal.INITIAL_CHIP;
         JackpotP2 = MyGlobal.INITIAL_CHIP;
-        
-        _raiseCount=0;
+
+        _raiseCount = 0;
 
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
     }
@@ -107,6 +107,16 @@ public class JackpotManager
 
                 GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
                 break;
+            case GameMode.SoloWithAi:
+                if (GameManager.CurPlayerId == 0)
+                {
+                    GameUIPanel.Instance.ShowRaisePanel(isP1: GameManager.CurPlayerId == 0,
+                        haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
+                        needJackpot: AnteNub, canFold: StageManager.Turn > 1);
+                }
+
+                GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -132,8 +142,8 @@ public class JackpotManager
     public void JackpotCalculation(int score0, int score1) //暂未处理赢家不跟注的情况
     {
         var title = $"你{(score0 > score1 ? "赢" : "输")}了{(score0 > score1 ? _jackpotNub1 : _jackpotNub0)}个筹码";
-        
-        bool winerWaiver=_raiseCount==2;
+
+        bool winerWaiver = _raiseCount == 2;
         Debug.Log(_raiseCount);
 
         if (score0 == score1 || winerWaiver) //（不跟注时与平局同样处理方式）

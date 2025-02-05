@@ -150,7 +150,7 @@ namespace GamePlay.Core
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
                     break;
                 case GameMode.SoloWithAi:
-                    if(curPlayerId==1&&StageManager.CurGameStage==GameStage.Place)AiAddTouZi();
+                    if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Place) AiAddTouZi();
                     // AiCall();
                     break;
                 default:
@@ -239,7 +239,8 @@ namespace GamePlay.Core
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
                     break;
                 case GameMode.SoloWithAi:
-                    AiCall();
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Raise) AiCall();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
