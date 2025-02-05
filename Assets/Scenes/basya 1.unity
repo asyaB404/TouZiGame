@@ -2382,6 +2382,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 463048202200248534, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
+      propertyPath: m_Name
+      value: AgainBtn
+      objectReference: {fileID: 0}
+    - target: {fileID: 2461477116975266088, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
+      propertyPath: m_Name
+      value: CalculationCGPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2461477116975266088, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6810365940937887832, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2461,6 +2473,10 @@ PrefabInstance:
     - target: {fileID: 6810365940937887832, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8985443990791188468, guid: 52bd30463ff45a647810f2641042bf78, type: 3}
+      propertyPath: m_Name
+      value: ExitBtn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

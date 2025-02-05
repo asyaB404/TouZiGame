@@ -74,7 +74,7 @@ namespace UI.Panel
             popPanel?.HideAnim();
             if (popPanel is not MenuPanel 
                && popPanel is not SwitchoverPanel 
-                //&& popPanel is not CalculationCGPanel 
+                && popPanel is not CalculationCGPanel 
                 ) ShowAnim();
         }
 
@@ -98,6 +98,7 @@ namespace UI.Panel
         public void HideHandOverPanel()
         {
             handOverPanel.SetActive(false);
+            GameManager.Instance.NewHand();
         }
 
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
@@ -106,7 +107,7 @@ namespace UI.Panel
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
             HideHandOverPanel();
-            GameManager.Instance.NewHand();
+            
         });
 
         [FormerlySerializedAs("JackpotTexts")]

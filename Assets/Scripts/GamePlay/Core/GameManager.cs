@@ -84,16 +84,18 @@ namespace GamePlay.Core
             holeCardManagers[0].HideShader();
             holeCardManagers[1].HideShader();
         }
-        public void Restart(){
-            switch(GameMode){
+        public void Restart()
+        {
+            switch (GameMode)
+            {
                 case GameMode.Native:
-                    StartNativeGame(Random.Range(int.MinValue,int.MaxValue));
+                    StartNativeGame(Random.Range(int.MinValue, int.MaxValue));
                     break;
                 case GameMode.Online:
                     break;
                 case GameMode.SoloWithAi:
-                    StartSoloWaitAiGame(Random.Range(int.MinValue,int.MaxValue));
-                    break; 
+                    StartSoloWaitAiGame(Random.Range(int.MinValue, int.MaxValue));
+                    break;
             }
         }
         public void Reset()
@@ -239,9 +241,11 @@ namespace GamePlay.Core
             }
             else
             {
-                
-                if (curPlayerId == StageManager.FirstPlayerId) return;
-                NextToPlayerId();
+
+                // if (curPlayerId == StageManager.FirstPlayerId) return;//没有把这里删除是因为我不知道这里原来应该是什么样
+                // NextToPlayerId();
+                // _stageManager.NewStage();
+                if (curPlayerId != StageManager.FirstPlayerId) NextToPlayerId();
                 _stageManager.NewStage();
             }
 
@@ -288,11 +292,7 @@ namespace GamePlay.Core
 
             _jackpotManager.JackpotCalculation(sumScore0, sumScore1);
             StageManager.SetStage(GameStage.Calculation);
-            if (sumScore0 == 0 || sumScore1 == 0)
-            {
-                //TODO:彻底结束
-                CalculationCGPanel.Instance.ShowMe();
-            }
+            
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
@@ -302,13 +302,21 @@ namespace GamePlay.Core
             {
                 nodeQueueManager.Reset();
             }
+            GameUIPanel.Instance.UpdateScoreUI(0);
+            GameUIPanel.Instance.UpdateScoreUI(1);
+            int sumScore0 = _jackpotManager.JackpotP1;
+            int sumScore1 = _jackpotManager.JackpotP2;
+            if (sumScore0 == 0 || sumScore1 == 0)
+            {
+                Debug.Log("结束了");
+                CalculationCGPanel.Instance.ShowMe(sumScore0 == 0);
+            }
 
             _stageManager.NewHand();
             _jackpotManager.NewHand();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
-            GameUIPanel.Instance.UpdateScoreUI(0);
-            GameUIPanel.Instance.UpdateScoreUI(1);
+
             _jackpotManager.EnterRaise();
         }
 

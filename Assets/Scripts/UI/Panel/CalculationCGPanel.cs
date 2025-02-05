@@ -18,6 +18,10 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
         winImage = GetControl<Image>("Image");
         
     }
+    public override void CallBackWhenHeadPush(IBasePanel popPanel)
+    {
+        ShowAnim();
+    }
     public void ShowMe(bool isBuleWin)
     {
         if (isBuleWin) winImage.sprite = buleWin;

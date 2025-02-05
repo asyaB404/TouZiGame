@@ -172,7 +172,7 @@ public class JackpotManager
         {
             await UniTask.Delay(3000);
             GameUIPanel.Instance.HideHandOverPanel();
-            GameManager.Instance.NewHand();
+            // GameManager.Instance.NewHand();
         }).Forget();
     }
 
