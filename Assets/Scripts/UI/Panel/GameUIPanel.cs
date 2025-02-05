@@ -72,8 +72,10 @@ namespace UI.Panel
         public override void CallBackWhenHeadPop(IBasePanel popPanel)
         {
             popPanel?.HideAnim();
-            if (popPanel is not MenuPanel &&
-                popPanel is not SwitchoverPanel) ShowAnim();
+            if (popPanel is not MenuPanel 
+               && popPanel is not SwitchoverPanel 
+                //&& popPanel is not CalculationCGPanel 
+                ) ShowAnim();
         }
 
         [FormerlySerializedAs("HandOverPanel")]

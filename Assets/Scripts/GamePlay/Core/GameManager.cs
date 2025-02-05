@@ -84,7 +84,18 @@ namespace GamePlay.Core
             holeCardManagers[0].HideShader();
             holeCardManagers[1].HideShader();
         }
-
+        public void Restart(){
+            switch(GameMode){
+                case GameMode.Native:
+                    StartNativeGame(Random.Range(int.MinValue,int.MaxValue));
+                    break;
+                case GameMode.Online:
+                    break;
+                case GameMode.SoloWithAi:
+                    StartSoloWaitAiGame(Random.Range(int.MinValue,int.MaxValue));
+                    break; 
+            }
+        }
         public void Reset()
         {
             curPlayerId = 0;
@@ -280,6 +291,7 @@ namespace GamePlay.Core
             if (sumScore0 == 0 || sumScore1 == 0)
             {
                 //TODO:彻底结束
+                CalculationCGPanel.Instance.ShowMe();
             }
         }
 
