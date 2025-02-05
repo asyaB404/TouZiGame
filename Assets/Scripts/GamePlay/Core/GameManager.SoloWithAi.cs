@@ -26,7 +26,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
 
             _jackpotManager.EnterRaise();
-            Debug.Log("start");
+            // Debug.Log("start");
         }
 
         public void AiCall()
@@ -43,6 +43,7 @@ namespace GamePlay.Core
                 return;
             }
             int isRaise = ints[Random.Range(0, ints.Count)];//TODO
+            // isRaise=2;
             UniTask.Create(async () =>
             {
                 await UniTask.Delay(time);
@@ -104,7 +105,7 @@ namespace GamePlay.Core
                     }
                     // 计算扣除的分数
                     int clear = holeCard.TouZiScore * nub * nub;
-                    Debug.Log($"handNub:{t},nodeNub:{i},clear:{clear},nub:{nub},newValue:{newValue}");
+                    // Debug.Log($"handNub:{t},nodeNub:{i},clear:{clear},nub:{nub},newValue:{newValue}");
                     // 如果当前组合的分数（newValue + clear）比之前的最大值更大，更新最大值
                     if (newValue + clear > maxValue + maxClear)
                     {
@@ -118,8 +119,8 @@ namespace GamePlay.Core
             holeCardManagers[1].CurIndex = handNub;
             UniTask.Create(async () =>
             {
-                if (curPlayerId != 1) return;
                 await UniTask.Delay(time);
+                if (curPlayerId != 1) return;
                 AddTouzi(nodeNub);
             }).Forget();
         }

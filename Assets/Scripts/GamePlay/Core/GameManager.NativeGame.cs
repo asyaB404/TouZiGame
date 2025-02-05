@@ -32,7 +32,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
             
             _jackpotManager.EnterRaise();
-            Debug.Log("start");
+            // Debug.Log("start");
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace GamePlay.Core
         /// </summary>
         public void ShowBlankScreen()
         {
-            Debug.Log("show");
+            // Debug.Log("show");
             _stageManager.ShowBlankScreen();
         }
 

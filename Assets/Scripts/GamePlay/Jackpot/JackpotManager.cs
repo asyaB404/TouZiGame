@@ -120,6 +120,7 @@ public class JackpotManager
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        // Debug.LogError("进入加注阶段");
     }
 
     public void NewHand()
@@ -144,7 +145,7 @@ public class JackpotManager
         var title = $"你{(score0 > score1 ? "赢" : "输")}了{(score0 > score1 ? _jackpotNub1 : _jackpotNub0)}个筹码";
 
         bool winerWaiver = _raiseCount == 2;
-        Debug.Log(_raiseCount);
+        // Debug.Log(_raiseCount);
 
         if (score0 == score1 || winerWaiver) //（不跟注时与平局同样处理方式）
         {

@@ -29,11 +29,14 @@ namespace GamePlay.Core
         {
             CurGameStage = stage;
             HintManager.Instance.SetHint0(stage.ToString());
-            if(GameManager.GameMode==GameMode.SoloWithAi){
-                if(stage == GameStage.Place){
-                    GameManager.Instance.AiAddTouZi(); 
+            if (GameManager.GameMode == GameMode.SoloWithAi)
+            {
+                if (stage == GameStage.Place)
+                {
+                    GameManager.Instance.AiAddTouZi();
                 }
-                if(stage == GameStage.Raise){
+                if (stage == GameStage.Raise)
+                {
                     GameManager.Instance.AiCall();
                 }
             }
@@ -45,9 +48,9 @@ namespace GamePlay.Core
             FirstPlayerId = GameManager.CurPlayerId;
             UpdateUI();
             blankId = -1;
-            Hand=1;
-            Stage=1;
-            Turn=1;
+            Hand = 1;
+            Stage = 1;
+            Turn = 1;
         }
 
         public void NewHand()
@@ -109,7 +112,7 @@ namespace GamePlay.Core
             else str += "回合";
             GameManager.Instance.HoleCardManagers[0].ShowShader();
             GameManager.Instance.HoleCardManagers[1].ShowShader();
-            Debug.Log("ShowScreen");
+            // Debug.Log("ShowScreen");
             SwitchoverPanel.Instance.ShowSwitchoverButton(str, isRaise);
             HintManager.Instance.SetHint1("BlankScreen");
             // Debug.Log("打开黑幕");

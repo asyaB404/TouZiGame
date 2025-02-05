@@ -26,7 +26,7 @@ namespace UI.Panel
         {
             // GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
             HideMe();
-            Debug.Log("Hide");
+            // Debug.Log("Hide");
             HintManager.Instance.SetHint1("");
             GameManager.Instance.HideBlankScreen();
         }

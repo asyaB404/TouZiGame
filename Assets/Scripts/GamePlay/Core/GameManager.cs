@@ -228,9 +228,10 @@ namespace GamePlay.Core
             }
             else
             {
-                _stageManager.NewStage();
+                
                 if (curPlayerId == StageManager.FirstPlayerId) return;
                 NextToPlayerId();
+                _stageManager.NewStage();
             }
 
             switch (GameMode)
