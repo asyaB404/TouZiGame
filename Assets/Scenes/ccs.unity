@@ -5271,6 +5271,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5503671d555dc574fa151644a59931b2, type: 2}
+    - target: {fileID: -4683669308469848369, guid: a018d6e57e7c21148953c8d4dd03a129, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e2deb2f0ba2f3e4cb5423bfa2cec1af, type: 2}
+    - target: {fileID: -4683669308469848369, guid: a018d6e57e7c21148953c8d4dd03a129, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e2deb2f0ba2f3e4cb5423bfa2cec1af, type: 2}
+    - target: {fileID: -4683669308469848369, guid: a018d6e57e7c21148953c8d4dd03a129, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e2deb2f0ba2f3e4cb5423bfa2cec1af, type: 2}
     - target: {fileID: 919132149155446097, guid: a018d6e57e7c21148953c8d4dd03a129, type: 3}
       propertyPath: m_Name
       value: 2025mengya2
@@ -5429,7 +5441,7 @@ Transform:
   m_GameObject: {fileID: 1262416647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.799324, y: 3.2779045, z: 16.809776}
+  m_LocalPosition: {x: 10.15, y: 3.28, z: 16.99}
   m_LocalScale: {x: 6.3092, y: 6.3092003, z: 6.3092003}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5699,7 +5711,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 0.4745098}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5763,7 +5775,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2.56
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -6148,7 +6160,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1.31, y: 3.7, z: 0.28}
+    m_Scale: {x: 4.74, y: 3.7, z: 0.28}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
