@@ -160,6 +160,7 @@ namespace UI.Panel
         public void SetWaitPanel(bool flag)
         {
             waitPanel.gameObject.SetActive(flag);
+            // Debug.LogError(flag);
         }
 
         /// <summary>

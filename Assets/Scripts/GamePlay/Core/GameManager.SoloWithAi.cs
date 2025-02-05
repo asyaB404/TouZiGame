@@ -11,6 +11,8 @@ namespace GamePlay.Core
         public void StartSoloWaitAiGame(int seed)
         {
             holeCardManagers[1].gameObject.SetActive(false);
+            holeCardManagers[0].HideShader();
+
             GameMode = GameMode.SoloWithAi;
             gameObject.SetActive(true);
             Random.InitState(seed);
@@ -27,26 +29,35 @@ namespace GamePlay.Core
             Debug.Log("start");
         }
 
-        private void AiCall()
+        public void AiCall()
         {
+            if (curPlayerId != 1) return;
             int time = (int)(1000 * Random.Range(MyGlobal.MIN_AI_PONDER_Time, MyGlobal.MAX_AI_PONDER_Time));
-            int isRaise = Random.Range(0, 3);//TODO
-            if(StageManager.Stage==1){
-                isRaise=Random.Range(0, 2);
+            List<int> ints = new();
+            if (StageManager.Stage != 1)ints.Add(2);
+
+            if (_jackpotManager.JackpotP2>_jackpotManager.AnteNub) ints.Add(1); 
+            if(_jackpotManager.JackpotP2>0) ints.Add(0);
+            if(ints.Count==0) {
+                Debug.LogError("Error");
+                return;
             }
+            int isRaise = ints[Random.Range(0, ints.Count)];//TODO
             UniTask.Create(async () =>
             {
                 await UniTask.Delay(time);
+                if (curPlayerId != 1) return;
                 if (isRaise == 0) Call(false);
                 else if (isRaise == 1) Call(true);
                 else if (isRaise == 2) Fold();
             }).Forget();
         }
-        private void AiAddTouZi()
+        public void AiAddTouZi()
         {
+            if (curPlayerId != 1) return;
             int time = (int)(1000 * Random.Range(MyGlobal.MIN_AI_PONDER_Time, MyGlobal.MAX_AI_PONDER_Time));
             // 初始化变量，用于存储最大价值、最大清除分数和底牌编号和棋盘位置
-            int maxValue = 0, maxClear = 0, handNub = 0,nodeNub=0;
+            int maxValue = 0, maxClear = 0, handNub = 0, nodeNub = 0;
 
             // 遍历每一列（NodeQueues）
             for (int i = 0; i < nodeQueueManagers[1].NodeQueues.Count; i++)
@@ -77,7 +88,7 @@ namespace GamePlay.Core
                     int newValue = 0;
                     for (int j = 0; j < tempDiceCounts.Count(); j++)
                     {
-                        newValue += j  * tempDiceCounts[j] * tempDiceCounts[j];
+                        newValue += j * tempDiceCounts[j] * tempDiceCounts[j];
                     }
                     // 减去当前列的基础分数，得到净增分数
                     newValue -= currentQueue.SumScore;
@@ -104,9 +115,10 @@ namespace GamePlay.Core
                     }
                 }
             }
-            holeCardManagers[1].CurIndex= handNub;
+            holeCardManagers[1].CurIndex = handNub;
             UniTask.Create(async () =>
             {
+                if (curPlayerId != 1) return;
                 await UniTask.Delay(time);
                 AddTouzi(nodeNub);
             }).Forget();

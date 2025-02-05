@@ -29,6 +29,14 @@ namespace GamePlay.Core
         {
             CurGameStage = stage;
             HintManager.Instance.SetHint0(stage.ToString());
+            if(GameManager.GameMode==GameMode.SoloWithAi){
+                if(stage == GameStage.Place){
+                    GameManager.Instance.AiAddTouZi(); 
+                }
+                if(stage == GameStage.Raise){
+                    GameManager.Instance.AiCall();
+                }
+            }
         }
 
 

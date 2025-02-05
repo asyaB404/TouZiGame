@@ -114,7 +114,7 @@ public class JackpotManager
                         haveJackpot: GameManager.CurPlayerId == 0 ? JackpotP1 : JackpotP2,
                         needJackpot: AnteNub, canFold: StageManager.Turn > 1);
                 }
-
+                // if (GameManager.CurPlayerId == 1 && StageManager.CurGameStage == GameStage.Raise) GameManager.Instance.AiCall();
                 GameUIPanel.Instance.SetWaitPanel(GameManager.CurPlayerId != 0);
                 break;
             default:

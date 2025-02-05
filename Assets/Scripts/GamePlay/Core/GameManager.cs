@@ -15,6 +15,7 @@ using FishNet;
 using GamePlay.Node;
 using NetWork;
 using UI.Panel;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -139,6 +140,7 @@ namespace GamePlay.Core
             else
             {
                 NextToPlayerId();
+                StageManager.SetStage(GameStage.Place);
             }
 
             switch (GameMode)
@@ -150,7 +152,8 @@ namespace GamePlay.Core
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
                     break;
                 case GameMode.SoloWithAi:
-                    if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Place) AiAddTouZi();
+                    GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
+                    // if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Place) AiAddTouZi();
                     // AiCall();
                     break;
                 default:
@@ -240,7 +243,6 @@ namespace GamePlay.Core
                     break;
                 case GameMode.SoloWithAi:
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
-                    if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Raise) AiCall();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -254,6 +256,7 @@ namespace GamePlay.Core
         public void Fold()
         {
             OverOneHand();
+            GameUIPanel.Instance.SetWaitPanel(false);
         }
 
         #endregion
