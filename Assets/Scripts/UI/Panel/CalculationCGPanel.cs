@@ -22,11 +22,14 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
     {
         ShowAnim();
     }
-    public void ShowMe(bool isBuleWin)
+    public void Show(bool isBuleWin)
     {
-        if (isBuleWin) winImage.sprite = buleWin;
-        else winImage.sprite = redWin;
-        base.ShowMe();
+        
+        ShowMe();
+    }
+    public override void ShowAnim()
+    {
+        base.ShowAnim();
     }
     public override void OnPressedEsc()
     {
@@ -34,9 +37,11 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
         Again();
     }
     private void Again() {
+        HideMe();
         GameManager.Instance.Restart();
      }
     private void Exit() { 
+        HideMe();
         GameManager.Instance.Exit();
     }
 }

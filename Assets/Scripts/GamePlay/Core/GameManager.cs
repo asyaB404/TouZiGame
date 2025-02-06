@@ -292,7 +292,7 @@ namespace GamePlay.Core
 
             _jackpotManager.JackpotCalculation(sumScore0, sumScore1);
             StageManager.SetStage(GameStage.Calculation);
-            
+
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
@@ -306,18 +306,19 @@ namespace GamePlay.Core
             GameUIPanel.Instance.UpdateScoreUI(1);
             int sumScore0 = _jackpotManager.JackpotP1;
             int sumScore1 = _jackpotManager.JackpotP2;
-            if (sumScore0 == 0 || sumScore1 == 0)
-            {
-                Debug.Log("结束了");
-                CalculationCGPanel.Instance.ShowMe(sumScore0 == 0);
-            }
+
 
             _stageManager.NewHand();
             _jackpotManager.NewHand();
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
 
-            _jackpotManager.EnterRaise();
+            if (sumScore0 == 0 || sumScore1 == 0)
+            {
+                Debug.Log("结束了");
+                CalculationCGPanel.Instance.Show(sumScore0 == 0);
+            }
+            else _jackpotManager.EnterRaise();
         }
 
         #endregion
