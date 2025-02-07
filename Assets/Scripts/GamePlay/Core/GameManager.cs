@@ -15,7 +15,7 @@ using FishNet;
 using GamePlay.Node;
 using NetWork;
 using UI.Panel;
-using UnityEditor.SceneManagement;
+// using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -293,6 +293,10 @@ namespace GamePlay.Core
         }
 
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
+        // public void ClearData()
+        // {
+            
+        // }
         public void NewHand()
         {
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
@@ -301,12 +305,13 @@ namespace GamePlay.Core
             }
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
-            int sumScore0 = _jackpotManager.JackpotP1;
-            int sumScore1 = _jackpotManager.JackpotP2;
 
 
             _stageManager.NewHand();
             _jackpotManager.NewHand();
+            int sumScore0 = _jackpotManager.JackpotP1;
+            int sumScore1 = _jackpotManager.JackpotP2;
+
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
 
@@ -316,6 +321,7 @@ namespace GamePlay.Core
                 CalculationCGPanel.Instance.Show(sumScore0 == 0);
             }
             else _jackpotManager.EnterRaise();
+            // Debug.LogError("");
         }
 
         #endregion

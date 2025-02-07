@@ -34,6 +34,7 @@ namespace UI.Panel
             });
 
             GetControl<Button>("StartOnlineGame").onClick.AddListener(() => { MyServer.Instance.StartGame(); });
+            UpdateOnlineUI();
         }
 
         private void ShowForOnline()

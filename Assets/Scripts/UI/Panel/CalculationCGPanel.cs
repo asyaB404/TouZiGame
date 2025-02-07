@@ -24,7 +24,6 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
     }
     public void Show(bool isBuleWin)
     {
-
         ShowMe();
     }
     public override void ShowAnim()
