@@ -99,10 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d639989acbd77418d8da44dd1f9c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canChick: 0
+  canClick: 0
   playerId: -1
   id: -1
-  touZiNub: -1
   spriteRenderer: {fileID: 5366350333677994762}
   halo: {fileID: 0}
 --- !u!61 &4889364991006293063

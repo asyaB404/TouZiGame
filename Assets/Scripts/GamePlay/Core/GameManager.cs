@@ -241,10 +241,6 @@ namespace GamePlay.Core
             }
             else
             {
-
-                // if (curPlayerId == StageManager.FirstPlayerId) return;//没有把这里删除是因为我不知道这里原来应该是什么样
-                // NextToPlayerId();
-                // _stageManager.NewStage();
                 if (curPlayerId != StageManager.FirstPlayerId) NextToPlayerId();
                 _stageManager.NewStage();
             }

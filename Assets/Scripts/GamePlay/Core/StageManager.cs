@@ -27,6 +27,7 @@ namespace GamePlay.Core
 
         public static void SetStage(GameStage stage)
         {
+            Debug.Log(GameManager.CurPlayerId+" "+stage);
             CurGameStage = stage;
             HintManager.Instance.SetHint0(stage.ToString());
             if (GameManager.GameMode == GameMode.SoloWithAi)
@@ -120,6 +121,7 @@ namespace GamePlay.Core
 
         public void HideBlankScreen()
         {
+            if(blankId==-1)return;
             GameManager.Instance.HoleCardManagers[blankId].HideShader();
         }
 
