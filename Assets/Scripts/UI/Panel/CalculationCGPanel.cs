@@ -16,7 +16,7 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
         GetControl<Button>("AgainBtn").onClick.AddListener(Again);
         GetControl<Button>("ExitBtn").onClick.AddListener(Exit);
         winImage = GetControl<Image>("Image");
-        
+
     }
     public override void CallBackWhenHeadPush(IBasePanel popPanel)
     {
@@ -24,7 +24,7 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
     }
     public void Show(bool isBuleWin)
     {
-        
+
         ShowMe();
     }
     public override void ShowAnim()
@@ -36,11 +36,13 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
         base.OnPressedEsc();
         Again();
     }
-    private void Again() {
+    private void Again()
+    {
         HideMe();
         GameManager.Instance.Restart();
-     }
-    private void Exit() { 
+    }
+    private void Exit()
+    {
         HideMe();
         GameManager.Instance.Exit();
     }
