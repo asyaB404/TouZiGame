@@ -21,11 +21,14 @@ namespace GamePlay.Core
         public void StartNativeGame(int seed)
         {
             holeCardManagers[1].gameObject.SetActive(true);
+
             GameMode = GameMode.Native;
             gameObject.SetActive(true);
             Random.InitState(seed);
+
             _jackpotManager.NewGame();
             _stageManager.NewGame();
+            
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
             
