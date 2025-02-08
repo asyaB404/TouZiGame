@@ -24,7 +24,6 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].HideShader();
-            ChessboardOpen();
         }
         /// <summary>
         /// 房主开始游戏时所有客户端调用

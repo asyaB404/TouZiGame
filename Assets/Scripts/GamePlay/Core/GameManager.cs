@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using FishNet;
 using GamePlay.Node;
 using NetWork;
@@ -55,19 +54,9 @@ namespace GamePlay.Core
         public IReadOnlyList<HoleCardManager> HoleCardManagers => holeCardManagers;
         private readonly JackpotManager _jackpotManager = new();
         private readonly StageManager _stageManager = new();
-        [SerializeField] private Camera chessboardCamera;
-        [SerializeField] private Transform chessboard;
 
         #endregion
-        private Vector2 min_d=new Vector2(0, MyGlobal.MIN_CAMERA_DISTANCE);
-        private Vector2 max_d=new Vector2(0, MyGlobal.MAX_CAMERA_DISTANCE);
 
-        private void ChessboardOpen()
-        {
-            chessboard.gameObject.SetActive(false);
-            // chessboardCamera.transform.DOLocalPath( 0.5f).OnComplete(() =>
-            // chessboard.gameObject.SetActive(true));
-        }
         private void Awake()
         {
             Instance = this;
@@ -306,7 +295,7 @@ namespace GamePlay.Core
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
         // public void ClearData()
         // {
-
+            
         // }
         public void NewHand()
         {
