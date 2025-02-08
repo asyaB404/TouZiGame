@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using FishNet;
 using GamePlay.Node;
 using NetWork;
@@ -55,7 +56,27 @@ namespace GamePlay.Core
         private readonly JackpotManager _jackpotManager = new();
         private readonly StageManager _stageManager = new();
 
+        [SerializeField] private Camera ladderCamera;
+        [SerializeField] private GameObject chessboard;
         #endregion
+        private void EnterCameraAnim()
+        {
+            ladderCamera.transform.position = new Vector3(0, 0, MyGlobal.MAX_CAMERA_DISTANCE);
+            chessboard.SetActive(false);
+            TweenCallback firstAnimationCompleted = () =>
+            {
+                TweenCallback secondAnimationCompleted = () =>
+                {
+                    chessboard.SetActive(true);
+                };
+                ladderCamera.transform.DOMoveZ(MyGlobal.MIN_CAMERA_DISTANCE, 0.5f).OnComplete(secondAnimationCompleted);
+            };
+            ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f).OnComplete(firstAnimationCompleted);
+        }
+        public void ExitCameraAnim()
+        {
+            ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f);
+        }
 
         private void Awake()
         {
@@ -235,7 +256,7 @@ namespace GamePlay.Core
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
-            HintManager.Instance.SetUpHint(curPlayerId,isRaise?"Raise":"Call");
+            HintManager.Instance.SetUpHint(curPlayerId, isRaise ? "Raise" : "Call");
             if (_jackpotManager.CheckIfCanRaise())
             {
                 NextToPlayerId();
@@ -296,7 +317,7 @@ namespace GamePlay.Core
         //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
         // public void ClearData()
         // {
-            
+
         // }
         public void NewHand()
         {
@@ -338,8 +359,8 @@ namespace GamePlay.Core
         private void TestStartGame()
         {
             // StartNativeGame(123);
-            string a="P1";
-            string b=$"{a}觉得你说的对";
+            string a = "P1";
+            string b = $"{a}觉得你说的对";
             Debug.Log(b);
         }
 

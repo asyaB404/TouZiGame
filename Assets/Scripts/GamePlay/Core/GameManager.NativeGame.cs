@@ -35,6 +35,8 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
             
             _jackpotManager.EnterRaise();
+            EnterCameraAnim();
+
             // Debug.Log("start");
         }
 

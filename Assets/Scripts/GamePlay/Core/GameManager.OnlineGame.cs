@@ -24,6 +24,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].HideShader();
+            EnterCameraAnim();
         }
         /// <summary>
         /// 房主开始游戏时所有客户端调用
@@ -35,6 +36,7 @@ namespace GamePlay.Core
             holeCardManagers[0].ResetAllHoleCards();
             _jackpotManager.EnterRaise();
             GameUIPanel.Instance.UpdateOnlineUI();
+            
         }
     }
 }

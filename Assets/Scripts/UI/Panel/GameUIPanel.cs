@@ -49,6 +49,7 @@ namespace UI.Panel
             base.HideAnim();
             HideRaisePanel();
             HideHandOverPanel(false);
+            GameManager.Instance.ExitCameraAnim();
         }
 
         public override void OnPressedEsc()

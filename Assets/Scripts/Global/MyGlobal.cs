@@ -16,7 +16,7 @@ public static class MyGlobal
     public const float INITIAL_SCALE = 1; // 初始缩放大小
     public const float MAX_AI_PONDER_Time=3;
     public const float MIN_AI_PONDER_Time=0.5f;
-    public const float MAX_CAMERA_DISTANCE=90;
-    public const float MIN_CAMERA_DISTANCE=40;
+    public const float MAX_CAMERA_DISTANCE=-20;
+    public const float MIN_CAMERA_DISTANCE=-11.3f;
 
 }
