@@ -36,6 +36,7 @@ namespace GamePlay.Core
             
             _jackpotManager.EnterRaise();
             // Debug.Log("start");
+            ChessboardOpen();
         }
 
         /// <summary>
