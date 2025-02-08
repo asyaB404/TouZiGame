@@ -49,6 +49,9 @@ namespace GamePlay.Core
         private Sprite[] touziSprites;
 
         public IReadOnlyList<Sprite> TouziSprites => touziSprites;
+
+        public GameObject TouziPrefab;
+        
         [SerializeField] private NodeQueueManager[] nodeQueueManagers;
         public IReadOnlyList<NodeQueueManager> NodeQueueManagers => nodeQueueManagers;
         [SerializeField] private HoleCardManager[] holeCardManagers;

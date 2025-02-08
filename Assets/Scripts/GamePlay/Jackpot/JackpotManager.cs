@@ -125,11 +125,10 @@ public class JackpotManager
 
     public void NewHand()
     {
-        AnteNub = 1;
         _raiseCount = 0;
         _jackpotNub0 = 0;
         _jackpotNub1 = 0;
-        AnteNub += StageManager.Hand;
+        AnteNub = StageManager.Hand;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
         HintManager.Instance.SetConditionHint("FirstRaise");
     }

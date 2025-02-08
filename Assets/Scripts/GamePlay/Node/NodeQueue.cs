@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening; // 用于动画效果的Tweening库
 using GamePlay.Core;
 using NetWork.Client;
@@ -22,8 +23,7 @@ namespace GamePlay.Node
     /// <summary>
     /// Node队列，表示一列
     /// </summary>
-    public class NodeQueue : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
-        IPointerExitHandler
+    public class NodeQueue : MonoBehaviour
     {
         public int playerId = -1; //表示这个
         public int id = -1; //表示第几列
@@ -40,7 +40,18 @@ namespace GamePlay.Node
 
         [FormerlySerializedAs("nodePos")]
         [SerializeField]
-        private Transform[] touziPos; // 节点的位置数组（每个节点的放置位置）
+        private Transform[] touziPos; // 节点的位置数组
+        private Node[] Nodes;//节点数组
+
+        private void Awake()
+        {
+            Nodes = new Node[MaxQueueNode];
+            for (int i = 0; i < MaxQueueNode; i++)
+            {
+                Nodes[i] = touziPos[i].GetComponent<Node>();
+                Nodes[i].Init(this);
+            }
+        }
 
         [SerializeField] private List<int> scores; //存储每个节点的点数
 
@@ -70,9 +81,12 @@ namespace GamePlay.Node
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            foreach (Node node in Nodes)
+            {
+                node.transform.DOKill(); // 停止所有当前的动画
+                node.SetScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
+            }
 
-            transform.DOKill(); // 停止所有当前的动画
-            transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
             HintManager.Instance.SetEventHint("NodeQueue");
         }
 
@@ -80,8 +94,11 @@ namespace GamePlay.Node
         public void OnPointerExit(PointerEventData data)
         {
             if (StageManager.CurGameStage != GameStage.Place) return;
-            transform.DOKill(); // 停止当前动画
-            transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
+            foreach (Node node in Nodes)
+            {
+                node.transform.DOKill(); // 停止所有当前的动画
+                node.SetScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点大小
+            }
             HintManager.Instance.SetEventHint("");
         }
 
@@ -93,7 +110,9 @@ namespace GamePlay.Node
         // 当鼠标松开时，根据游戏模式执行相应操作
         public void OnPointerUp(PointerEventData data)
         {
-            if (data.pointerCurrentRaycast.gameObject != gameObject || playerId != GameManager.CurPlayerId ||
+            if (
+                !touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform) ||
+             playerId != GameManager.CurPlayerId ||
                 StageManager.CurGameStage != GameStage.Place)
                 return; // 确保点击的是当前节点且是当前玩家操作
             // 根据不同的游戏模式执行不同的逻辑
@@ -113,16 +132,18 @@ namespace GamePlay.Node
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
             }
-
-            transform.DOKill(); // 停止动画
-            transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f);
+            foreach (Node node in Nodes)
+            {
+                node.transform.DOKill(); // 停止所有当前的动画
+                node.SetScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点大小
+            }
         }
 
         //添加一个节点
         public bool AddNode(int score)
         {
             if (scores.Count == MaxQueueNode) return false;
-            GameObject node = NodeFactory.CreateNode(score, touziPos[scores.Count]);
+            GameObject node = NodeFactory.CreateTouzi(score, touziPos[scores.Count]);
             touziObjs.Add(node);
             scores.Add(score);
 

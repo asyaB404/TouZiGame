@@ -12,7 +12,9 @@ public class TouZi : MonoBehaviour
         new Vector3(90,90,0),
         new Vector3(180,0,0)
     };
-    
+    public void SetNub(int nub){
+        transform.localEulerAngles = vector3s[nub];
+    }
     public void RollAnim()
     {
 
