@@ -131,7 +131,7 @@ public class JackpotManager
         _jackpotNub1 = 0;
         AnteNub += StageManager.Hand;
         GameUIPanel.Instance.UpdateJackpotUI(sumJackpotNub: SumJackpotNub);
-        HintManager.Instance.SetHint1("FirstRaise");
+        HintManager.Instance.SetConditionHint("FirstRaise");
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public class JackpotManager
     /// <param name="score0">p1得分</param>
     /// <param name="score1">p2得分</param>
     /// <param name="winerWaiver">赢家是否不跟注</param>
-    public void JackpotCalculation(int score0, int score1) //暂未处理赢家不跟注的情况
+    public void JackpotCalculation(int score0, int score1) 
     {
         var title = $"你{(score0 > score1 ? "赢" : "输")}了{(score0 > score1 ? _jackpotNub1 : _jackpotNub0)}个筹码";
 
@@ -152,9 +152,12 @@ public class JackpotManager
             JackpotP1 += (int)SumJackpotNub / 2;
             JackpotP2 += (int)SumJackpotNub / 2;
             _extraJackpot = SumJackpotNub % 2;
-
-            if (score0 == score1) title = $"打平了。。。给你返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
-            else if (winerWaiver) title = $"由于赢家不愿意继续加注，给双方返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
+            if(winerWaiver){
+                title = $"由于赢家不愿意继续加注，给双方返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
+                HintManager.Instance.SetUpHint(score0 > score1?0:1,"WinerFold");
+            }
+            else if (score0 == score1) title = $"打平了。。。给你返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
+            // else if (winerWaiver) 
         }
         else
         {
@@ -163,8 +166,8 @@ public class JackpotManager
             else JackpotP2 += SumJackpotNub;
         }
 
-        var text1 = $"你一共获得了：{score0}分";
-        var text2 = $"对手一共获得了：{score1}分";
+        var text1 = $"p1一共获得了：{score0}分";
+        var text2 = $"p2一共获得了：{score1}分";
         GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2);
         //网络对战自动关闭面板
         if (GameManager.GameMode != GameMode.Online) return;

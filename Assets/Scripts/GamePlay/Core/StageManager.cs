@@ -29,7 +29,7 @@ namespace GamePlay.Core
         {
             Debug.Log(GameManager.CurPlayerId+" "+stage);
             CurGameStage = stage;
-            HintManager.Instance.SetHint0(stage.ToString());
+            HintManager.Instance.SetStageHint(stage.ToString());
             if (GameManager.GameMode == GameMode.SoloWithAi)
             {
                 if (stage == GameStage.Place)
@@ -86,7 +86,7 @@ namespace GamePlay.Core
             Turn++;
             if (Turn >= MyGlobal.A_STAGE_ROUND - 2)
             {
-                HintManager.Instance.SetHint1("EndPlace");
+                HintManager.Instance.SetConditionHint("EndPlace");
             }
 
             if (Turn > MyGlobal.A_STAGE_ROUND)
@@ -115,7 +115,7 @@ namespace GamePlay.Core
             GameManager.Instance.HoleCardManagers[1].ShowShader();
             // Debug.Log("ShowScreen");
             SwitchoverPanel.Instance.ShowSwitchoverButton(str, isRaise);
-            HintManager.Instance.SetHint1("BlankScreen");
+            HintManager.Instance.SetConditionHint("BlankScreen");
             // Debug.Log("打开黑幕");
         }
 

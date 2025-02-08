@@ -29,8 +29,8 @@ namespace UI.Panel
             base.Init();
             InitForOnline();
         }
-        
-     
+
+
 
         private void Awake()
         {
@@ -72,9 +72,9 @@ namespace UI.Panel
         public override void CallBackWhenHeadPop(IBasePanel popPanel)
         {
             popPanel?.HideAnim();
-            if (popPanel is not MenuPanel 
-               && popPanel is not SwitchoverPanel 
-                && popPanel is not CalculationCGPanel 
+            if (popPanel is not MenuPanel
+               && popPanel is not SwitchoverPanel
+                && popPanel is not CalculationCGPanel
                 ) ShowAnim();
         }
 
@@ -99,7 +99,7 @@ namespace UI.Panel
         {
             handOverPanel.SetActive(false);
 
-            if(flag)GameManager.Instance.NewHand();
+            if (flag) GameManager.Instance.NewHand();
         }
 
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
@@ -108,7 +108,7 @@ namespace UI.Panel
         private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
         {
             HideHandOverPanel();
-            
+
         });
 
         [FormerlySerializedAs("JackpotTexts")]
@@ -135,7 +135,7 @@ namespace UI.Panel
         {
             handNubText.text = $"第{handNub.ToString()}轮";
             stageNubText.text = $"第{stageNub.ToString()}次下注";
-            roundNubText.text =$"第{turnNub}次落子";
+            roundNubText.text = $"第{turnNub}次落子";
         }
 
 
@@ -164,7 +164,7 @@ namespace UI.Panel
         public void SetWaitPanel(bool flag)
         {
             waitPanel.gameObject.SetActive(flag);
-            if(flag) HideRaisePanel();
+            if (flag) HideRaisePanel();
             // Debug.LogError(flag);
         }
 
@@ -239,12 +239,12 @@ namespace UI.Panel
             {
                 eventID = EventTriggerType.PointerEnter,
             };
-            entryEnter.callback.AddListener((data) => { HintManager.Instance.SetHint2(str); });
+            entryEnter.callback.AddListener((data) => { HintManager.Instance.SetEventHint(str); });
             EventTrigger.Entry entryExit = new EventTrigger.Entry
             {
                 eventID = EventTriggerType.PointerExit,
             };
-            entryExit.callback.AddListener((data) => { HintManager.Instance.SetHint2(""); });
+            entryExit.callback.AddListener((data) => { HintManager.Instance.SetEventHint(""); });
             trigger.triggers.Add(entryEnter);
             trigger.triggers.Add(entryExit);
         }
@@ -309,11 +309,14 @@ namespace UI.Panel
             HideRaisePanel();
         }
 
-        public void UpdateHint(string str)
+        public void UpdateDownHint(string str)
         {
-            GetControl<TextMeshProUGUI>("HintText").text = str;
+            GetControl<TextMeshProUGUI>("HintTextDown").text = str;
         }
-
+        public void UpdateUpHint(string str)
+        {
+            GetControl<TextMeshProUGUI>("HintTextUp").text = str;
+        }
         #endregion
 
         #region debug

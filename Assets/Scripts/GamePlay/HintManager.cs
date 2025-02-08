@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class HintManager
 {
-    string hint0="";
-    string hint1="";
-    string hint2="";
-    // string hintStr;
     public static HintManager Instance
     {
         get
@@ -18,31 +14,49 @@ public class HintManager
         }
     }
     static HintManager instance;
+    #region 下方提示栏，用于提示现在该做什么
+    string hint0 = "";
+    string hint1 = "";
+    string hint2 = "";
+    // string hintStr;
+
 
     private void SetHint()
     {
-        if (hint2 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText2Dic[hint2]);
-        else if (hint1 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText1Dic[hint1]);
-        else if (hint0 != "") GameUIPanel.Instance.UpdateHint(HintText.HintText0Dic[hint0]);
-        
+        if (hint2 != "") GameUIPanel.Instance.UpdateDownHint(HintText.HintTextEventDic[hint2]);
+        else if (hint1 != "") GameUIPanel.Instance.UpdateDownHint(HintText.HintTextConditionDic[hint1]);
+        else if (hint0 != "") GameUIPanel.Instance.UpdateDownHint(HintText.HintTextStageDic[hint0]);
     }
-    public void SetHint0(string str)
+    public void SetStageHint(string str)//设置阶段性提示
     {
         hint0 = str;
-        hint1="";
-        hint2="";
+        hint1 = "";
+        hint2 = "";
         SetHint();
     }
 
-    public void SetHint1(string str)
+    public void SetConditionHint(string str)//设置条件性提示
     {
         hint1 = str;
-        hint2="";
+        hint2 = "";
         SetHint();
     }
-    public void SetHint2(string str)
+    public void SetEventHint(string str)//设置事件性提示（如鼠标进入xxx
     {
-        hint2 = str;    
+        hint2 = str;
         SetHint();
     }
+    #endregion
+
+    #region 上方提示栏，用于提示刚刚做了什么
+    public void SetUpHint(int playerId, string str)
+    {
+        string str1=playerId==0?"P1":"P2";
+        string str2=playerId==0?"P2":"P1";
+        string title=HintText.HintTextUpDic[str];
+        title=title.Replace("玩家1",str1);
+        title=title.Replace("玩家2",str2);
+        GameUIPanel.Instance.UpdateUpHint(title);
+    }
+    #endregion
 }

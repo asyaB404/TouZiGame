@@ -235,6 +235,7 @@ namespace GamePlay.Core
         public void Call(bool isRaise)
         {
             _jackpotManager.Call(curPlayerId, isRaise);
+            HintManager.Instance.SetUpHint(curPlayerId,isRaise?"Raise":"Call");
             if (_jackpotManager.CheckIfCanRaise())
             {
                 NextToPlayerId();
@@ -336,7 +337,10 @@ namespace GamePlay.Core
         [ContextMenu("startGame")]
         private void TestStartGame()
         {
-            StartNativeGame(123);
+            // StartNativeGame(123);
+            string a="P1";
+            string b=$"{a}觉得你说的对";
+            Debug.Log(b);
         }
 
         [ContextMenu("ReSetGame")]
@@ -355,7 +359,7 @@ namespace GamePlay.Core
         private void Test1()
         {
             // AddTouzi(curPlayerId, t2, t3);
-            GameUIPanel.Instance.UpdateHint("你好0");
+            GameUIPanel.Instance.UpdateDownHint("你好0");
         }
 
         [ContextMenu("clear")]

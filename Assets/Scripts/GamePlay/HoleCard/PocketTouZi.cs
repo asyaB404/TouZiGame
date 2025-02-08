@@ -38,7 +38,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     public void OnPointerEnter(PointerEventData data)
     {
         if (StageManager.CurGameStage != GameStage.Place) return;
-        HintManager.Instance.SetHint2("HoleCardChoose");
+        HintManager.Instance.SetEventHint("HoleCardChoose");
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
@@ -63,7 +63,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         if (StageManager.CurGameStage != GameStage.Place) return;
         _scaleAnim?.Kill(); 
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
-        HintManager.Instance.SetHint2("");
+        HintManager.Instance.SetEventHint("");
     }
 
     public void OnPointerDown(PointerEventData data)

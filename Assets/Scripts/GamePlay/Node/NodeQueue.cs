@@ -38,12 +38,14 @@ namespace GamePlay.Node
             private set => sumScore = value;
         }
 
-        [FormerlySerializedAs("nodePos")] [SerializeField]
+        [FormerlySerializedAs("nodePos")]
+        [SerializeField]
         private Transform[] touziPos; // 节点的位置数组（每个节点的放置位置）
 
         [SerializeField] private List<int> scores; //存储每个节点的点数
 
-        [FormerlySerializedAs("nodeObjs")] [SerializeField]
+        [FormerlySerializedAs("nodeObjs")]
+        [SerializeField]
         private List<GameObject> touziObjs; // 存储与节点关联的游戏对象（例如显示的骰子）
 
         public IReadOnlyList<int> Scores => scores; //提供只读的点数列表
@@ -63,7 +65,7 @@ namespace GamePlay.Node
                     // if(playerId == 1) return;
                     break;
                 case GameMode.SoloWithAi:
-                    if(playerId == 1) return;
+                    if (playerId == 1) return;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -71,7 +73,7 @@ namespace GamePlay.Node
 
             transform.DOKill(); // 停止所有当前的动画
             transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
-            HintManager.Instance.SetHint2("NodeQueue");
+            HintManager.Instance.SetEventHint("NodeQueue");
         }
 
         //当鼠标离开节点时，恢复节点的原始大小
@@ -80,7 +82,7 @@ namespace GamePlay.Node
             if (StageManager.CurGameStage != GameStage.Place) return;
             transform.DOKill(); // 停止当前动画
             transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
-            HintManager.Instance.SetHint2("");
+            HintManager.Instance.SetEventHint("");
         }
 
         //当鼠标按下时
@@ -128,8 +130,9 @@ namespace GamePlay.Node
             if (!_scoreCounts.TryAdd(score, 1))
             {
                 _scoreCounts[score]++;
-            }
 
+            }
+            HintManager.Instance.SetUpHint(playerId, "Hit" + _scoreCounts[score]);
             // 更新总分
             UpdateSumScore();
             return true;
@@ -154,7 +157,7 @@ namespace GamePlay.Node
                 Destroy(touziObjs[i]);
                 touziObjs.RemoveAt(i);
                 scores.RemoveAt(i);
-
+                HintManager.Instance.SetUpHint(playerId, "clear");
                 // 更新点数计数
                 if (_scoreCounts.TryGetValue(curScore, out int count))
                 {

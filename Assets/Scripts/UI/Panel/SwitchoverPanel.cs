@@ -27,7 +27,7 @@ namespace UI.Panel
             // GetControl<Button>("SwitchoverPanel").gameObject.SetActive(false);
             HideMe();
             // Debug.Log("Hide");
-            HintManager.Instance.SetHint1("");
+            HintManager.Instance.SetConditionHint("");
             GameManager.Instance.HideBlankScreen();
         }
         public override void CallBackWhenHeadPush(IBasePanel oldPanel)
