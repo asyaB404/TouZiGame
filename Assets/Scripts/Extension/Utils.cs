@@ -6,6 +6,21 @@ using Random = System.Random;
 
 public static class Utils
 {
+    public static void SetFullScreen(bool isFullScreen)
+    {
+        if (isFullScreen)
+        {
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height,
+                FullScreenMode.FullScreenWindow);
+        }
+        else
+        {
+            Screen.SetResolution(1280, 960, FullScreenMode.Windowed);
+        }
+        PlayerPrefs.SetInt("FullScreen", isFullScreen ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
     public static Vector2Int ToVectorInt(this Vector2 vector2)
     {
         return new Vector2Int(Mathf.FloorToInt(vector2.x), Mathf.FloorToInt(vector2.y));

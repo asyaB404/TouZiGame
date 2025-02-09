@@ -16,7 +16,7 @@ public class AppMain : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioClip[] musicClips;
- 
+
     private void Awake()
     {
         gameManager.Init();
@@ -25,5 +25,7 @@ public class AppMain : MonoBehaviour
     private void Start()
     {
         AudioMgr.Instance.PlayFirstThenLoop(musicClips[0], musicClips[1]);
+        bool isFullScreen = PlayerPrefs.GetInt("FullScreen", 0) == 1;
+        Utils.SetFullScreen(isFullScreen);
     }
 }

@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2025, Basya
 // // ********************************************************************************************
 
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panel
@@ -24,6 +25,7 @@ namespace UI.Panel
             {
                 AudioMgr.Instance.SetSFXVolume(value);
             });
+            GetControl<Toggle>("fullScreenToggle").onValueChanged.AddListener(Utils.SetFullScreen);
             GetControl<Button>("return").onClick.AddListener(HideMe);
         }
 
@@ -32,6 +34,7 @@ namespace UI.Panel
             base.ShowAnim();
             GetControl<Slider>("slider").value = AudioMgr.Instance.musicVolume;
             GetControl<Slider>("slider1").value = AudioMgr.Instance.sfxVolume;
+            GetControl<Toggle>("fullScreenToggle").isOn = Screen.fullScreen;
         }
     }
 }
