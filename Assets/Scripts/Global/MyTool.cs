@@ -14,18 +14,15 @@ public static class MyTool
         return (curPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
     }
     
-    public static void PlayParabola(Transform target, Vector3 startPos, Vector3 endPos, float height, float duration)
+    public static void PlayParabola(Transform target, Vector3 endPos, float height, float duration)
     {
         if (target == null) return;
-
-        target.position = startPos;
-
         // XZ 轴线性移动
         target.DOMoveX(endPos.x, duration).SetEase(Ease.Linear);
         target.DOMoveZ(endPos.z, duration).SetEase(Ease.Linear);
 
         // Y 轴抛物线运动
-        target.DOMoveY(startPos.y + height, duration / 2).SetEase(Ease.OutQuad)
+        target.DOMoveY(target.position.y + height, duration / 2).SetEase(Ease.OutQuad)
             .OnComplete(() => target.DOMoveY(endPos.y, duration / 2).SetEase(Ease.InQuad));
 
         // 旋转动画（到达终点时绕 Z 轴旋转 360°）
