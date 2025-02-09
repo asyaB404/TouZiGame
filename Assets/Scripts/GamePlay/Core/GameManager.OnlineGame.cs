@@ -23,8 +23,7 @@ namespace GamePlay.Core
             gameObject.SetActive(true);
             GameUIPanel.Instance.ShowMe();
             holeCardManagers[1].gameObject.SetActive(false);
-            holeCardManagers[0].HideShader();
-            EnterCameraAnim();
+            holeCardManagers[0].Show();
         }
         /// <summary>
         /// 房主开始游戏时所有客户端调用

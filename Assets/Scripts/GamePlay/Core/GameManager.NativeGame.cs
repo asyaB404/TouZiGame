@@ -20,8 +20,8 @@ namespace GamePlay.Core
         /// <param name="seed"></param>
         public void StartNativeGame(int seed)
         {
-            holeCardManagers[1].gameObject.SetActive(true);
-
+            // holeCardManagers[1].gameObject.SetActive(true);
+            holeCardManagers[curPlayerId].Hide();
             GameMode = GameMode.Native;
             gameObject.SetActive(true);
             Random.InitState(seed);
@@ -35,8 +35,6 @@ namespace GamePlay.Core
             GameUIPanel.Instance.ShowMe();
             
             _jackpotManager.EnterRaise();
-            EnterCameraAnim();
-
             // Debug.Log("start");
         }
 
@@ -51,7 +49,7 @@ namespace GamePlay.Core
 
         public void HideBlankScreen()
         {
-            _stageManager.HideBlankScreen();
+            _stageManager.ShowHoleCards();
         }
     }
 }

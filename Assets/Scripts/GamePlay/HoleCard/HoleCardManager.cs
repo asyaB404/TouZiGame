@@ -18,7 +18,7 @@ public class HoleCardManager : MonoBehaviour//非单例
     /// 当前选中的骰子索引
     /// </summary>
     [SerializeField] private int curIndex;
-    [SerializeField] private GameObject myShader;
+    // [SerializeField] private GameObject myShader;
     public  IReadOnlyList<PocketTouZi> HoleCards => holeCards;
     public int CurIndex
     {
@@ -80,11 +80,11 @@ public class HoleCardManager : MonoBehaviour//非单例
         }
     }
 
-    public void ShowShader()
+    public void Hide()
     {
-        myShader.SetActive(true);
+        gameObject.SetActive(false);
     }
-    public void HideShader(){
-        myShader.SetActive(false);
+    public void Show(){
+        gameObject.SetActive(true);
     }
 }

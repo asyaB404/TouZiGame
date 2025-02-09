@@ -10,13 +10,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening; // 用于动画效果的Tweening库
+using DG.Tweening; 
 using GamePlay.Core;
 using NetWork.Client;
-using NetWork.Server; // 游戏核心功能
-using UnityEngine; // Unity游戏开发API
-using UnityEngine.EventSystems; // 事件系统用于鼠标点击等事件
-using UnityEngine.Serialization; // 用于序列化字段
+using UnityEngine; 
+using UnityEngine.EventSystems; 
+using UnityEngine.Serialization; 
 
 namespace GamePlay.Node
 {
@@ -110,11 +109,11 @@ namespace GamePlay.Node
         // 当鼠标松开时，根据游戏模式执行相应操作
         public void OnPointerUp(PointerEventData data)
         {
-            if (
-                !touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform) ||
-             playerId != GameManager.CurPlayerId ||
-                StageManager.CurGameStage != GameStage.Place)
-                return; // 确保点击的是当前节点且是当前玩家操作
+            if (StageManager.CurGameStage != GameStage.Place) return;
+            if(data == null) return;
+            if(data.pointerCurrentRaycast.gameObject == null) return;
+            if (!touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform))return;
+            if(playerId != GameManager.CurPlayerId)return; // 确保点击的是当前节点且是当前玩家操作
             // 根据不同的游戏模式执行不同的逻辑
             switch (GameManager.GameMode)
             {
@@ -127,6 +126,7 @@ namespace GamePlay.Node
                         GameManager.Instance.CurScore);
                     break;
                 case GameMode.SoloWithAi:
+                    if (playerId == 1) return;
                     GameManager.Instance.AddTouzi(id);
                     break;
                 default:

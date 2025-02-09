@@ -11,7 +11,7 @@ namespace GamePlay.Core
         public void StartSoloWaitAiGame(int seed)
         {
             holeCardManagers[1].gameObject.SetActive(false);
-            holeCardManagers[0].HideShader();
+            holeCardManagers[0].Show();
 
             GameMode = GameMode.SoloWithAi;
             gameObject.SetActive(true);
@@ -24,8 +24,6 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
 
             GameUIPanel.Instance.ShowMe();
-            EnterCameraAnim();
-
             _jackpotManager.EnterRaise();
             // Debug.Log("start");
         }
