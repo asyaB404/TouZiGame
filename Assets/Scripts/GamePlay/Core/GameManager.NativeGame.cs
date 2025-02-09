@@ -21,7 +21,7 @@ namespace GamePlay.Core
         public void StartNativeGame(int seed)
         {
             SceneInitialize();
-            // holeCardManagers[1].gameObject.SetActive(true);
+            holeCardManagers[0].Show();
             holeCardManagers[curPlayerId].Hide();
             GameMode = GameMode.Native;
             Random.InitState(seed);

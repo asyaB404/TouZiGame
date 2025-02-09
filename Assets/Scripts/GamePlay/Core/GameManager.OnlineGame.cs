@@ -39,6 +39,7 @@ namespace GamePlay.Core
 
             _jackpotManager.NewGame();
             _stageManager.NewGame();
+            holeCardManagers[0].Show();
             holeCardManagers[0].ResetAllHoleCards();
             _jackpotManager.EnterRaise();
             GameUIPanel.Instance.UpdateOnlineUI();
