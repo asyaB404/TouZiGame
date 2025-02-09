@@ -14,7 +14,7 @@ public static class MyTool
         return (curPlayerId + 1) % MyGlobal.MAX_PLAYER_COUNT;
     }
     
-    public static void PlayParabola(Transform target, Vector3 endPos, float height, float duration)
+    public static void PlayParabola(Transform target, Vector3 endPos, float height, float duration,float degree)
     {
         if (target == null) return;
         // XZ 轴线性移动
@@ -26,7 +26,7 @@ public static class MyTool
             .OnComplete(() => target.DOMoveY(endPos.y, duration / 2).SetEase(Ease.InQuad));
 
         // 旋转动画（到达终点时绕 Z 轴旋转 360°）
-        target.DORotate(new Vector3(0, 0, 360), duration, RotateMode.LocalAxisAdd)
+        target.DORotate(new Vector3(0, 0, degree), duration, RotateMode.WorldAxisAdd)
             .SetEase(Ease.Linear);
     }
 }
