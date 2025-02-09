@@ -51,8 +51,8 @@ public class HintManager
     #region 上方提示栏，用于提示刚刚做了什么
     public void SetUpHint(int playerId, string str)
     {
-        string str1=playerId==0?"P1":"P2";
-        string str2=playerId==0?"P2":"P1";
+        string str1=playerId==0?"小蓝":"小红";
+        string str2=playerId==0?"小红":"小蓝";
         string title=HintText.HintTextUpDic[str];
         title=title.Replace("玩家1",str1);
         title=title.Replace("玩家2",str2);
