@@ -111,23 +111,24 @@ namespace GamePlay.Core
             else str = "P2";
             if (isRaise) str += "加注";
             else str += "回合";
-            GameManager.Instance.HoleCardManagers[0].ShowShader();
-            GameManager.Instance.HoleCardManagers[1].ShowShader();
+            GameManager.Instance.HoleCardManagers[0].Hide();
+            GameManager.Instance.HoleCardManagers[1].Hide();
             // Debug.Log("ShowScreen");
             SwitchoverPanel.Instance.ShowSwitchoverButton(str, isRaise);
             HintManager.Instance.SetConditionHint("BlankScreen");
             // Debug.Log("打开黑幕");
         }
 
-        public void HideBlankScreen()
+        public void ShowHoleCards()
         {
+            Debug.Log("ShowCards"+blankId);
             if(blankId==-1)return;
-            GameManager.Instance.HoleCardManagers[blankId].HideShader();
+            GameManager.Instance.HoleCardManagers[blankId].Show();
         }
 
-        public void HideBlankScreen(int playerId)
+        public void ShowHoleCards(int playerId)
         {
-            GameManager.Instance.HoleCardManagers[playerId].HideShader();
+            GameManager.Instance.HoleCardManagers[playerId].Show();
         }
 
         private void UpdateUI()
