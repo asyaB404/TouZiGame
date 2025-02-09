@@ -30,13 +30,13 @@ namespace GamePlay.Core
         /// </summary>
         public void StartOnlineGame()
         {
-            
+            curPlayerId = 0;
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
             _jackpotManager.EnterRaise();
             GameUIPanel.Instance.UpdateOnlineUI();
-            
+            CalculationCGPanel.Instance.HideMe();
         }
     }
 }

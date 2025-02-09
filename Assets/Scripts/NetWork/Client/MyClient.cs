@@ -5,6 +5,7 @@
 *********************************************************************/
 
 using System;
+using ChatUI;
 using FishNet.Object;
 using GamePlay.Core;
 using NetWork.Server;
@@ -30,6 +31,7 @@ namespace NetWork.Client
             {
                 Instance = this;
                 GameManager.Instance.InitForOnline();
+                ServerManager.Broadcast(new ChatMessage("系统", "玩家NoName加入了游戏"));
             }
             else
             {
@@ -54,7 +56,7 @@ namespace NetWork.Client
         /// <returns></returns>
         private bool CheckRpcCoolDown()
         {
-            if (DateTime.Now - _lastRequestTime < TimeSpan.FromSeconds(1))
+            if (DateTime.Now - _lastRequestTime < TimeSpan.FromSeconds(1.1))
             {
                 Debug.Log("请求太频繁，请稍等一秒");
                 return false;
