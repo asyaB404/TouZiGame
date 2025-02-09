@@ -14,6 +14,7 @@ public class MenuPanel : BasePanel<MenuPanel>
         GetControl<Button>("exit").onClick.AddListener(() =>
         {
             GameManager.Instance.Exit();
+            Debug.Log("退出游戏");
         });
         GetControl<Button>("return").onClick.AddListener(HideMe);
     }

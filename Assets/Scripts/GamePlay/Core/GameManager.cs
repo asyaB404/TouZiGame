@@ -19,6 +19,7 @@ using NetWork.Server;
 using UI.Panel;
 // using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -85,9 +86,11 @@ namespace GamePlay.Core
             Reset();
             gameObject.SetActive(false);
             GameUIPanel.Instance.HideMe();
+            CamarControl.Instance.Reset();
             if (GameMode != GameMode.Online) return;
             NetWorkMgr.CloseConnection();
             NetWorkMgr.CloseServer();
+            
         }
         public void Restart()
         {
