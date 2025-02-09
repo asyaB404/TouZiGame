@@ -15,6 +15,7 @@ using DG.Tweening;
 using FishNet;
 using GamePlay.Node;
 using NetWork;
+using NetWork.Server;
 using UI.Panel;
 // using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -96,7 +97,7 @@ namespace GamePlay.Core
                     StartNativeGame(Random.Range(int.MinValue, int.MaxValue));
                     break;
                 case GameMode.Online:
-                    InitForOnline();
+                    MyServer.Instance.StartGame();
                     break;
                 case GameMode.SoloWithAi:
                     StartSoloWaitAiGame(Random.Range(int.MinValue, int.MaxValue));
@@ -315,16 +316,17 @@ namespace GamePlay.Core
 
             _stageManager.NewHand();
             _jackpotManager.NewHand();
-            int sumScore0 = _jackpotManager.JackpotP1;
-            int sumScore1 = _jackpotManager.JackpotP2;
+            int jackpotP1 = _jackpotManager.JackpotP1;
+            int jackpotP2 = _jackpotManager.JackpotP2;
 
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
 
-            if (sumScore0 == 0 || sumScore1 == 0)
+            if (jackpotP1 <= 0 || jackpotP2 <= 0)
             {
-                Debug.Log("结束了");
-                CalculationCGPanel.Instance.Show(sumScore0 == 0);
+                holeCardManagers[0].gameObject.SetActive(false);
+                holeCardManagers[1].gameObject.SetActive(false);
+                CalculationCGPanel.Instance.Show(jackpotP2 <= 0);
             }
             else _jackpotManager.EnterRaise();
             // Debug.LogError("");
