@@ -31,7 +31,7 @@ namespace NetWork.Client
             {
                 Instance = this;
                 GameManager.Instance.InitForOnline();
-                ServerManager.Broadcast(new ChatMessage("系统", "玩家NoName加入了游戏"));
+                ClientManager.Broadcast(new ChatMessage("系统", "玩家NoName加入了游戏"));
             }
             else
             {
