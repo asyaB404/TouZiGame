@@ -110,8 +110,8 @@ namespace GamePlay.Core
             if (blankId == playerId) return;
             blankId = playerId;
             string str;
-            if (playerId == 0) str = "P1";
-            else str = "P2";
+            if (playerId == 0) str = "小蓝";
+            else str = "小红";
             if (isRaise) str += "加注";
             else str += "回合";
             GameManager.Instance.HoleCardManagers[0].Hide();

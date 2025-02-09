@@ -20,7 +20,7 @@ public static class HintText
     public static readonly Dictionary<string, string> HintTextConditionDic = new Dictionary<string, string>()//条件性性提示
     {
         {"",""},
-        {"FirstRaise", "后手玩家(P2)进行第一次加注"},
+        {"FirstRaise", "后手玩家进行第一次加注"},
         { "EndPlace","最后一个放置回合，回合结束后进行结算"},
         {"BlankScreen","切换屏幕，请对应的玩家回避"},
         // { "",""},
