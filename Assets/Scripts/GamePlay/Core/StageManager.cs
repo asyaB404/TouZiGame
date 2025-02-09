@@ -27,7 +27,7 @@ namespace GamePlay.Core
 
         public static void SetStage(GameStage stage)
         {
-            Debug.Log(GameManager.CurPlayerId+" "+stage);
+            // Debug.Log(GameManager.CurPlayerId+" "+stage);
             CurGameStage = stage;
             HintManager.Instance.SetStageHint(stage.ToString());
             if (GameManager.GameMode == GameMode.SoloWithAi)

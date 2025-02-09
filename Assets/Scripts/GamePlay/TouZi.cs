@@ -66,7 +66,7 @@ public class TouZi : MonoBehaviour
         Destroy(gameObject);
         // 输出修改后的属性值进行调试
         float newValue = materials.sharedMaterial.GetFloat("_Float");
-        Debug.Log($"Float 属性修改后的值: {newValue}");
+        // Debug.Log($"Float 属性修改后的值: {newValue}");
     }
 }
 

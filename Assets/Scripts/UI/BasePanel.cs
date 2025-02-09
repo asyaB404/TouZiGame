@@ -116,7 +116,7 @@ namespace UI
         public void ShowMe()
         {
             if (IsInStack) return;
-            Debug.Log(name);
+            // Debug.Log(name);
             UIManager.Instance.PushPanel(this);
             gameObject.SetActive(true);
             //设置为最后一个子物体，防止被其他已经打开的面板遮挡
