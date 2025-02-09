@@ -63,7 +63,10 @@ namespace GamePlay.Core
 
         [SerializeField] private Camera ladderCamera;
         [SerializeField] private GameObject chessboard;
-        
+
+        public  ParticleSystem[] winParticles;
+        public  ParticleSystem[] loseParticles;
+
         #endregion
 
         public void Init()
