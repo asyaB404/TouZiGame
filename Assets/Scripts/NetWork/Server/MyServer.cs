@@ -41,9 +41,9 @@ namespace NetWork.Server
         }
 
         [Server]
-        public void StartGame()
+        public void StartGame(bool isForce=false)
         {
-            if (!CheckIsAllReady())
+            if (!CheckIsAllReady() && !isForce)
             {
                 ServerManager.Broadcast(new ChatMessage("系统", "双方玩家未准备完毕"));
                 return;

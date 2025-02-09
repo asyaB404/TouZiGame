@@ -113,7 +113,7 @@ namespace GamePlay.Core
                     StartNativeGame(Random.Range(int.MinValue, int.MaxValue));
                     break;
                 case GameMode.Online:
-                    MyServer.Instance.StartGame();
+                    MyServer.Instance.StartGame(true);
                     break;
                 case GameMode.SoloWithAi:
                     StartSoloWaitAiGame(Random.Range(int.MinValue, int.MaxValue));
