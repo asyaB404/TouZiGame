@@ -63,6 +63,7 @@ namespace GamePlay.Core
 
         [SerializeField] private Camera ladderCamera;
         [SerializeField] private GameObject chessboard;
+        
         #endregion
 
         public void Init()
