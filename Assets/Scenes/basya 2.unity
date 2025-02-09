@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.27490178, g: 0.09954739, b: 0.35055894, a: 1}
+  m_IndirectSpecularColor: {r: 0.27490175, g: 0.09954739, b: 0.350559, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2516,6 +2516,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4372616796426148014, guid: 5d4ed46fa4db3304db20143916cf10d9, type: 3}
   m_PrefabInstance: {fileID: 2074406704}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1000009599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1000009601}
+  - component: {fileID: 1000009600}
+  m_Layer: 0
+  m_Name: Camara
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1000009600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000009599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 984986451dbb015459e0417cad14ff12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threshold: 10
+  rotationSpeed: 0.1
+--- !u!4 &1000009601
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000009599}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1655795104}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1079590341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4165,12 +4212,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655795098}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.30062255, y: 0, z: 0, w: 0.9537432}
+  m_LocalRotation: {x: 0.30062255, y: -0, z: -0, w: 0.9537432}
   m_LocalPosition: {x: 0, y: 7.93, z: -7.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1000009601}
   m_LocalEulerAnglesHint: {x: 34.99, y: 0, z: 0}
 --- !u!114 &1655795105
 MonoBehaviour:
@@ -17697,7 +17744,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
-  - {fileID: 1655795104}
   - {fileID: 7443408886587729825}
   - {fileID: 5326145824266182773}
   - {fileID: 694099984}
@@ -17705,3 +17751,4 @@ SceneRoots:
   - {fileID: 540398926}
   - {fileID: 175205957}
   - {fileID: 1996664715}
+  - {fileID: 1000009601}
