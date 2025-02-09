@@ -24,8 +24,6 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
 
             GameUIPanel.Instance.ShowMe();
-            EnterCameraAnim();
-
             _jackpotManager.EnterRaise();
             // Debug.Log("start");
         }

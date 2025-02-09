@@ -62,26 +62,8 @@ namespace GamePlay.Core
         [SerializeField] private Camera ladderCamera;
         [SerializeField] private GameObject chessboard;
         #endregion
-        private void EnterCameraAnim()
-        {
-            // ladderCamera.transform.position = new Vector3(0, 0, MyGlobal.MAX_CAMERA_DISTANCE);
-            // chessboard.SetActive(false);
-            // TweenCallback firstAnimationCompleted = () =>
-            // {
-            //     TweenCallback secondAnimationCompleted = () =>
-            //     {
-            //         chessboard.SetActive(true);
-            //     };
-            //     ladderCamera.transform.DOMoveZ(MyGlobal.MIN_CAMERA_DISTANCE, 0.5f).OnComplete(secondAnimationCompleted);
-            // };
-            // ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f).OnComplete(firstAnimationCompleted);
-        }
-        public void ExitCameraAnim()
-        {
-            ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f);
-        }
 
-        private void Awake()
+        public void Init()
         {
             Instance = this;
             for (int i = 0; i < nodeQueueManagers.Length; i++)
