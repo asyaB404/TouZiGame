@@ -20,6 +20,7 @@ namespace UI.Panel
     public partial class GameUIPanel
     {
         [SerializeField] private GameObject[] readySigns;
+        [SerializeField] private GameObject chatPanel;
 
         private void InitForOnline()
         {
@@ -53,6 +54,7 @@ namespace UI.Panel
         /// </summary>
         public void UpdateOnlineUI()
         {
+            chatPanel.gameObject.SetActive(GameManager.GameMode == GameMode.Online);
             //游戏开始时关闭所有准备标志
             if (StageManager.CurGameStage != GameStage.Idle)
             {
