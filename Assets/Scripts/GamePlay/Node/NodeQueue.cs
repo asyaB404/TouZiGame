@@ -110,11 +110,11 @@ namespace GamePlay.Node
         // 当鼠标松开时，根据游戏模式执行相应操作
         public void OnPointerUp(PointerEventData data)
         {
-            if (
-                !touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform) ||
-             playerId != GameManager.CurPlayerId ||
-                StageManager.CurGameStage != GameStage.Place)
-                return; // 确保点击的是当前节点且是当前玩家操作
+            if (StageManager.CurGameStage != GameStage.Place) return;
+            if(data == null) return;
+            if(data.pointerCurrentRaycast.gameObject == null) return;
+            if (!touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform))return;
+            if(playerId != GameManager.CurPlayerId)return; // 确保点击的是当前节点且是当前玩家操作
             // 根据不同的游戏模式执行不同的逻辑
             switch (GameManager.GameMode)
             {
@@ -127,6 +127,7 @@ namespace GamePlay.Node
                         GameManager.Instance.CurScore);
                     break;
                 case GameMode.SoloWithAi:
+                    if (playerId == 1) return;
                     GameManager.Instance.AddTouzi(id);
                     break;
                 default:
