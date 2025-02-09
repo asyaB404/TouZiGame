@@ -139,7 +139,7 @@ public class JackpotManager
     /// <param name="score0">p1得分</param>
     /// <param name="score1">p2得分</param>
     /// <param name="winerWaiver">赢家是否不跟注</param>
-    public void JackpotCalculation(int score0, int score1)
+    public void JackpotCalculation(int score0, int score1) 
     {
         var title = $"你{(score0 > score1 ? "赢" : "输")}了{(score0 > score1 ? _jackpotNub1 : _jackpotNub0)}个筹码";
 
@@ -151,10 +151,9 @@ public class JackpotManager
             JackpotP1 += (int)SumJackpotNub / 2;
             JackpotP2 += (int)SumJackpotNub / 2;
             _extraJackpot = SumJackpotNub % 2;
-            if (winerWaiver)
-            {
+            if(winerWaiver){
                 title = $"由于赢家不愿意继续加注，给双方返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
-                HintManager.Instance.SetUpHint(score0 > score1 ? 0 : 1, "WinerFold");
+                HintManager.Instance.SetUpHint(score0 > score1?0:1,"WinerFold");
             }
             else if (score0 == score1) title = $"打平了。。。给你返还奖池一半的奖金（向下取整）{(int)SumJackpotNub / 2}个筹码";
             // else if (winerWaiver) 
@@ -162,16 +161,8 @@ public class JackpotManager
         else
         {
             _extraJackpot = 0;
-            if (score0 > score1)
-            {
-                GameManager.Instance.WinParticle(true);
-                JackpotP1 += SumJackpotNub;
-            }
-            else
-            {
-                JackpotP2 += SumJackpotNub;
-                GameManager.Instance.WinParticle(false);
-            }
+            if (score0 > score1) JackpotP1 += SumJackpotNub;
+            else JackpotP2 += SumJackpotNub;
         }
 
         var text1 = $"p1一共获得了：{score0}分";
