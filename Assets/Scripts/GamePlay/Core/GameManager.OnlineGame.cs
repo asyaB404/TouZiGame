@@ -7,6 +7,7 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2025, Basya
 // // ********************************************************************************************
 
+using FishNet;
 using NetWork.Server;
 using UI.Panel;
 using UnityEngine;
@@ -25,12 +26,17 @@ namespace GamePlay.Core
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].Show();
         }
+
         /// <summary>
         /// 房主开始游戏时所有客户端调用
         /// </summary>
         public void StartOnlineGame()
         {
-            curPlayerId = 0;
+            if (InstanceFinder.IsHostStarted)
+            {
+                curPlayerId = 0;
+            }
+
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
