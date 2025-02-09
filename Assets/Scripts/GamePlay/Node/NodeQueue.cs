@@ -10,12 +10,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening; 
+using DG.Tweening;
 using GamePlay.Core;
 using NetWork.Client;
-using UnityEngine; 
-using UnityEngine.EventSystems; 
-using UnityEngine.Serialization; 
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace GamePlay.Node
 {
@@ -37,10 +37,10 @@ namespace GamePlay.Node
             private set => sumScore = value;
         }
 
-        [FormerlySerializedAs("nodePos")]
-        [SerializeField]
+        [FormerlySerializedAs("nodePos")] [SerializeField]
         private Transform[] touziPos; // 节点的位置数组
-        private Node[] Nodes;//节点数组
+
+        private Node[] Nodes; //节点数组
 
         private void Awake()
         {
@@ -54,8 +54,7 @@ namespace GamePlay.Node
 
         [SerializeField] private List<int> scores; //存储每个节点的点数
 
-        [FormerlySerializedAs("nodeObjs")]
-        [SerializeField]
+        [FormerlySerializedAs("nodeObjs")] [SerializeField]
         private List<GameObject> touziObjs; // 存储与节点关联的游戏对象（例如显示的骰子）
 
         public IReadOnlyList<int> Scores => scores; //提供只读的点数列表
@@ -80,6 +79,7 @@ namespace GamePlay.Node
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             foreach (Node node in Nodes)
             {
                 node.transform.DOKill(); // 停止所有当前的动画
@@ -98,6 +98,7 @@ namespace GamePlay.Node
                 node.transform.DOKill(); // 停止所有当前的动画
                 node.SetScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点大小
             }
+
             HintManager.Instance.SetEventHint("");
         }
 
@@ -110,10 +111,10 @@ namespace GamePlay.Node
         public void OnPointerUp(PointerEventData data)
         {
             if (StageManager.CurGameStage != GameStage.Place) return;
-            if(data == null) return;
-            if(data.pointerCurrentRaycast.gameObject == null) return;
-            if (!touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform))return;
-            if(playerId != GameManager.CurPlayerId)return; // 确保点击的是当前节点且是当前玩家操作
+            if (data == null) return;
+            if (data.pointerCurrentRaycast.gameObject == null) return;
+            if (!touziPos.Contains(data.pointerCurrentRaycast.gameObject.transform)) return;
+            if (playerId != GameManager.CurPlayerId) return; // 确保点击的是当前节点且是当前玩家操作
             // 根据不同的游戏模式执行不同的逻辑
             switch (GameManager.GameMode)
             {
@@ -132,6 +133,7 @@ namespace GamePlay.Node
                 default:
                     throw new ArgumentOutOfRangeException(); // 其他模式抛出异常
             }
+
             foreach (Node node in Nodes)
             {
                 node.transform.DOKill(); // 停止所有当前的动画
@@ -146,13 +148,13 @@ namespace GamePlay.Node
             GameObject node = NodeFactory.CreateTouzi(score, touziPos[scores.Count]);
             touziObjs.Add(node);
             scores.Add(score);
-
+            AudioMgr.Instance.PlaySFX("SFX/place");
             // 更新点数出现次数
             if (!_scoreCounts.TryAdd(score, 1))
             {
                 _scoreCounts[score]++;
-
             }
+
             HintManager.Instance.SetUpHint(playerId, "Hit" + _scoreCounts[score]);
             // 更新总分
             UpdateSumScore();
@@ -243,7 +245,8 @@ namespace GamePlay.Node
             for (int i = 0; i < touziObjs.Count; i++)
             {
                 // touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
-                MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, touziPos[i].position , 1, 0.8f);
+                MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, touziPos[i].position, 1, 0.8f);
+                AudioMgr.Instance.PlaySFX("SFX/hit");
                 touziObjs[i].transform.SetParent(Nodes[i].transform);
             }
         }
