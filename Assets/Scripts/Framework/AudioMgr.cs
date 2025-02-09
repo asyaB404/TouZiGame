@@ -35,8 +35,8 @@ public class AudioMgr
     public float SfxVolume => sfxVolume;
 
 
-    public float musicVolume = 1f;
-    public float sfxVolume = 1f;
+    public float musicVolume = PlayerPrefs.GetFloat("musicVolume", 1f);
+    public float sfxVolume = PlayerPrefs.GetFloat("sfxVolume", 1f);
 
 
     private AudioSource musicSource;
@@ -77,6 +77,7 @@ public class AudioMgr
             return;
         }
 
+        musicSource.volume = MusicVolume;
         musicSource.clip = firstClip;
         musicSource.Play();
 
@@ -145,12 +146,16 @@ public class AudioMgr
 
     public void SetMusicVolume(float volume)
     {
+        PlayerPrefs.SetFloat("musicVolume", volume);
+        PlayerPrefs.Save();
         musicVolume = volume;
         musicSource.volume = MusicVolume;
     }
 
     public void SetSFXVolume(float volume)
     {
+        PlayerPrefs.SetFloat("sfxVolume", volume);
+        PlayerPrefs.Save();
         sfxVolume = volume;
         foreach (var source in sfxPool)
         {
