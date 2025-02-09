@@ -245,7 +245,15 @@ namespace GamePlay.Node
             for (int i = 0; i < touziObjs.Count; i++)
             {
                 // touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
-                MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, 1, 0.8f);
+                if (playerId == 0)
+                {
+                    MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, 1, 0.8f,360);
+                }
+                else
+                {
+                    MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, 1, 0.8f,-360);
+                }
+
                 AudioMgr.Instance.PlaySFX("SFX/hit");
                 touziObjs[i].transform.SetParent(Nodes[i].transform);
             }
