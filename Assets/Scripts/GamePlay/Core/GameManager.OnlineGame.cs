@@ -20,8 +20,8 @@ namespace GamePlay.Core
         /// </summary>
         public void InitForOnline()
         {
-            SceneInitialize();
             GameMode = GameMode.Online;
+            SceneInitialize();
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].Show();
         }
