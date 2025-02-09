@@ -20,10 +20,10 @@ namespace GamePlay.Core
         /// <param name="seed"></param>
         public void StartNativeGame(int seed)
         {
+            SceneInitialize();
             // holeCardManagers[1].gameObject.SetActive(true);
             holeCardManagers[curPlayerId].Hide();
             GameMode = GameMode.Native;
-            gameObject.SetActive(true);
             Random.InitState(seed);
 
             _jackpotManager.NewGame();
@@ -32,7 +32,6 @@ namespace GamePlay.Core
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
             
-            GameUIPanel.Instance.ShowMe();
             
             _jackpotManager.EnterRaise();
             // Debug.Log("start");

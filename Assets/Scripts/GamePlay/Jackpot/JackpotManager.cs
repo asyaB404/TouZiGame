@@ -205,7 +205,7 @@ public class JackpotManager
             // GameManager.Instance.NewHand();
         }).Forget();
     }
-
+    
     /// <summary>
     /// 加注或跟注
     /// </summary>

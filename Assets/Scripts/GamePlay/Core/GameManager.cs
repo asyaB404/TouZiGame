@@ -68,7 +68,16 @@ namespace GamePlay.Core
         public  ParticleSystem[] loseParticles;
 
         #endregion
+        private void SceneInitialize(){
+            
+            GameUIPanel.Instance.ShowMe();
+            gameObject.SetActive(true);
+            winParticles[0].Stop();
+            winParticles[1].Stop();
+            loseParticles[0].Stop();
+            loseParticles[1].Stop();
 
+        }
         public void Init()
         {
             Instance = this;
