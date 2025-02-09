@@ -78,7 +78,7 @@ namespace GamePlay.Core
         }
         public void ExitCameraAnim()
         {
-            ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f);
+            // ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f);
         }
 
         private void Awake()
@@ -105,8 +105,8 @@ namespace GamePlay.Core
             if (GameMode != GameMode.Online) return;
             NetWorkMgr.CloseConnection();
             NetWorkMgr.CloseServer();
-            holeCardManagers[0].HideShader();
-            holeCardManagers[1].HideShader();
+            holeCardManagers[0].Show();
+            holeCardManagers[1].Show();
         }
         public void Restart()
         {

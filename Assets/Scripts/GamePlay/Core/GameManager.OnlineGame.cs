@@ -23,7 +23,7 @@ namespace GamePlay.Core
             gameObject.SetActive(true);
             GameUIPanel.Instance.ShowMe();
             holeCardManagers[1].gameObject.SetActive(false);
-            holeCardManagers[0].HideShader();
+            holeCardManagers[0].Show();
             EnterCameraAnim();
         }
         /// <summary>
