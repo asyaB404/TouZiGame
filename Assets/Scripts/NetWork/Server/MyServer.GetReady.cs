@@ -40,6 +40,16 @@ namespace NetWork.Server
             return true;
         }
 
+        [Server]
+        public void ResetAllReadyState()
+        {
+            for (int index = 0; index < _players.Count; index++)
+            {
+                ConnData customData = _players[index].CustomData as ConnData;
+                customData.isReady = false;
+            }
+        }
+
         private void OnClientLostConnForGetReady()
         {
             GameUIPanel.Instance.SetReadySign(1,false);
