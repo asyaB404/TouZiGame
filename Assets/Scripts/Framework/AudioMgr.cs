@@ -69,13 +69,11 @@ public class AudioMgr
     }
 
     //超级无敌石山，但是没时间了
-    public void PlayFirstThenLoop(string path1, string path2)
+    public void PlayFirstThenLoop(AudioClip firstClip, AudioClip loopClip)
     {
-        AudioClip firstClip = Resources.Load<AudioClip>(path1);
-        AudioClip loopClip = Resources.Load<AudioClip>(path2);
         if (firstClip == null || loopClip == null)
         {
-            Debug.LogWarning("未找到音效资源: " + path1 + ", " + path2);
+            Debug.LogWarning("未找到音效资源");
             return;
         }
 

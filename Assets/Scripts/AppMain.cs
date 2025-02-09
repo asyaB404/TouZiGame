@@ -15,7 +15,8 @@ using UnityEngine;
 public class AppMain : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
-
+    [SerializeField] private AudioClip[] musicClips;
+ 
     private void Awake()
     {
         gameManager.Init();
@@ -23,6 +24,6 @@ public class AppMain : MonoBehaviour
 
     private void Start()
     {
-        AudioMgr.Instance.PlayFirstThenLoop("music/1", "music/2");
+        AudioMgr.Instance.PlayFirstThenLoop(musicClips[0], musicClips[1]);
     }
 }

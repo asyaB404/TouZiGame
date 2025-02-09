@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet;
 using GamePlay.Core;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,10 +38,12 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
         if (GameManager.GameMode == GameMode.Online)
         {
             GetControl<Button>("AgainBtn").gameObject.SetActive(InstanceFinder.NetworkManager.IsHostStarted);
+            GetControl<TextMeshProUGUI>("onlineTip").gameObject.SetActive(!InstanceFinder.NetworkManager.IsHostStarted);
         }
         else
         {
             GetControl<Button>("AgainBtn").gameObject.SetActive(true);
+            GetControl<TextMeshProUGUI>("onlineTip").gameObject.SetActive(false);
         }
     }
 
