@@ -23,12 +23,10 @@ namespace GamePlay.Node
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
             nodeQueue.OnPointerEnter(eventData);
-            Debug.Log("OnPointerEnter");
         }
         public void OnPointerExit(PointerEventData eventData)
         {
             nodeQueue.OnPointerExit(eventData);
-            Debug.Log("OnPointerExit");
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData)

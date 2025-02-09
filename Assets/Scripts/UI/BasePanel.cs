@@ -208,6 +208,7 @@ namespace UI
         /// <param name="btnName">这个按钮的GameObject的名称</param>
         protected virtual void OnClick(string btnName)
         {
+            AudioMgr.Instance.PlaySFX("SFX/click",3);
         }
 
         /// <summary>

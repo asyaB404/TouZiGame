@@ -168,6 +168,7 @@ public class JackpotManager
         var text1 = $"p1一共获得了：{score0}分";
         var text2 = $"p2一共获得了：{score1}分";
         GameUIPanel.Instance.ShowHandOverPanel(title, text1, text2);
+        AudioMgr.Instance.PlaySFX("SFX/pop");
         //网络对战自动关闭面板
         if (GameManager.GameMode != GameMode.Online) return;
         UniTask.Create(async () =>
@@ -199,7 +200,7 @@ public class JackpotManager
             _jackpotNub1 += nub;
             JackpotP2 -= nub;
         }
-
+        AudioMgr.Instance.PlaySFX("SFX/call");
         GameUIPanel.Instance.UpdateJackpotUI(SumJackpotNub);
     }
 

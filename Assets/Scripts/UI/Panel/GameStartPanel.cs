@@ -20,6 +20,7 @@ namespace UI.Panel
             GetControl<Button>("btn1").onClick.AddListener(() => { NativeGamePanel.Instance.ShowMe(); });
             GetControl<Button>("btn2").onClick.AddListener(() => { MulGamePanel.Instance.ShowMe(); });
             GetControl<Button>("btn3").onClick.AddListener(() => { SettingsPanel.Instance.ShowMe(); });
+            GetControl<Button>("btn4").onClick.AddListener(Application.Quit);
         }
 
         public override void OnPressedEsc()
