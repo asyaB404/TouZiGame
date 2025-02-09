@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/cjz.unity
     guid: 216179093bb2f5744b04536cecc0fc95
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/basya.unity
     guid: 752cd8b0ef02ec146bdb8b78137e9c8b
+  - enabled: 1
+    path: Assets/Scenes/basya 2.unity
+    guid: 6cfda022040c37a41accba7f7bfb2210
   m_configObjects: {}

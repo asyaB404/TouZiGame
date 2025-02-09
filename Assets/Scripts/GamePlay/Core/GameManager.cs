@@ -61,6 +61,36 @@ namespace GamePlay.Core
 
         [SerializeField] private Camera ladderCamera;
         [SerializeField] private GameObject chessboard;
+
+
+        [SerializeField] private ParticleSystem p1win;
+        [SerializeField] private ParticleSystem p2win;
+        [SerializeField] private ParticleSystem p1lose;
+        [SerializeField] private ParticleSystem p2lose;
+        [SerializeField] private ParticleSystem[] Fires;
+
+        public void WinParticle(bool isP1Win){
+            if(GameMode==GameMode.Online){
+                if (isP1Win){
+                    p1win.Play();
+                    p2win.Play();
+                } 
+                else{
+                    p1lose.Play();
+                    p2lose.Play(); 
+                }
+            }
+            else{
+                if (isP1Win){
+                    p1win.Play();
+                    p2lose.Play();
+                } 
+                else{
+                    p1lose.Play();
+                    p2win.Play(); 
+                }
+            }
+        }
         #endregion
         private void EnterCameraAnim()
         {
@@ -75,6 +105,10 @@ namespace GamePlay.Core
                 ladderCamera.transform.DOMoveZ(MyGlobal.MIN_CAMERA_DISTANCE, 0.5f).OnComplete(secondAnimationCompleted);
             };
             ladderCamera.transform.DOMoveZ(MyGlobal.MAX_CAMERA_DISTANCE, 0.5f).OnComplete(firstAnimationCompleted);
+            p1lose.Stop();
+            p2lose.Stop();
+            p1win.Stop();
+            p2win.Stop();
         }
         public void ExitCameraAnim()
         {
@@ -146,6 +180,8 @@ namespace GamePlay.Core
         {
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
+            Fires[curPlayerId].Play();
+            
         }
 
         /// <summary>
