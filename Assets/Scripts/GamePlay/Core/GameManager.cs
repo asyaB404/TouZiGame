@@ -72,6 +72,7 @@ namespace GamePlay.Core
             
             GameUIPanel.Instance.ShowMe();
             gameObject.SetActive(true);
+            CamarControl.Instance.hideFires();
             winParticles[0].Stop();
             winParticles[1].Stop();
             loseParticles[0].Stop();
@@ -143,6 +144,7 @@ namespace GamePlay.Core
         {
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
+            CamarControl.Instance.setFires(curPlayerId);
         }
 
         /// <summary>

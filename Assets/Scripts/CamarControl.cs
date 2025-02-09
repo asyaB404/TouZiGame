@@ -17,6 +17,7 @@ public class CamarControl : MonoBehaviour
     private Vector3 mouseDownPosition;
     public float threshold = 10.0f; // 阈值，可以根据需要调整
     public float rotationSpeed = 0.5f; // 旋转速度，可以根据需要调整
+    public GameObject[] fires;
     void Update()
     {
         // 检查鼠标右键是否按下
@@ -78,7 +79,15 @@ public class CamarControl : MonoBehaviour
 
         gameObject.transform.rotation = Quaternion.Euler(eulerAngles);
     }
-
+    public void setFires(int num)
+    {
+        fires[num].SetActive(true);
+        fires[1 - num].SetActive(false);
+    }
+    public void hideFires(){
+        fires[0].SetActive(false);
+        fires[1].SetActive(false);
+    }
     public void Reset()
     {
         Debug.Log("reset");
