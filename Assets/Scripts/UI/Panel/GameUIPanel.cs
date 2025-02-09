@@ -49,6 +49,7 @@ namespace UI.Panel
             base.HideAnim();
             HideRaisePanel();
             HideHandOverPanel(false);
+            SetWaitPanel(false);
         }
 
         public override void OnPressedEsc()
@@ -165,7 +166,6 @@ namespace UI.Panel
         {
             waitPanel.gameObject.SetActive(flag);
             if (flag) HideRaisePanel();
-            // Debug.LogError(flag);
         }
 
         /// <summary>
@@ -317,18 +317,6 @@ namespace UI.Panel
         {
             GetControl<TextMeshProUGUI>("HintTextUp").text = str;
         }
-        #endregion
-
-        #region debug
-
-        [SerializeField][Range(0, 5)] private int testIndex;
-
-        [ContextMenu("test")]
-        public void Test()
-        {
-            // RollDiceAnimation(testIndex);
-        }
-
         #endregion
     }
 }
