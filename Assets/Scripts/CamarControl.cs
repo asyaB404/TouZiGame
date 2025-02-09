@@ -65,7 +65,7 @@ public class CamarControl : MonoBehaviour
             eulerAngles.x -= 360;
         if (eulerAngles.x > maxX)
         {
-            Debug.Log(eulerAngles.x);
+            // Debug.Log(eulerAngles.x);
             eulerAngles.x = maxX;
         }
         if (eulerAngles.x < -maxX)
