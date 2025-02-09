@@ -99,6 +99,7 @@ namespace GamePlay.Core
         {
             Reset();
             gameObject.SetActive(false);
+            CamarControl.Instance.hideFires();
             GameUIPanel.Instance.HideMe();
             CamarControl.Instance.Reset();
             if (GameMode != GameMode.Online) return;
