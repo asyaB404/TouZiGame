@@ -33,11 +33,12 @@ namespace GamePlay.Core
             if (curPlayerId != 1) return;
             int time = (int)(1000 * Random.Range(MyGlobal.MIN_AI_PONDER_Time, MyGlobal.MAX_AI_PONDER_Time));
             List<int> ints = new();
-            if (StageManager.Stage != 1)ints.Add(2);
+            if (StageManager.Stage != 1) ints.Add(2);
 
-            if (_jackpotManager.JackpotP2>_jackpotManager.AnteNub) ints.Add(1); 
-            if(_jackpotManager.JackpotP2>0) ints.Add(0);
-            if(ints.Count==0) {
+            if (_jackpotManager.JackpotP2 > _jackpotManager.AnteNub) ints.Add(1);
+            if (_jackpotManager.JackpotP2 > 0) ints.Add(0);
+            if (ints.Count == 0)
+            {
                 Debug.LogError("Error");
                 return;
             }

@@ -8,6 +8,7 @@
 // // ********************************************************************************************
 
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class AudioMgr
@@ -67,6 +68,7 @@ public class AudioMgr
         }
     }
 
+    //超级无敌石山，但是没时间了
     public void PlayFirstThenLoop(string path1, string path2)
     {
         AudioClip firstClip = Resources.Load<AudioClip>(path1);
@@ -77,17 +79,16 @@ public class AudioMgr
             return;
         }
 
-        // 播放第一个音频
         musicSource.clip = firstClip;
-        musicSource.PlayScheduled(AudioSettings.dspTime);
+        musicSource.Play();
 
-        // 计算第一个音频播放结束的时间点
-        double startTime = AudioSettings.dspTime + firstClip.length;
-
-        // 预定第二个音频的播放
-        musicSource.clip = loopClip;
-        musicSource.loop = true; 
-        musicSource.PlayScheduled(startTime);
+        UniTask.Create(async () =>
+        {
+            await UniTask.WaitUntil(() => !musicSource.isPlaying);
+            musicSource.clip = loopClip;
+            musicSource.loop = true;
+            musicSource.Play();
+        }).Forget();
     }
 
     public void PlaySFX(string path)

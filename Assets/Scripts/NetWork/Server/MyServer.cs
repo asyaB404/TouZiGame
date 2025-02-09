@@ -50,6 +50,7 @@ namespace NetWork.Server
             }
 
             GameManager.GameMode = GameMode.Online;
+            ResetAllReadyState();
             GameManager.Instance.StartOnlineGame();
             MyClient.Instance.StartGameResponse();
         }

@@ -21,7 +21,6 @@ namespace NetWork.Client
         [ObserversRpc]
         public void GetReadyResponse(bool isReady, NetworkConnection conn)
         {
-            //TODO:准备成功的UI
             int playerId = 0;
             if (!conn.IsLocalClient) playerId = 1;
             GameUIPanel.Instance.SetReadySign(playerId, isReady);

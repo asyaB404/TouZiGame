@@ -40,6 +40,9 @@ namespace GamePlay.Core
                 {
                     GameManager.Instance.AiCall();
                 }
+                if (stage == GameStage.Calculation){
+                    
+                }
             }
         }
 

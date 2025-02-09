@@ -7,9 +7,31 @@
 // //   (___)___)                         @Copyright  Copyright (c) 2025, Basya
 // // ********************************************************************************************
 
+using UnityEngine.UI;
+
 namespace UI.Panel
 {
     public class SettingsPanel : BasePanel<SettingsPanel>
     {
+        public override void Init()
+        {
+            base.Init();
+            GetControl<Slider>("slider").onValueChanged.AddListener((float value) =>
+            {
+                AudioMgr.Instance.SetMusicVolume(value);
+            });
+            GetControl<Slider>("slider1").onValueChanged.AddListener((float value) =>
+            {
+                AudioMgr.Instance.SetSFXVolume(value);
+            });
+            GetControl<Button>("return").onClick.AddListener(HideMe);
+        }
+
+        public override void ShowAnim()
+        {
+            base.ShowAnim();
+            GetControl<Slider>("slider").value = AudioMgr.Instance.musicVolume;
+            GetControl<Slider>("slider1").value = AudioMgr.Instance.sfxVolume;
+        }
     }
 }
