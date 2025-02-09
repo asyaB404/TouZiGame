@@ -242,6 +242,7 @@ namespace GamePlay.Node
             for (int i = 0; i < touziObjs.Count; i++)
             {
                 touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
+                touziObjs[i].transform.SetParent(Nodes[i].transform);
             }
         }
     }

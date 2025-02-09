@@ -294,6 +294,7 @@ namespace GamePlay.Core
 
             _jackpotManager.JackpotCalculation(sumScore0, sumScore1);
             StageManager.SetStage(GameStage.Calculation);
+            GameUIPanel.Instance.SetWaitPanel(false);
 
         }
 
