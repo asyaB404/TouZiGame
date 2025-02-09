@@ -160,7 +160,7 @@ namespace GamePlay.Node
         }
 
         /// <summary>
-        /// 
+        /// 移除骰子
         /// </summary>
         /// <param name="removedScore"></param>
         /// <returns></returns>
@@ -242,7 +242,8 @@ namespace GamePlay.Node
         {
             for (int i = 0; i < touziObjs.Count; i++)
             {
-                touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
+                // touziObjs[i].transform.DOMove(touziPos[i].position, 0.5f);
+                MyTool.PlayParabola(touziObjs[i].transform, touziPos[i].position, touziPos[i].position , 1, 0.8f);
                 touziObjs[i].transform.SetParent(Nodes[i].transform);
             }
         }
