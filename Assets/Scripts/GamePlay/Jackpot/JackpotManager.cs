@@ -167,7 +167,7 @@ public class JackpotManager
         }
         if (score0 != score1)
         {
-            if (GameManager.GameMode == GameMode.Online)
+            if (GameManager.GameMode != GameMode.Native)
             {
                 if (score0 > score1)
                 {
