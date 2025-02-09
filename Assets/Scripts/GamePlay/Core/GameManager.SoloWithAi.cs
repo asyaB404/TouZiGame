@@ -10,11 +10,11 @@ namespace GamePlay.Core
     {
         public void StartSoloWaitAiGame(int seed)
         {
+            SceneInitialize();
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].Show();
 
             GameMode = GameMode.SoloWithAi;
-            gameObject.SetActive(true);
             Random.InitState(seed);
 
             _jackpotManager.NewGame();
@@ -23,7 +23,6 @@ namespace GamePlay.Core
             holeCardManagers[0].ResetAllHoleCards();
             holeCardManagers[1].ResetAllHoleCards();
 
-            GameUIPanel.Instance.ShowMe();
             _jackpotManager.EnterRaise();
             // Debug.Log("start");
         }

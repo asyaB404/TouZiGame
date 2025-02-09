@@ -20,9 +20,8 @@ namespace GamePlay.Core
         /// </summary>
         public void InitForOnline()
         {
+            SceneInitialize();
             GameMode = GameMode.Online;
-            gameObject.SetActive(true);
-            GameUIPanel.Instance.ShowMe();
             holeCardManagers[1].gameObject.SetActive(false);
             holeCardManagers[0].Show();
         }
@@ -31,6 +30,7 @@ namespace GamePlay.Core
         /// </summary>
         public void StartOnlineGame()
         {
+            
             _jackpotManager.NewGame();
             _stageManager.NewGame();
             holeCardManagers[0].ResetAllHoleCards();
