@@ -21,14 +21,14 @@ public class CamarControl : MonoBehaviour
     void Update()
     {
         // 检查鼠标右键是否按下
-        if (Input.GetMouseButtonDown(1)) // 1 表示鼠标右键
+        if (Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(1)) // 1 表示鼠标右键
         {
             isRightMouseButtonDown = true;
             mouseDownPosition = Input.mousePosition;
         }
 
         // 检查鼠标右键是否抬起
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0)||Input.GetMouseButtonUp(1))
         {
             isRightMouseButtonDown = false;
         }
