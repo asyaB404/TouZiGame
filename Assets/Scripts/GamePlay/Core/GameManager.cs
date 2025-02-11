@@ -134,6 +134,7 @@ namespace GamePlay.Core
             _jackpotManager.Reset();
             GameUIPanel.Instance.UpdateScoreUI(0);
             GameUIPanel.Instance.UpdateScoreUI(1);
+            CalculationCGPanel.Instance.HideMe();
             GameUIPanel.Instance.UpdateOnlineUI();
             StageManager.SetStage(GameStage.Idle);
         }

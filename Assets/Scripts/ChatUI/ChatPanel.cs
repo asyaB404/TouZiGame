@@ -119,6 +119,8 @@ namespace ChatUI
         {
             if (string.IsNullOrEmpty(chatMessage.Message)) return;
             redPoint.gameObject.SetActive(true);
+            redPoint.transform.localScale = Vector3.zero;
+            redPoint.transform.DOScale(Vector3.one, 0.25f);
             var newMessage = Instantiate(messagePrefab, content, false);
             Vector2 pos = newMessage.transform.localPosition;
             pos.y = -_totalLineCount * lineHeight;

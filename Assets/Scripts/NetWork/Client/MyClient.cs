@@ -39,6 +39,12 @@ namespace NetWork.Client
             }
         }
 
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            ClientManager.Broadcast(new ChatMessage("系统", "玩家NoName退出了游戏"));
+        }
+
         [ObserversRpc]
         public void StartGameResponse()
         {

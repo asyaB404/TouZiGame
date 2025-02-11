@@ -21,24 +21,28 @@ namespace NetWork.Client
         public void CallRequest(bool isRaise)
         {
             if (!CheckRpcCoolDown()) return;
+            GameManager.Instance.Call(isRaise);
             MyServer.Instance.HandleCallRequest(isRaise);
         }
 
         [ObserversRpc]
         public void CallResponse(bool isRaise, NetworkConnection conn = null)
         {
+            if (conn != null && conn.IsLocalClient) return;
             GameManager.Instance.Call(isRaise);
         }
 
         public void FoldRequest()
         {
             if (!CheckRpcCoolDown()) return;
+            GameManager.Instance.Fold();
             MyServer.Instance.HandleFoldRequest();
         }
 
         [ObserversRpc]
         public void FoldResponse(NetworkConnection conn)
         {
+            if (conn != null && conn.IsLocalClient) return;
             GameManager.Instance.Fold();
         }
     }

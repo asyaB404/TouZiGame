@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.27490175, g: 0.09954739, b: 0.350559, a: 1}
+  m_IndirectSpecularColor: {r: 0.27490178, g: 0.09954739, b: 0.35055894, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7882,7 +7882,6 @@ MonoBehaviour:
   jackpotText: {fileID: 8040728484344928966}
   waitPanel: {fileID: 1974987418457388408}
   callText: {fileID: 6906042377031332349}
-  testIndex: 0
   readySigns:
   - {fileID: 1382167480}
   - {fileID: 282260243}
@@ -12152,7 +12151,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &4461139465098150014
 CanvasRenderer:
   m_ObjectHideFlags: 0
