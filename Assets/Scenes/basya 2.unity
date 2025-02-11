@@ -5234,6 +5234,8 @@ MonoBehaviour:
   fires:
   - {fileID: 1589140579}
   - {fileID: 18432513}
+  maxX: 35
+  maxY: 60
 --- !u!4 &1802707914
 Transform:
   m_ObjectHideFlags: 0
@@ -8476,7 +8478,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &1801172181343848087
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12152,7 +12154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &4461139465098150014
 CanvasRenderer:
   m_ObjectHideFlags: 0

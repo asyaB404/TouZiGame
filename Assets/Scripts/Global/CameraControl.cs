@@ -49,8 +49,8 @@ public class CameraControl : MonoBehaviour
             }
         }
     }
-    int maxX = 25;
-    int maxY = 30;
+    public int maxX = 25;
+    public int maxY = 30;
     // 自定义的拖动处理函数
     private void OnRightMouseDrag(Vector3 delta)
     {
