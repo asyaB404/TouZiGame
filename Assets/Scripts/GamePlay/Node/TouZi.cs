@@ -7,32 +7,40 @@ using UnityEngine;
 public class TouZi : MonoBehaviour
 {
     [SerializeField] private MeshRenderer materials;
-    public static List<Vector3> vector3s = new List<Vector3>(){//骰子的六个面的位置
-        new Vector3(0,0,0),
-        new Vector3(-90,-90,0),
-        new Vector3(-90,0,0),
-        new Vector3(90,0,0),
-        new Vector3(90,90,0),
-        new Vector3(180,0,0)
+
+    public static List<Vector3> vector3s = new List<Vector3>()
+    {
+        //骰子的六个面的位置
+        new Vector3(0, 0, 0),
+        new Vector3(-90, -90, 0),
+        new Vector3(-90, 0, 0),
+        new Vector3(90, 0, 0),
+        new Vector3(90, 90, 0),
+        new Vector3(180, 0, 0)
     };
+
     void Awake()
     {
         if (materials == null) materials = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
     }
+
     public void SetNub(int nub)
     {
         transform.localEulerAngles = vector3s[nub];
     }
+
     public void RollAnim()
     {
-
     }
+
     [ContextMenu("clear")]
-    public void clear()
+    public void Clear()
     {
         StartCoroutine(AnimateFloatProperty());
     }
+
     public const float duration = 1; // 动画持续时间
+
     private IEnumerator AnimateFloatProperty()
     {
         // 创建一个材质属性块
@@ -69,5 +77,3 @@ public class TouZi : MonoBehaviour
         // Debug.Log($"Float 属性修改后的值: {newValue}");
     }
 }
-
-

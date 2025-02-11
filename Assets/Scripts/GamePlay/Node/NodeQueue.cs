@@ -177,7 +177,7 @@ namespace GamePlay.Node
                 if (curScore != removedScore) continue; // 如果当前点数不匹配，跳过
 
                 // 删除节点和对应的游戏对象
-                touziObjs[i].GetComponent<TouZi>().clear();
+                touziObjs[i].GetComponent<TouZi>().Clear();
                 // Destroy(touziObjs[i]);
                 touziObjs.RemoveAt(i);
                 scores.RemoveAt(i);

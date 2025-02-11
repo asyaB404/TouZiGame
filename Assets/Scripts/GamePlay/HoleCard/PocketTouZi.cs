@@ -13,7 +13,6 @@ using UnityEngine.Serialization;
 public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
     IPointerExitHandler
 {
-    [FormerlySerializedAs("canChick")] public bool canClick; //是否可以点击,动画状态下就不能点击
     public int playerId = -1; //表示这个玩家
     public int id = -1; //表示第几个骰子
     public int TouZiScore { get; private set; } = -1; //这枚骰子的点数大小
@@ -29,7 +28,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         halo.gameObject.SetActive(isActive);
     }
 
-    public void init()
+    public void Init()
     {
         _initialPos = transform.position;
         halo = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -45,23 +44,23 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 // if (playerId != GameManager.CurPlayerId) return; // 只允许当前玩家操作
                 break;
             case GameMode.Online:
-                if(playerId == 1) return;
+                if (playerId == 1) return;
                 break;
             case GameMode.SoloWithAi:
-                if(playerId == 1) return;
+                if (playerId == 1) return;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        _scaleAnim?.Kill(); 
+        _scaleAnim?.Kill();
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE * MyGlobal.HOVER_SCALE_FACTOR, 0.3f); // 放大节点
     }
 
     public void OnPointerExit(PointerEventData data)
     {
         if (StageManager.CurGameStage != GameStage.Place) return;
-        _scaleAnim?.Kill(); 
+        _scaleAnim?.Kill();
         _scaleAnim = transform.DOScale(MyGlobal.INITIAL_SCALE, 0.3f); // 恢复节点的原始缩放
         HintManager.Instance.SetEventHint("");
     }
@@ -72,12 +71,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerUp(PointerEventData data)
     {
-        if (data.pointerCurrentRaycast.gameObject != gameObject //不是这个节点
-            // || playerId != GameManager.CurPlayerId //不是当前玩家
-            // || StageManager.CurGameStage != GameStage.Place //游戏状态不是Idle
-            || !canClick //不能点击
-           )
-            return;
+        if (data.pointerCurrentRaycast.gameObject != gameObject) return;
         switch (GameManager.GameMode)
         {
             case GameMode.Native:
@@ -88,7 +82,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
                 break;
             case GameMode.SoloWithAi:
-                if(playerId == 1) return;
+                if (playerId == 1) return;
                 GameManager.Instance.HoleCardManagers[playerId].CurIndex = id;
                 break;
             default:
@@ -117,12 +111,8 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         _rollAnim?.Kill();
         _doShakePosition?.Kill();
         _shakeTween?.Kill();
-
         transform.position = _initialPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-
-        canClick = false;
         finalIndex -= 1;
         _rollAnim = DOTween.Sequence();
         // 添加持续摇晃效果
@@ -140,8 +130,6 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
             randomness: 90, // 随机性
             fadeOut: true // 衰减
         );
-        // Tween MoveTween=touziImage.transform.DOMove(point, ANIMATION_DURATION);
-        // 添加骰子面滚动动画
         for (int i = 0; i < SPIN_COUNT; i++)
         {
             int randomIndex = UnityEngine.Random.Range(0, Touzi.Count);
@@ -152,7 +140,6 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         _rollAnim.AppendCallback(() =>
         {
             spriteRenderer.sprite = Touzi[finalIndex];
-            canClick = true;
         });
         _rollAnim.Play();
     }

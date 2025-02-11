@@ -4,9 +4,9 @@ using GamePlay.Core;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CamarControl : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
-    public static CamarControl Instance;
+    public static CameraControl Instance;
     private void Awake()
     {
         Instance = this;

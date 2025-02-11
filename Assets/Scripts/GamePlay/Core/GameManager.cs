@@ -10,16 +10,11 @@
 
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using FishNet;
 using GamePlay.Node;
 using NetWork;
 using NetWork.Server;
 using UI.Panel;
-// using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -72,7 +67,7 @@ namespace GamePlay.Core
             
             GameUIPanel.Instance.ShowMe();
             gameObject.SetActive(true);
-            CamarControl.Instance.hideFires();
+            CameraControl.Instance.hideFires();
             winParticles[0].Stop();
             winParticles[1].Stop();
             loseParticles[0].Stop();
@@ -99,9 +94,9 @@ namespace GamePlay.Core
         {
             Reset();
             gameObject.SetActive(false);
-            CamarControl.Instance.hideFires();
+            CameraControl.Instance.hideFires();
             GameUIPanel.Instance.HideMe();
-            CamarControl.Instance.Reset();
+            CameraControl.Instance.Reset();
             if (GameMode != GameMode.Online) return;
             NetWorkMgr.CloseConnection();
             NetWorkMgr.CloseServer();
@@ -146,7 +141,7 @@ namespace GamePlay.Core
         {
             curPlayerId++;
             curPlayerId %= MyGlobal.MAX_PLAYER_COUNT;
-            CamarControl.Instance.setFires(curPlayerId);
+            CameraControl.Instance.setFires(curPlayerId);
         }
 
         /// <summary>
@@ -192,8 +187,6 @@ namespace GamePlay.Core
                     break;
                 case GameMode.SoloWithAi:
                     GameUIPanel.Instance.SetWaitPanel(CurPlayerId != 0);
-                    // if (curPlayerId == 1 && StageManager.CurGameStage == GameStage.Place) AiAddTouZi();
-                    // AiCall();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -318,12 +311,7 @@ namespace GamePlay.Core
             GameUIPanel.Instance.SetWaitPanel(false);
 
         }
-
-        //重新开始第二hand，清空棋盘，分数，奖池,重新发底牌
-        // public void ClearData()
-        // {
-
-        // }
+        
         public void NewHand()
         {
             foreach (var nodeQueueManager in nodeQueueManagers) //清空棋盘
@@ -349,7 +337,6 @@ namespace GamePlay.Core
                 CalculationCGPanel.Instance.Show(jackpotP2 <= 0);
             }
             else _jackpotManager.EnterRaise();
-            // Debug.LogError("");
         }
 
         #endregion
@@ -364,10 +351,7 @@ namespace GamePlay.Core
         [ContextMenu("startGame")]
         private void TestStartGame()
         {
-            // StartNativeGame(123);
-            string a = "P1";
-            string b = $"{a}觉得你说的对";
-            Debug.Log(b);
+            StartNativeGame(123);
         }
 
         [ContextMenu("ReSetGame")]
