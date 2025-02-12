@@ -203,7 +203,7 @@ namespace UI.Panel
         /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
         private void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
         {
-            raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
+            raisePanelTitleText.text = isP1 ? "小蓝的加注时间" : "小红的加注时间";
 
             callButton.gameObject.SetActive(haveJackpot != 0);
             raiseButton.gameObject.SetActive(haveJackpot > needJackpot);
