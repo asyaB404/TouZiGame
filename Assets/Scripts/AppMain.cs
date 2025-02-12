@@ -25,6 +25,7 @@ public class AppMain : MonoBehaviour
     private void Start()
     {
         AudioMgr.Instance.PlayFirstThenLoop(musicClips[0], musicClips[1]);
+        if (Application.platform == RuntimePlatform.WebGLPlayer) return;
         bool isFullScreen = PlayerPrefs.GetInt("FullScreen", 0) == 1;
         Utils.SetFullScreen(isFullScreen);
     }

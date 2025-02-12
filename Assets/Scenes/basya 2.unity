@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.27490175, g: 0.09954739, b: 0.350559, a: 1}
+  m_IndirectSpecularColor: {r: 0.27490178, g: 0.09954739, b: 0.35055894, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4600,6 +4600,7 @@ MonoBehaviour:
   t1: 0
   t2: 0
   t3: 0
+  aiLevel: 0
 --- !u!224 &1597435264 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8267321029218446013, guid: fc0696c669a3bbc41aa714f4284e0aa5, type: 3}
@@ -5233,6 +5234,8 @@ MonoBehaviour:
   fires:
   - {fileID: 1589140579}
   - {fileID: 18432513}
+  maxX: 35
+  maxY: 60
 --- !u!4 &1802707914
 Transform:
   m_ObjectHideFlags: 0
@@ -7882,7 +7885,6 @@ MonoBehaviour:
   jackpotText: {fileID: 8040728484344928966}
   waitPanel: {fileID: 1974987418457388408}
   callText: {fileID: 6906042377031332349}
-  testIndex: 0
   readySigns:
   - {fileID: 1382167480}
   - {fileID: 282260243}
@@ -18049,15 +18051,15 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1939381497978037813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 21.4, y: 20.3}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 14.399994, y: 33.3}
   m_SizeDelta: {x: 50, y: 50}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8822274301085214519
 MonoBehaviour:
   m_ObjectHideFlags: 0

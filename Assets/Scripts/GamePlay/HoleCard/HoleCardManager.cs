@@ -44,7 +44,7 @@ public class HoleCardManager : MonoBehaviour//非单例
         ownerId = playerId;
         for (int j = 0; j < holeCards.Length; j++)
         {
-            holeCards[j].init();
+            holeCards[j].Init();
             holeCards[j].playerId = playerId;
             holeCards[j].id = j;
             holeCards[j].gameObject.SetActive(false);

@@ -17,26 +17,21 @@ namespace NetWork.Client
         public void AddTouziRequest(int playerId, int id, int score)
         {
             if (!CheckRpcCoolDown()) return;
+            GameManager.Instance.AddTouzi(playerId, id, score);
             MyServer.Instance.HandleAddTouziRequest(playerId, id, score);
         }
 
         [ObserversRpc]
         public void AddTouziResponse(int playerId, int id, int score, NetworkConnection conn = null)
         {
-            if (IsServerStarted)
+            if (conn != null && conn.IsLocalClient) return;
+            if (playerId == GameManager.CurPlayerId)
             {
-                //由于服务端那边已经在请求中处理了，所以这里不用做处理
+                GameManager.Instance.AddTouzi(playerId, id, score);
             }
             else
             {
-                if (playerId == GameManager.CurPlayerId)
-                {
-                    GameManager.Instance.AddTouzi(playerId, id, score);
-                }
-                else
-                {
-                    GameManager.Instance.AddTouzi(MyTool.GetNextPlayerId(playerId), id, score);
-                }
+                GameManager.Instance.AddTouzi(MyTool.GetNextPlayerId(playerId), id, score);
             }
         }
     }

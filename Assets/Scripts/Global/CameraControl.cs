@@ -4,9 +4,9 @@ using GamePlay.Core;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CamarControl : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
-    public static CamarControl Instance;
+    public static CameraControl Instance;
     private void Awake()
     {
         Instance = this;
@@ -49,8 +49,8 @@ public class CamarControl : MonoBehaviour
             }
         }
     }
-    int maxX = 25;
-    int maxY = 30;
+    public int maxX = 25;
+    public int maxY = 30;
     // 自定义的拖动处理函数
     private void OnRightMouseDrag(Vector3 delta)
     {

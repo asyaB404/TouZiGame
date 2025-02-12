@@ -8,6 +8,8 @@ namespace GamePlay.Core
 {
     public partial class GameManager
     {
+        [SerializeField] private int aiLevel;
+        
         public void StartSoloWaitAiGame(int seed)
         {
             SceneInitialize();
@@ -24,7 +26,6 @@ namespace GamePlay.Core
             holeCardManagers[1].ResetAllHoleCards();
 
             _jackpotManager.EnterRaise();
-            // Debug.Log("start");
         }
 
         public void AiCall()
@@ -42,7 +43,6 @@ namespace GamePlay.Core
                 return;
             }
             int isRaise = ints[Random.Range(0, ints.Count)];//TODO
-            // isRaise=2;
             UniTask.Create(async () =>
             {
                 await UniTask.Delay(time);

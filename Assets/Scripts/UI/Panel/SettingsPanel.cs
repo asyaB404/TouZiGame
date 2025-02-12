@@ -27,6 +27,8 @@ namespace UI.Panel
             });
             GetControl<Toggle>("fullScreenToggle").onValueChanged.AddListener(Utils.SetFullScreen);
             GetControl<Button>("return").onClick.AddListener(HideMe);
+            bool isWebGL = Application.platform == RuntimePlatform.WebGLPlayer;
+            GetControl<Toggle>("fullScreenToggle").gameObject.SetActive(!isWebGL);
         }
 
         public override void ShowAnim()
