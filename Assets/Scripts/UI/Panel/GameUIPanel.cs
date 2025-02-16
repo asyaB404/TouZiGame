@@ -100,17 +100,19 @@ namespace UI.Panel
             confirmButton.gameObject.SetActive(GameManager.GameMode != GameMode.Online);
         }
 
-        public void HideHandOverPanel(bool flag = true)
+        public void HideHandOverPanel()
         {
             handOverPanel.SetActive(false);
-
-            if (flag) GameManager.Instance.NewHand();
         }
 
         [SerializeField] private Button confirmButton; //分数确认页面的关闭按钮
 
         //设置分数确认页面的关闭按钮的监听
-        private void SetConfirmButton() => confirmButton.onClick.AddListener(() => { HideHandOverPanel(); });
+        private void SetConfirmButton() => confirmButton.onClick.AddListener(() =>
+        {
+            HideHandOverPanel();
+            GameManager.Instance.NewHand();
+        });
 
         [FormerlySerializedAs("JackpotTexts")] [SerializeField]
         private TextMeshProUGUI[] jackpotTexts; //双方的筹码的显示ui
