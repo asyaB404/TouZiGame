@@ -32,6 +32,9 @@ namespace UI.Panel
 
         public void ResetGameUI()
         {
+            UpdateOnlineUI();
+            UpdateScoreUI(0);
+            UpdateScoreUI(1);
             HideRaisePanel();
             HideHandOverPanel();
             SetWaitPanel(false);
