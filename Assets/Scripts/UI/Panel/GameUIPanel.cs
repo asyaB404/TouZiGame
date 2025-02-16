@@ -179,25 +179,7 @@ namespace UI.Panel
         public void ShowRaisePanel(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
         {
             if (callText == null) callText = callButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-<<<<<<< HEAD
-            SetRaiseButtons(isP1, haveJackpot, needJackpot, canFold);
-            if (gameMode == GameMode.Native) buttonPanel.gameObject.SetActive(true);
-        }
-
-        /// <summary>
-        /// 设置加注页面按钮
-        /// </summary>
-        /// <param name="isP1">是否是p1</param>
-        /// <param name="haveJackpot">拥有的筹码</param>
-        /// <param name="needJackpot">需要的筹码</param>
-        /// <param name="canFold">是否可以弃权（第一回合不能弃权）</param>
-        private void SetRaiseButtons(bool isP1, int haveJackpot, int needJackpot, bool canFold = true)
-        {
             raisePanelTitleText.text = isP1 ? "小蓝的加注时间" : "小红的加注时间";
-
-=======
-            raisePanelTitleText.text = isP1 ? "p1的加注时间" : "p2的加注时间";
->>>>>>> upstream/main
             callButton.gameObject.SetActive(haveJackpot != 0);
             raiseButton.gameObject.SetActive(haveJackpot > needJackpot);
             callText.text = haveJackpot > needJackpot ? "跟注" : "AllIn!!!!";
