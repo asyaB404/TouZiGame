@@ -12,7 +12,7 @@ public class CalculationCGPanel : BasePanel<CalculationCGPanel>
     [SerializeField] Sprite buleWin;
     [SerializeField] Sprite redWin;
     Image winImage;
-
+    
     public override void Init()
     {
         base.Init();

@@ -134,6 +134,12 @@ namespace GamePlay.Core
             StageManager.SetStage(GameStage.Idle);
         }
 
+        public void GameOver(bool isBlue)
+        {
+            Reset();
+            CalculationCGPanel.Instance.Show(isBlue);
+        }
+
         /// <summary>
         /// 更新玩家ID
         /// </summary>
@@ -334,7 +340,7 @@ namespace GamePlay.Core
             {
                 holeCardManagers[0].gameObject.SetActive(false);
                 holeCardManagers[1].gameObject.SetActive(false);
-                CalculationCGPanel.Instance.Show(jackpotP2 <= 0);
+                GameOver(jackpotP2 <= 0);
             }
             else _jackpotManager.EnterRaise();
         }

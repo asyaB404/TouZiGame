@@ -52,9 +52,7 @@ namespace UI.Panel
         public override void HideAnim()
         {
             base.HideAnim();
-            HideRaisePanel();
-            HideHandOverPanel(false);
-            SetWaitPanel(false);
+            ResetGameUI();
         }
 
         public override void OnPressedEsc()
