@@ -102,7 +102,7 @@ public class PocketTouZi : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     private const float ANIMATION_DURATION = 2f;
     private static IReadOnlyList<Sprite> Touzi => GameManager.Instance.TouziSprites;
     private Sequence _rollAnim;
-    private Tweener _doShakePosition;
+    private Tween _doShakePosition;
     private Tween _shakeTween;
     private readonly Vector3 _point = new(0.2f, .2f);
 
